@@ -1,0 +1,28 @@
+@font-face {
+  font-family: "Roboto-Light";
+  src: url("../fonts/Roboto-Light.eot?#iefix") format("embedded-opentype"), 
+       url("../fonts/Roboto-Light.woff") format("woff"), 
+       url("../fonts/Roboto-Light.ttf")  format("truetype"),
+       url("../fonts/Roboto-Light.svg#svgFontName") format("svg");
+}
+@font-face {
+  font-family: "materialdesignjim-Regular";
+  src: url("../fonts/materialdesignjim-Regular.eot?#iefix") format("embedded-opentype"), 
+       url("../fonts/materialdesignjim-Regular.woff") format("woff"), 
+       url("../fonts/materialdesignjim-Regular.ttf")  format("truetype"),
+       url("../fonts/materialdesignjim-Regular.svg#svgFontName") format("svg");
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("../fonts/Roboto-Regular.eot?#iefix") format("embedded-opentype"), 
+       url("../fonts/Roboto-Regular.woff") format("woff"), 
+       url("../fonts/Roboto-Regular.ttf")  format("truetype"),
+       url("../fonts/Roboto-Regular.svg#svgFontName") format("svg");
+}
+@font-face {
+  font-family: "Roboto-Thin";
+  src: url("../fonts/Roboto-Thin.eot?#iefix") format("embedded-opentype"), 
+       url("../fonts/Roboto-Thin.woff") format("woff"), 
+       url("../fonts/Roboto-Thin.ttf")  format("truetype"),
+       url("../fonts/Roboto-Thin.svg#svgFontName") format("svg");
+}
