@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".GestureListActivity"
+            android:label="@string/title_activity_gesture_list" >
+        </activity>
+        <activity
+            android:name=".GestureEditActivity"
+            android:label="@string/title_activity_gesture_edit" >
+        </activity>
     </application>
 
 </manifest>

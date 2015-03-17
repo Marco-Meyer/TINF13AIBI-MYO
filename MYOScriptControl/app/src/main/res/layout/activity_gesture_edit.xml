@@ -1,0 +1,126 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Name:"
+            android:id="@+id/labelName"
+            android:layout_weight="0.25"/>
+
+        <TextView
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Medium Text"
+            android:id="@+id/textViewGestureName"
+            android:layout_weight="0.60"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonGestureName"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Skript:"
+            android:id="@+id/labelScript"
+            android:layout_weight="0.25"/>
+
+        <TextView
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Medium Text"
+            android:id="@+id/textViewGestureScript"
+            android:layout_weight="0.60"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonEditGestureScript"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Muster:"
+            android:id="@+id/labelPattern"
+            android:layout_weight="0.70"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonPlayGesturePattern"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_media_play"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonEditGesturePattern"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:weightSum="1">
+        <GridView
+            android:id="@+id/gridViewGesturePattern"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:numColumns="auto_fit"
+            android:columnWidth="50dp"
+            android:horizontalSpacing="5dp"
+            android:verticalSpacing="5dp"
+            android:gravity="center"
+            android:stretchMode="columnWidth"/>
+
+    </LinearLayout>
+</LinearLayout>
