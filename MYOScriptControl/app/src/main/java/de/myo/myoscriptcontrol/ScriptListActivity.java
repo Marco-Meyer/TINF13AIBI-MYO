@@ -17,14 +17,29 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class GestureListActivity extends ActionBarActivity {
-    private static final int ADD_GESTURE_REQUEST = 1;
-    private static final int EDIT_GESTURE_REQUEST = 2;
-    private ArrayList<GestureItem> mGestureList = new ArrayList<GestureItem>();
-    private GestureItemListViewAdapter mListViewAdapter;
+public class ScriptListActivity extends ActionBarActivity {
+    private static final int ADD_SCRIPT_REQUEST = 1;
+    private static final int EDIT_SCRIPT_REQUEST = 2;
+    private ArrayList<ScriptItem> mScriptList = new ArrayList<ScriptItem>();
+    private ScriptItemListViewAdapter mListViewAdapter;
     private ListView mListView;
-    private GestureItem mLongClickedItem;
+    private ScriptItem mLongClickedItem;
     private GestureScriptManager mGestureScriptManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_script_list);
+        mGestureScriptManager = MainActivity.mManager;
+        mScriptList = mGestureScriptManager.getScriptList();
+
+        mListViewAdapter = new ScriptItemListViewAdapter(this, mScriptList);
+        mListView = (ListView)findViewById(R.id.listViewScripts);
+        mListView.setAdapter(mListViewAdapter);
+        registerForContextMenu(mListView);
+
+        initializeListeners();
+    }
 
     private void initializeListeners(){
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -44,23 +59,8 @@ public class GestureListActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gesture_list);
-        mGestureScriptManager = MainActivity.mManager;
-        mGestureList = mGestureScriptManager.getGestureList();
-
-        mListViewAdapter = new GestureItemListViewAdapter(this, mGestureList);
-        mListView = (ListView)findViewById(R.id.listViewGestures);
-        mListView.setAdapter(mListViewAdapter);
-        registerForContextMenu(mListView);
-
-        initializeListeners();
-    }
-
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listViewGestures) {
+        if (v.getId()==R.id.listViewScripts) {
             String[] menuItems = { "Bearbeiten", "Löschen" };
             for (int i = 0; i<menuItems.length; i++) {
                 menu.add(Menu.NONE, i, i, menuItems[i]);
@@ -82,10 +82,36 @@ public class GestureListActivity extends ActionBarActivity {
         return true;
     }
 
+    private void deleteItem(ScriptItem longClickedItem){
+        String scriptName = longClickedItem.getName();
+        mScriptList.remove(longClickedItem);
+        mListViewAdapter.notifyDataSetChanged();
+        mGestureScriptManager.saveToJsonFile();
+        Toast.makeText(getApplicationContext(), scriptName + " wurde gelöscht", Toast.LENGTH_LONG).show();
+    }
+
+    private void addItem(){
+        Intent intent = new Intent(ScriptListActivity.this, ScriptEditActivity.class);
+        intent.putExtra("addOrEdit", "add");
+        startActivityForResult(intent, ADD_SCRIPT_REQUEST);
+    }
+
+    private void editItem(ScriptItem longClickedItem){
+        Intent intent = new Intent(ScriptListActivity.this, ScriptEditActivity.class);
+        intent.putExtra("addOrEdit", "edit");
+        try {
+            intent.putExtra("item", longClickedItem.asJsonObject().toString(2));
+            startActivityForResult(intent, EDIT_SCRIPT_REQUEST);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_gesture_list, menu);
+        getMenuInflater().inflate(R.menu.menu_script_list, menu);
         return true;
     }
 
@@ -97,7 +123,7 @@ public class GestureListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add_gesture) {
+        if (id == R.id.action_add_script) {
             addItem();
             return true;
         }
@@ -107,22 +133,22 @@ public class GestureListActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_GESTURE_REQUEST && resultCode == RESULT_OK){
+        if (requestCode == ADD_SCRIPT_REQUEST && resultCode == RESULT_OK){
             //Geste zur liste hinzufügen
             try {
-                String gestureItemResult = data.getStringExtra("resultItem");
-                GestureItem item = new GestureItem(new JSONObject(gestureItemResult));
-                mGestureList.add(item);
+                String scriptItemResult = data.getStringExtra("resultItem");
+                ScriptItem item = new ScriptItem(new JSONObject(scriptItemResult));
+                mScriptList.add(item);
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             mGestureScriptManager.saveToJsonFile();
-        } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
+        } else if (requestCode == EDIT_SCRIPT_REQUEST && resultCode == RESULT_OK){
             //Geste in liste ändern/auswechseln
             try {
-                String gestureItemResult = data.getStringExtra("resultItem");
-                mLongClickedItem.insertJsonData(new JSONObject(gestureItemResult));
+                String scriptItemResult = data.getStringExtra("resultItem");
+                mLongClickedItem.insertJsonData(new JSONObject(scriptItemResult));
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -131,28 +157,5 @@ public class GestureListActivity extends ActionBarActivity {
         }
     }
 
-    private void deleteItem(GestureItem longClickedItem){
-        String gestureName = longClickedItem.getName();
-        mGestureList.remove(longClickedItem);
-        mListViewAdapter.notifyDataSetChanged();
-        mGestureScriptManager.saveToJsonFile();
-        Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
-    }
 
-    private void addItem(){
-        Intent intent = new Intent(GestureListActivity.this, GestureEditActivity.class);
-        intent.putExtra("addOrEdit", "add");
-        startActivityForResult(intent, ADD_GESTURE_REQUEST);
-    }
-
-    private void editItem(GestureItem longClickedItem){
-        Intent intent = new Intent(GestureListActivity.this, GestureEditActivity.class);
-        intent.putExtra("addOrEdit", "edit");
-        try {
-            intent.putExtra("item", longClickedItem.asJsonObject().toString(2));
-            startActivityForResult(intent, EDIT_GESTURE_REQUEST);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 }

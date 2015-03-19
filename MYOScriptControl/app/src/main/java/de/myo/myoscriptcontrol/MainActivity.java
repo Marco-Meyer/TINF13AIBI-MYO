@@ -52,6 +52,11 @@ public class MainActivity extends ActionBarActivity {
 
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_script_manager) {
+            Intent intent = new Intent(MainActivity.this, ScriptListActivity.class);
+
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
