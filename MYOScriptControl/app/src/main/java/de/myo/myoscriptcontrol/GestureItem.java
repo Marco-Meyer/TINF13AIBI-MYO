@@ -43,7 +43,7 @@ public class GestureItem {
 
     public GestureItem(){
         mId = UUID.randomUUID();
-        mName = "Unnamed";
+        mName = "Unbenannt";
         mScript = "<No Script>";
         mPattern = new GesturePattern();
         mDate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM, Locale.getDefault()).format(new Date());

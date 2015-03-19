@@ -23,6 +23,9 @@
     <string name="action_cancel_pattern">Abbrechen</string>
     <string name="action_save_pattern">Speichern</string>
 
+    <string name="action_cancel_script">Abbrechen</string>
+    <string name="action_save_script">Speichern</string>
+
     <string name="title_activity_gesture_list">Gesten verwalten</string>
     <string name="title_activity_gesture_edit">GestureEditActivity</string>
 

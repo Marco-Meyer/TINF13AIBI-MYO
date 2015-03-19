@@ -29,7 +29,7 @@ public class ScriptItem {
 
     public ScriptItem(){
         mId = UUID.randomUUID();
-        mName = "Unnamed";
+        mName = "Unbenannt";
         mScriptFile = "";
         mDescription = "";
         mDate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM, Locale.getDefault()).format(new Date());
