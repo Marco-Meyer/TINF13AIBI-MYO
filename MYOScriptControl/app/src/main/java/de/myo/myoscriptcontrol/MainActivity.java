@@ -13,7 +13,7 @@ public class MainActivity extends ActionBarActivity {
 
     private String ConfigDir;
     private File ConfigFile;
-    private String ScriptDir;
+    public static String ScriptDir;
 
     public static GestureScriptManager mManager;
 

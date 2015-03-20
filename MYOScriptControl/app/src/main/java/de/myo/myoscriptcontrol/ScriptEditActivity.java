@@ -1,12 +1,10 @@
 package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class ScriptEditActivity extends ActionBarActivity {
@@ -28,6 +27,7 @@ public class ScriptEditActivity extends ActionBarActivity {
 
     private ScriptItem mScriptItem;
     private String mScriptItemString;
+    private File mImportedScriptFile, mScriptFile;
     private ImageButton mButtonNameEdit, mButtonDescriptionEdit, mButtonScriptEdit, mButtonScriptSearch;
     private TextView mTextViewName, mTextViewDescription, mTextViewScript;
 
@@ -175,7 +175,20 @@ public class ScriptEditActivity extends ActionBarActivity {
     private void refreshViews(ScriptItem scriptItem){
         mTextViewName.setText(scriptItem.getName());
         mTextViewDescription.setText(scriptItem.getDescription());
-        mTextViewScript.setText("");
+        mScriptFile = new File(MainActivity.ScriptDir, mScriptItem.getScriptFile());
+            try {
+                String script;
+                if (mImportedScriptFile != null) {
+                    script = FileManager.getStringFromFile(mImportedScriptFile.getAbsolutePath());
+                } else if (mScriptFile.exists()) {
+                    script = FileManager.getStringFromFile(mScriptFile.getAbsolutePath());
+                } else {
+                    script = "<Kein Skript vorhanden>";
+                }
+                mTextViewScript.setText(script);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
 
@@ -201,6 +214,14 @@ public class ScriptEditActivity extends ActionBarActivity {
                 mScriptItemString = mScriptItem.asJsonObject().toString(2);
                 Intent intent = new Intent();
                 intent.putExtra("resultItem", mScriptItemString);
+                if (mImportedScriptFile != null) {
+                    try {
+                        File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
+                        FileManager.copyFile(mImportedScriptFile, destFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 setResult(RESULT_OK, intent);
                 finish();
             } catch (JSONException e) {
@@ -215,8 +236,9 @@ public class ScriptEditActivity extends ActionBarActivity {
         if (requestCode == IMPORT_SCRIPT_REQUEST){
             if (resultCode == RESULT_OK) {
                 String curFileName = data.getStringExtra("GetFileName");
-                File file = new File(data.getStringExtra("GetPath"), curFileName);
-                Toast.makeText(this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                mImportedScriptFile = new File(data.getStringExtra("GetPath"), curFileName);
+                refreshViews(mScriptItem);
+                Toast.makeText(this, mImportedScriptFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
             }
         }
     }

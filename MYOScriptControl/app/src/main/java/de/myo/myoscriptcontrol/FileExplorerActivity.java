@@ -31,7 +31,7 @@ public class FileExplorerActivity extends ListActivity {
     private void fill(File f)
     {
         File[]dirs = f.listFiles();
-        this.setTitle("Current Dir: "+f.getName());
+        this.setTitle("Verzeichnis: "+f.getName());
         List<Item>dir = new ArrayList<Item>();
         List<Item>fls = new ArrayList<Item>();
         try{
@@ -50,8 +50,8 @@ public class FileExplorerActivity extends ListActivity {
                     }
                     else buf = 0;
                     String num_item = String.valueOf(buf);
-                    if(buf == 0) num_item = num_item + " item";
-                    else num_item = num_item + " items";
+                    if(buf == 0) num_item = num_item + " Element";
+                    else num_item = num_item + " Elemente";
 
                     //String formated = lastModDate.toString();
                     dir.add(new Item(ff.getName(),num_item,date_modify,ff.getAbsolutePath(),"directory_icon"));
@@ -90,7 +90,6 @@ public class FileExplorerActivity extends ListActivity {
     }
     private void onFileClick(Item o)
     {
-        //Toast.makeText(this, "Folder Clicked: "+ currentDir, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.putExtra("GetPath",currentDir.toString());
         intent.putExtra("GetFileName",o.getName());

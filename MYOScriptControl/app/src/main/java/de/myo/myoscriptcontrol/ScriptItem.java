@@ -78,10 +78,6 @@ public class ScriptItem {
     }
 
     public String getScriptFile() {
-        return mScriptFile;
-    }
-
-    public void setScriptFile(String mScriptFile) {
-        this.mScriptFile = mScriptFile;
+        return mId.toString() + ".sf";
     }
 }
