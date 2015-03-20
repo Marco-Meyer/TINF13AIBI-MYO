@@ -35,4 +35,5 @@
 
     <string name="title_activity_script_list">Scripte verwalten</string>
     <string name="title_activity_script_edit">ScriptEditActivity</string>
+    <string name="title_activity_file_explorer">FileExplorerActivity</string>
 </resources>

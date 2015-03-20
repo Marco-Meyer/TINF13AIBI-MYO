@@ -1,6 +1,7 @@
 package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -18,8 +19,12 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 
 public class ScriptEditActivity extends ActionBarActivity {
+    private int IMPORT_SCRIPT_REQUEST = 0;
+
 
     private ScriptItem mScriptItem;
     private String mScriptItemString;
@@ -70,6 +75,8 @@ public class ScriptEditActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "TODO: Search script (FileExplorerActivity)", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ScriptEditActivity.this, FileExplorerActivity.class);
+                startActivityForResult(intent,IMPORT_SCRIPT_REQUEST);
             }
         });
     }
@@ -201,5 +208,16 @@ public class ScriptEditActivity extends ActionBarActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        // See which child activity is calling us back.
+        if (requestCode == IMPORT_SCRIPT_REQUEST){
+            if (resultCode == RESULT_OK) {
+                String curFileName = data.getStringExtra("GetFileName");
+                File file = new File(data.getStringExtra("GetPath"), curFileName);
+                Toast.makeText(this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
