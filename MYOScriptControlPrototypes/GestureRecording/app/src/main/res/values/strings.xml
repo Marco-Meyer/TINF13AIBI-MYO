@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">MYO Script Control</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="title_activity_gesture_list">GestureListActivity</string>
+    <string name="action_gesture_manager">Gesten verwalten</string>
+    <string name="action_script_manager">Scripte verwalten</string>
+    <string name="action_connect_myo">MYO verbinden</string>
+    <string name="action_help">Hilfe</string>
+
+    <string name="action_add_gesture">Hinzufügen</string>
+    <string name="action_edit_gesture">Editieren</string>
+    <string name="action_delete_gestures">Löschen</string>
+
+    <string name="action_cancel_gesture">Abbrechen</string>
+    <string name="action_save_gesture">Speichern</string>
+
+    <string name="action_cancel_pattern">Abbrechen</string>
+    <string name="action_save_pattern">Speichern</string>
+
+    <string name="title_activity_gesture_edit">GestureEditActivity</string>
+    <string name="title_activity_textinput">TextInputActivity</string>
+    <string name="title_activity_gesture_record">GestureRecordActivity</string>
+</resources>
