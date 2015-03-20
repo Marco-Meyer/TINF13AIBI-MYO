@@ -63,13 +63,13 @@ public class ScriptEditActivity extends ActionBarActivity {
         mButtonScriptEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getApplicationContext(), "TODO: Edit script", Toast.LENGTH_LONG).show();
             }
         });
         mButtonScriptSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getApplicationContext(), "TODO: Search script (FileExplorerActivity)", Toast.LENGTH_LONG).show();
             }
         });
     }

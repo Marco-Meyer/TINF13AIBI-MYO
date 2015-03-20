@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by Tommy on 12.03.2015.
@@ -55,7 +56,18 @@ public class GestureItemListViewAdapter extends BaseAdapter {
 
         GestureItem item = mGestureItems.get(position);
         gestureName.setText(item.getName());
-        script.setText(item.getScript());
+
+        String scriptText;
+        try {
+            UUID uuid = UUID.fromString(item.getScript());
+            ScriptItem scriptItem = MainActivity.mManager.getScriptByUUID(uuid);
+            scriptText = String.format("Skript: %s", scriptItem.getName());
+        } catch (NullPointerException|IllegalArgumentException e){
+            scriptText = String.format("Skript: %s", item.getScript());
+        }
+        script.setText(scriptText);
+
+//        script.setText(item.getScript());
         date.setText(item.getDate());
 
         return convertView;

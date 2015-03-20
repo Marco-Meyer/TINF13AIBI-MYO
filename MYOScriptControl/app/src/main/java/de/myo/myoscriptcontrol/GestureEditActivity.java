@@ -1,6 +1,7 @@
 package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,10 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class GestureEditActivity extends ActionBarActivity {
@@ -87,6 +92,25 @@ public class GestureEditActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "TODO: Show scripts", Toast.LENGTH_LONG).show();
+                final Dialog dialog = new Dialog(GestureEditActivity.this);
+                dialog.setContentView(R.layout.activity_script_list);
+
+                ArrayList<ScriptItem> scriptList = MainActivity.mManager.getScriptList();
+                ListView listView = (ListView) dialog.findViewById(R.id.listViewScripts);
+                final ScriptItemListViewAdapter adapter = new ScriptItemListViewAdapter(GestureEditActivity.this, scriptList);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ScriptItem item = adapter.getItem(position);
+                        mGestureItem.setScript(item.getId().toString());
+                        refreshViews(mGestureItem);
+                        dialog.cancel();
+                    }
+                });
+                dialog.setCancelable(true);
+                dialog.setTitle("Skript auswählen");
+                dialog.show();
             }
         });
         mButtonPatternEdit.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +225,13 @@ public class GestureEditActivity extends ActionBarActivity {
 //        name.setText(gestureItem.getName());
 //        script.setText(gestureItem.getScript());
         mTextViewName.setText(gestureItem.getName());
-        mTextViewScript.setText(gestureItem.getScript());
+        try {
+            UUID uuid = UUID.fromString(gestureItem.getScript());
+            ScriptItem scriptItem = MainActivity.mManager.getScriptByUUID(uuid);
+            mTextViewScript.setText(scriptItem.getName());
+        } catch (NullPointerException|IllegalArgumentException e){
+            mTextViewScript.setText(gestureItem.getScript());
+        }
         loadPatternIntoGrid(gestureItem.getPattern());
     }
 

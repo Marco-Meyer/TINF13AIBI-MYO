@@ -27,6 +27,8 @@
             android:gravity="top|start"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:lines="1"
+            android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Medium Text"
             android:id="@+id/textViewScriptName"

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by Tommy on 18.03.2015.
@@ -24,6 +25,15 @@ public class GestureScriptManager {
     public GestureScriptManager(){
         mGestureList = new ArrayList<>();
         mScriptList = new ArrayList<>();
+    }
+
+    public ScriptItem getScriptByUUID(UUID uuid){
+        for (ScriptItem item : mScriptList){
+            if (item.getId().compareTo(uuid)==0){
+                return item;
+            }
+        }
+        return null;
     }
 
     public GestureScriptManager(File file){
