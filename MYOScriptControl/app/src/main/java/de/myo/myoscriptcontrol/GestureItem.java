@@ -43,7 +43,7 @@ public class GestureItem {
 
     public GestureItem(){
         mId = UUID.randomUUID();
-        mName = "Unnamed";
+        mName = "Unbenannt";
         mScript = "<No Script>";
         mPattern = new GesturePattern();
         mDate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM, Locale.getDefault()).format(new Date());
@@ -53,13 +53,18 @@ public class GestureItem {
         insertJsonData(json);
     }
 
-    public JSONObject asJsonObject() throws JSONException {
+    public JSONObject asJsonObject() {
         JSONObject json = new JSONObject();
-        json.put("id", mId.toString());
-        json.put("name", mName);
-        json.put("script", mScript);
-        json.put("date", mDate);
-        json.put("pattern", mPattern.asJsonArray());
+        try {
+            json.put("id", mId.toString());
+            json.put("name", mName);
+            json.put("script", mScript);
+            json.put("date", mDate);
+            json.put("pattern", mPattern.asJsonArray());
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
         return json;
     }
 

@@ -8,7 +8,7 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_action_add"
         android:visible="true"/>
-    <item android:id="@+id/action_delete_gestures"
+    <!--item android:id="@+id/action_delete_gestures"
         android:title="@string/action_delete_gestures"
         android:orderInCategory="100"
         app:showAsAction="always"
@@ -19,5 +19,5 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_edit"
-        android:visible="false"/>
+        android:visible="false"/-->
 </menu>

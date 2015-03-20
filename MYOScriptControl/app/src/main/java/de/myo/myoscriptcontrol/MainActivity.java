@@ -6,13 +6,29 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    private String ConfigDir;
+    private File ConfigFile;
+    private String ScriptDir;
+
+    public static GestureScriptManager mManager;
+
+    private void initializeFiles(){
+        ConfigDir = getExternalFilesDir("config/").getAbsolutePath();
+        ConfigFile = new File(ConfigDir, "Config.json");
+        ScriptDir = getExternalFilesDir("scripts/").getAbsolutePath();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeFiles();
+        mManager = new GestureScriptManager(ConfigFile);
     }
 
 
@@ -33,6 +49,11 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_gesture_manager) {
             Intent intent = new Intent(MainActivity.this, GestureListActivity.class);
+
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_script_manager) {
+            Intent intent = new Intent(MainActivity.this, ScriptListActivity.class);
 
             startActivity(intent);
             return true;

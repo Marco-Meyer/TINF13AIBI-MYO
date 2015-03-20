@@ -1,6 +1,7 @@
 package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,10 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class GestureEditActivity extends ActionBarActivity {
@@ -31,8 +36,8 @@ public class GestureEditActivity extends ActionBarActivity {
 
     private GestureItem mGestureItem;
     private String mGestureItemString;
-    private ImageButton buttonNameEdit, buttonScriptEdit, buttonPatternPlay, buttonPatternEdit;
-    private TextView textViewName, textViewScript;
+    private ImageButton mButtonNameEdit, mButtonScriptEdit, mButtonPatternPlay, mButtonPatternEdit;
+    private TextView mTextViewName, mTextViewScript;
 
     private void loadPatternIntoGrid(GesturePattern pattern){
         int count = pattern.size();
@@ -66,36 +71,55 @@ public class GestureEditActivity extends ActionBarActivity {
     }
 
     public void initializeViews(){
-        buttonNameEdit = (ImageButton)findViewById(R.id.imageButtonGestureName);
-        buttonScriptEdit = (ImageButton)findViewById(R.id.imageButtonEditGestureScript);
-        buttonPatternEdit = (ImageButton)findViewById(R.id.imageButtonEditGesturePattern);
-        buttonPatternPlay = (ImageButton)findViewById(R.id.imageButtonPlayGesturePattern);
+        mButtonNameEdit = (ImageButton)findViewById(R.id.imageButtonGestureName);
+        mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonEditGestureScript);
+        mButtonPatternEdit = (ImageButton)findViewById(R.id.imageButtonEditGesturePattern);
+        mButtonPatternPlay = (ImageButton)findViewById(R.id.imageButtonPlayGesturePattern);
 
-        textViewName = (TextView)findViewById(R.id.textViewGestureName);
-        textViewScript = (TextView)findViewById(R.id.textViewGestureScript);
+        mTextViewName = (TextView)findViewById(R.id.textViewGestureName);
+        mTextViewScript = (TextView)findViewById(R.id.textViewGestureScript);
         initializeListeners();
     }
 
     private void initializeListeners(){
-        buttonNameEdit.setOnClickListener(new View.OnClickListener() {
+        mButtonNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertTextInput(mGestureItem.getName());
             }
         });
-        buttonScriptEdit.setOnClickListener(new View.OnClickListener() {
+        mButtonScriptEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "TODO: Show scripts", Toast.LENGTH_LONG).show();
+                final Dialog dialog = new Dialog(GestureEditActivity.this);
+                dialog.setContentView(R.layout.activity_script_list);
+
+                ArrayList<ScriptItem> scriptList = MainActivity.mManager.getScriptList();
+                ListView listView = (ListView) dialog.findViewById(R.id.listViewScripts);
+                final ScriptItemListViewAdapter adapter = new ScriptItemListViewAdapter(GestureEditActivity.this, scriptList);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ScriptItem item = adapter.getItem(position);
+                        mGestureItem.setScript(item.getId().toString());
+                        refreshViews(mGestureItem);
+                        dialog.cancel();
+                    }
+                });
+                dialog.setCancelable(true);
+                dialog.setTitle("Skript auswählen");
+                dialog.show();
             }
         });
-        buttonPatternEdit.setOnClickListener(new View.OnClickListener() {
+        mButtonPatternEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startGestureRecordActivity(mGestureItem.getPattern());
             }
         });
-        buttonPatternPlay.setOnClickListener(new View.OnClickListener() {
+        mButtonPatternPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startGestureShowActivity(mGestureItem.getPattern());
@@ -140,16 +164,19 @@ public class GestureEditActivity extends ActionBarActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptView);
         final EditText input = (EditText) promptView.findViewById(R.id.editTextAlertInput);
+        TextView label = (TextView) promptView.findViewById(R.id.labelInput);
+        label.setText("Name eingeben:");
+        input.setHint("Name");
         input.setText(text);
         alertDialogBuilder
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String text = input.getText().toString();
-                        textViewName.setText(text);
+                        mTextViewName.setText(text);
                         mGestureItem.setName(text);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,	int id) {
                         dialog.cancel();
                     }
@@ -193,10 +220,18 @@ public class GestureEditActivity extends ActionBarActivity {
     }
 
     private void refreshViews(GestureItem gestureItem){
-        TextView name = (TextView)findViewById(R.id.textViewGestureName);
-        TextView script = (TextView)findViewById(R.id.textViewGestureScript);
-        name.setText(gestureItem.getName());
-        script.setText(gestureItem.getScript());
+//        TextView name = (TextView)findViewById(R.id.textViewGestureName);
+//        TextView script = (TextView)findViewById(R.id.textViewGestureScript);
+//        name.setText(gestureItem.getName());
+//        script.setText(gestureItem.getScript());
+        mTextViewName.setText(gestureItem.getName());
+        try {
+            UUID uuid = UUID.fromString(gestureItem.getScript());
+            ScriptItem scriptItem = MainActivity.mManager.getScriptByUUID(uuid);
+            mTextViewScript.setText(scriptItem.getName());
+        } catch (NullPointerException|IllegalArgumentException e){
+            mTextViewScript.setText(gestureItem.getScript());
+        }
         loadPatternIntoGrid(gestureItem.getPattern());
     }
 

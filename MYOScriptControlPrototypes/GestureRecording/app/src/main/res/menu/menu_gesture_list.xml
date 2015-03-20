@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="de.myo.myoscriptcontrol.GestureListActivity">
+    <item android:id="@+id/action_add_gesture"
+        android:title="@string/action_add_gesture"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_add"
+        android:visible="true"/>
+    <item android:id="@+id/action_delete_gestures"
+        android:title="@string/action_delete_gestures"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:visible="false"/>
+    <item android:id="@+id/action_edit_gesture"
+        android:title="@string/action_edit_gesture"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:visible="false"/>
+</menu>

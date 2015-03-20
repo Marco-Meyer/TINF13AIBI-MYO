@@ -20,10 +20,11 @@ import java.util.ArrayList;
 public class GestureListActivity extends ActionBarActivity {
     private static final int ADD_GESTURE_REQUEST = 1;
     private static final int EDIT_GESTURE_REQUEST = 2;
-    private ArrayList<GestureItem> gestureItems = new ArrayList<GestureItem>();
+    private ArrayList<GestureItem> mGestureList = new ArrayList<GestureItem>();
     private GestureItemListViewAdapter mListViewAdapter;
     private ListView mListView;
     private GestureItem mLongClickedItem;
+    private GestureScriptManager mGestureScriptManager;
 
     private void initializeListeners(){
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -46,9 +47,10 @@ public class GestureListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesture_list);
-        gestureItems = new ArrayList<GestureItem>();
+        mGestureScriptManager = MainActivity.mManager;
+        mGestureList = mGestureScriptManager.getGestureList();
 
-        mListViewAdapter = new GestureItemListViewAdapter(this, gestureItems);
+        mListViewAdapter = new GestureItemListViewAdapter(this, mGestureList);
         mListView = (ListView)findViewById(R.id.listViewGestures);
         mListView.setAdapter(mListViewAdapter);
         registerForContextMenu(mListView);
@@ -110,11 +112,12 @@ public class GestureListActivity extends ActionBarActivity {
             try {
                 String gestureItemResult = data.getStringExtra("resultItem");
                 GestureItem item = new GestureItem(new JSONObject(gestureItemResult));
-                gestureItems.add(item);
+                mGestureList.add(item);
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            mGestureScriptManager.saveToJsonFile();
         } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
             //Geste in liste ändern/auswechseln
             try {
@@ -124,13 +127,15 @@ public class GestureListActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            mGestureScriptManager.saveToJsonFile();
         }
     }
 
     private void deleteItem(GestureItem longClickedItem){
         String gestureName = longClickedItem.getName();
-        gestureItems.remove(longClickedItem);
+        mGestureList.remove(longClickedItem);
         mListViewAdapter.notifyDataSetChanged();
+        mGestureScriptManager.saveToJsonFile();
         Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 

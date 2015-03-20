@@ -9,9 +9,13 @@
     <string name="action_connect_myo">MYO verbinden</string>
     <string name="action_help">Hilfe</string>
 
-    <string name="action_add_gesture">Hinzufügen</string>
-    <string name="action_edit_gesture">Editieren</string>
-    <string name="action_delete_gestures">Löschen</string>
+    <string name="action_add_gesture">Geste Hinzufügen</string>
+    <string name="action_edit_gesture">Geste Editieren</string>
+    <string name="action_delete_gestures">Geste Löschen</string>
+
+    <string name="action_add_script">Skript Hinzufügen</string>
+    <string name="action_edit_script">Skript Editieren</string>
+    <string name="action_delete_script">Skript Löschen</string>
 
     <string name="action_cancel_gesture">Abbrechen</string>
     <string name="action_save_gesture">Speichern</string>
@@ -19,9 +23,16 @@
     <string name="action_cancel_pattern">Abbrechen</string>
     <string name="action_save_pattern">Speichern</string>
 
+    <string name="action_cancel_script">Abbrechen</string>
+    <string name="action_save_script">Speichern</string>
+
     <string name="title_activity_gesture_list">Gesten verwalten</string>
     <string name="title_activity_gesture_edit">GestureEditActivity</string>
+
     <string name="title_activity_textinput">TextInputActivity</string>
     <string name="title_activity_gesture_record">GestureRecordActivity</string>
     <string name="title_activity_text_input_alert">TextInputAlertActivity</string>
+
+    <string name="title_activity_script_list">Scripte verwalten</string>
+    <string name="title_activity_script_edit">ScriptEditActivity</string>
 </resources>

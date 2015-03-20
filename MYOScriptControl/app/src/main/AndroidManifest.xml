@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.myo.myoscriptcontrol" >
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +26,14 @@
         <activity
             android:name=".GestureEditActivity"
             android:label="@string/title_activity_gesture_edit" >
+        </activity>
+        <activity
+            android:name=".ScriptListActivity"
+            android:label="@string/title_activity_script_list" >
+        </activity>
+        <activity
+            android:name=".ScriptEditActivity"
+            android:label="@string/title_activity_script_edit" >
         </activity>
     </application>
 

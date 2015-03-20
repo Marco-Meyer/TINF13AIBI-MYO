@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_gesture_manager" android:title="@string/action_gesture_manager"
+        android:orderInCategory="100" app:showAsAction="ifRoom" android:icon="@android:drawable/ic_dialog_dialer"/>
+    <item android:id="@+id/action_script_manager" android:title="@string/action_script_manager"
+        android:orderInCategory="100" app:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_agenda"/>
+    <item android:id="@+id/action_connect_myo" android:title="@string/action_connect_myo"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_help" android:title="@string/action_help"
+        android:orderInCategory="100" app:showAsAction="never"/>
+    <!--item android:id="@+id/action_add_gesture" android:title="@string/action_add"
+        android:orderInCategory="100" app:showAsAction="always" android:icon="@android:drawable/ic_menu_add" /-->
+
+</menu>
