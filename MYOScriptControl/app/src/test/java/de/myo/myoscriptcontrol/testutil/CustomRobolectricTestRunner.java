@@ -21,13 +21,9 @@ public class CustomRobolectricTestRunner extends RobolectricTestRunner {
     @Override
     protected AndroidManifest getAppManifest(Config config) {
         String path = "src/main/AndroidManifest.xml";
-
-        // android studio has a different execution root for tests than pure gradle
-        // so we avoid here manual effort to get them running inside android studio
         if (!new File(path).exists()) {
             path = "app/" + path;
         }
-
         config = overwriteConfig(config, "manifest", path);
         return super.getAppManifest(config);
     }
@@ -41,11 +37,7 @@ public class CustomRobolectricTestRunner extends RobolectricTestRunner {
 
 
     @Override
-    protected SdkConfig pickSdkVersion(
-
-            AndroidManifest appManifest, Config config) {
-        // current Robolectric supports not the latest android SDK version
-        // so we must downgrade to simulate the latest supported version.
+    protected SdkConfig pickSdkVersion(AndroidManifest appManifest, Config config) {
         config = overwriteConfig(config, "emulateSdk", "18");
         return super.pickSdkVersion(appManifest, config);
     }
@@ -53,7 +45,6 @@ public class CustomRobolectricTestRunner extends RobolectricTestRunner {
     @Override
     protected void configureShadows(SdkEnvironment sdkEnvironment, Config config) {
         Properties properties = new Properties();
-        // to add more shadows use white space separation + " " +
         properties.setProperty("shadows", ShadowSupportMenuInflater.class.getName());
         super.configureShadows(sdkEnvironment, new Config.Implementation(config, Config.Implementation.fromProperties(properties)));
     }
