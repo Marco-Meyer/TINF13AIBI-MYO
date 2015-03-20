@@ -61,6 +61,7 @@ public class GestureListActivity extends ActionBarActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId()==R.id.listViewGestures) {
+            menu.setHeaderTitle("Geste");
             String[] menuItems = { "Bearbeiten", "Löschen" };
             for (int i = 0; i<menuItems.length; i++) {
                 menu.add(Menu.NONE, i, i, menuItems[i]);
