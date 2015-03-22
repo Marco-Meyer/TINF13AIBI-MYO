@@ -83,7 +83,7 @@ public class ScriptListActivity extends ActionBarActivity {
         return true;
     }
 
-    private void deleteItem(ScriptItem longClickedItem){
+    public void deleteItem(ScriptItem longClickedItem){
         String scriptName = longClickedItem.getName();
         mScriptList.remove(longClickedItem);
         mListViewAdapter.notifyDataSetChanged();

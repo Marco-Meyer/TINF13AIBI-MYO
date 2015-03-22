@@ -134,7 +134,7 @@ public class GestureListActivity extends ActionBarActivity {
         Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 
-    public void addItem(){
+    private void addItem(){
         Intent intent = new Intent(GestureListActivity.this, GestureEditActivity.class);
         intent.putExtra("addOrEdit", "add");
         startActivityForResult(intent, ADD_GESTURE_REQUEST);
