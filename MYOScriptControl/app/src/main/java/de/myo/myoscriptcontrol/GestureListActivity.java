@@ -92,12 +92,8 @@ public class GestureListActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_gesture) {
             addItem();
             return true;
@@ -109,7 +105,6 @@ public class GestureListActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_GESTURE_REQUEST && resultCode == RESULT_OK){
-            //Geste zur liste hinzufügen
             try {
                 String gestureItemResult = data.getStringExtra("resultItem");
                 GestureItem item = new GestureItem(new JSONObject(gestureItemResult));
@@ -120,37 +115,36 @@ public class GestureListActivity extends ActionBarActivity {
             }
             mGestureScriptManager.saveToJsonFile();
         } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
-            //Geste in liste ändern/auswechseln
             try {
                 String gestureItemResult = data.getStringExtra("resultItem");
                 mLongClickedItem.insertJsonData(new JSONObject(gestureItemResult));
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
-                e.printStackTrace();
+                    e.printStackTrace();
             }
             mGestureScriptManager.saveToJsonFile();
         }
     }
 
-    private void deleteItem(GestureItem longClickedItem){
-        String gestureName = longClickedItem.getName();
-        mGestureList.remove(longClickedItem);
+    public void deleteItem(GestureItem item){
+        String gestureName = item.getName();
+        mGestureList.remove(item);
         mListViewAdapter.notifyDataSetChanged();
         mGestureScriptManager.saveToJsonFile();
         Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 
-    private void addItem(){
+    public void addItem(){
         Intent intent = new Intent(GestureListActivity.this, GestureEditActivity.class);
         intent.putExtra("addOrEdit", "add");
         startActivityForResult(intent, ADD_GESTURE_REQUEST);
     }
 
-    private void editItem(GestureItem longClickedItem){
+    private void editItem(GestureItem item){
         Intent intent = new Intent(GestureListActivity.this, GestureEditActivity.class);
         intent.putExtra("addOrEdit", "edit");
         try {
-            intent.putExtra("item", longClickedItem.asJsonObject().toString(2));
+            intent.putExtra("item", item.asJsonObject().toString(2));
             startActivityForResult(intent, EDIT_GESTURE_REQUEST);
         } catch (JSONException e) {
             e.printStackTrace();
