@@ -49,7 +49,6 @@ public class GestureListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_gesture_list);
         mGestureScriptManager = MainActivity.mManager;
         mGestureList = mGestureScriptManager.getGestureList();
-
         mListViewAdapter = new GestureItemListViewAdapter(this, mGestureList);
         mListView = (ListView)findViewById(R.id.listViewGestures);
         mListView.setAdapter(mListViewAdapter);

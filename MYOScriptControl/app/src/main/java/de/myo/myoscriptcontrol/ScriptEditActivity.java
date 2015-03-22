@@ -24,7 +24,6 @@ import java.io.IOException;
 public class ScriptEditActivity extends ActionBarActivity {
     private int IMPORT_SCRIPT_REQUEST = 0;
 
-
     private ScriptItem mScriptItem;
     private String mScriptItemString;
     private File mImportedScriptFile, mScriptFile;
@@ -38,6 +37,10 @@ public class ScriptEditActivity extends ActionBarActivity {
         initializeViews();
         String activityType = getIntent().getStringExtra("addOrEdit");
         chooseActivityType(activityType);
+    }
+
+    public ScriptItem getScriptItem(){
+        return mScriptItem;
     }
 
     public void initializeViews(){
@@ -199,6 +202,25 @@ public class ScriptEditActivity extends ActionBarActivity {
         return true;
     }
 
+    public void saveScriptItem(File scriptFile){
+        try {
+            mScriptItemString = mScriptItem.asJsonObject().toString(2);
+            Intent intent = new Intent();
+            intent.putExtra("resultItem", mScriptItemString);
+            if (scriptFile != null) {
+                try {
+                    File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
+                    FileManager.copyFile(scriptFile, destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            setResult(RESULT_OK, intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -210,23 +232,24 @@ public class ScriptEditActivity extends ActionBarActivity {
             setResult(RESULT_CANCELED);
             finish();
         } else if (id == R.id.action_save_script){
-            try {
-                mScriptItemString = mScriptItem.asJsonObject().toString(2);
-                Intent intent = new Intent();
-                intent.putExtra("resultItem", mScriptItemString);
-                if (mImportedScriptFile != null) {
-                    try {
-                        File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
-                        FileManager.copyFile(mImportedScriptFile, destFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                setResult(RESULT_OK, intent);
-                finish();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            saveScriptItem(mImportedScriptFile);
+//            try {
+//                mScriptItemString = mScriptItem.asJsonObject().toString(2);
+//                Intent intent = new Intent();
+//                intent.putExtra("resultItem", mScriptItemString);
+//                if (mImportedScriptFile != null) {
+//                    try {
+//                        File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
+//                        FileManager.copyFile(mImportedScriptFile, destFile);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                setResult(RESULT_OK, intent);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
