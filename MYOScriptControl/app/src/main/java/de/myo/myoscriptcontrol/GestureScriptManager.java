@@ -42,25 +42,6 @@ public class GestureScriptManager {
         loadFromJsonFile(mConfigFile);
     }
 
-    private String convertStreamToString(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-        reader.close();
-        return sb.toString();
-    }
-
-    private String getStringFromFile (String filePath) throws Exception {
-        File fl = new File(filePath);
-        FileInputStream fin = new FileInputStream(fl);
-        String ret = convertStreamToString(fin);
-        fin.close();
-        return ret;
-    }
-
     private void loadGestureListFromJson(JSONArray json){
         int count = json.length();
         for (int i=0; i<count; i++){
@@ -78,7 +59,7 @@ public class GestureScriptManager {
     public void loadFromJsonFile(File file){
         if (file.exists()){
             try {
-                String jsonFileString = getStringFromFile(file.getAbsolutePath());
+                String jsonFileString = FileManager.getStringFromFile(file.getAbsolutePath());
                 JSONObject jsonObject = new JSONObject(jsonFileString);
                 JSONArray jsonGestureArray = jsonObject.optJSONArray("gestures");
                 JSONArray jsonScriptArray = jsonObject.optJSONArray("scripts");
