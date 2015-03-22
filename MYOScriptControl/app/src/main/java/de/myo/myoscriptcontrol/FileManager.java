@@ -9,12 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-/**
- *  Created by Tommy on 21.10.2014.
- *
- *  Die Funktionen habe ich von:
- *      http://stackoverflow.com/questions/12910503/read-file-as-string
- */
 public class FileManager {
     private static String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
