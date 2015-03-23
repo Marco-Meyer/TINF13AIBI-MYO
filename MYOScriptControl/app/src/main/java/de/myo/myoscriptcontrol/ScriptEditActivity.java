@@ -233,22 +233,6 @@ public class ScriptEditActivity extends ActionBarActivity {
             finish();
         } else if (id == R.id.action_save_script){
             saveScriptItem(mImportedScriptFile);
-//            try {
-//                mScriptItemString = mScriptItem.asJsonObject().toString(2);
-//                Intent intent = new Intent();
-//                intent.putExtra("resultItem", mScriptItemString);
-//                if (mImportedScriptFile != null) {
-//                    try {
-//                        File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
-//                        FileManager.copyFile(mImportedScriptFile, destFile);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                setResult(RESULT_OK, intent);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
             finish();
         }
         return super.onOptionsItemSelected(item);

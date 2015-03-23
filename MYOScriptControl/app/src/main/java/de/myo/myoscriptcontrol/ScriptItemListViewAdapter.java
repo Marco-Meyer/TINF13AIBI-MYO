@@ -45,7 +45,6 @@ public class ScriptItemListViewAdapter extends BaseAdapter {
             mInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         if (convertView == null) {
-            //TODO Layout
             convertView = mInflater.inflate(R.layout.listview_script_item, null);
         }
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumbnail);
