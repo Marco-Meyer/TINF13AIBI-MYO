@@ -46,21 +46,18 @@ public class ScriptItemListViewAdapter extends BaseAdapter {
         }
         if (convertView == null) {
             //TODO Layout
-            //convertView = mInflater.inflate(R.layout.listview_script_item, null);
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_1, null);
+            convertView = mInflater.inflate(R.layout.listview_script_item, null);
         }
-        TextView scriptName = (TextView) convertView.findViewById(android.R.id.text1);
+        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumbnail);
+        TextView scriptName = (TextView) convertView.findViewById(R.id.scriptName);
+
+        TextView description = (TextView) convertView.findViewById(R.id.scriptDescription);
+        TextView date = (TextView) convertView.findViewById(R.id.textViewListItemDate);
+
         ScriptItem item = mScriptItems.get(position);
         scriptName.setText(item.getName());
-//        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumbnail);
-//        TextView gestureName = (TextView) convertView.findViewById(R.id.gestureName);
-//        TextView script = (TextView) convertView.findViewById(R.id.textViewListScript);
-//        TextView date = (TextView) convertView.findViewById(R.id.textViewListItemDate);
-
-//        ScriptItem item = mScriptItems.get(position);
-//        gestureName.setText(item.getName());
-//        script.setText(item.getScript());
-//        date.setText(item.getDate());
+        description.setText(item.getDescription());
+        date.setText(item.getDate());
 
         return convertView;
     }

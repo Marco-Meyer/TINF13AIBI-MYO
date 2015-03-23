@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_row_selector"
+    android:padding="8dp" >
+
+    <!-- Thumbnail Image -->
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
+
+    <!-- ScriptName -->
+    <TextView
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:lines="1"
+        android:maxLines="1"
+        android:id="@+id/scriptName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textSize="@dimen/fileName"
+        android:textStyle="bold"
+        />
+
+    <!-- Description -->
+    <TextView
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:lines="2"
+        android:maxLines="2"
+        android:id="@+id/scriptDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scriptName"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textSize="@dimen/descriptionScript"
+        />
+
+    <!-- Placeholder -->
+    <!--TextView
+        android:id="@+id/textViewListPlaceHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewListScript"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textColor="@color/textViewListPlaceHolder"
+        android:textSize="@dimen/textViewListPlaceHolder" /-->
+
+    <!-- Date -->
+    <TextView
+        android:id="@+id/textViewListItemDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/textViewListItemDate"
+        android:textSize="@dimen/textViewListItemDate"
+        />
+</RelativeLayout>

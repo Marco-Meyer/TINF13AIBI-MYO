@@ -7,6 +7,7 @@
     <dimen name="textViewListScript">15dip</dimen>
     <dimen name="textViewListPlaceHolder">13dip</dimen>
     <dimen name="textViewListItemDate">12dip</dimen>
+    <dimen name="descriptionScript">15dip</dimen>
 
     <dimen name="fileNameIW">16dp</dimen>
     <dimen name="dateIW">14dip</dimen>
