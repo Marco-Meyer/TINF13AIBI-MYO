@@ -3,15 +3,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_row_selector"
-    android:padding="8dp" >
+    android:padding="8dp">
 
     <!-- Thumbnail Image -->
-    <ImageView
+    <!--ImageView
         android:id="@+id/thumbnail"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp" /-->
 
     <!-- GestureName -->
     <TextView
@@ -22,9 +22,9 @@
         android:id="@+id/gestureName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
         android:textSize="@dimen/fileName"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:textStyle="bold" />
 
     <!-- Script -->
@@ -38,19 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/gestureName"
         android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/thumbnail"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:textSize="@dimen/textViewListScript" />
-
-    <!-- Placeholder -->
-    <!--TextView
-        android:id="@+id/textViewListPlaceHolder"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewListScript"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:textColor="@color/textViewListPlaceHolder"
-        android:textSize="@dimen/textViewListPlaceHolder" /-->
 
     <!-- Date -->
     <TextView
@@ -58,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:textColor="@color/textViewListItemDate"
         android:textSize="@dimen/textViewListItemDate" />
 
