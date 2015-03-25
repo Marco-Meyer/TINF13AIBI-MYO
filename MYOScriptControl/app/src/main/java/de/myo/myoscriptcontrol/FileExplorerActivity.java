@@ -36,48 +36,43 @@ public class FileExplorerActivity extends ListActivity {
         List<Item>dir = new ArrayList<Item>();
         List<Item>fls = new ArrayList<Item>();
         try{
-            for(File ff: dirs)
-            {
+            for(File ff: dirs){
                 Date lastModDate = new Date(ff.lastModified());
                 DateFormat formater = DateFormat.getDateTimeInstance();
                 String date_modify = formater.format(lastModDate);
                 if(ff.isDirectory()){
-
-
                     File[] fbuf = ff.listFiles();
                     int buf = 0;
                     if(fbuf != null){
                         buf = fbuf.length;
+                    } else {
+                        buf = 0;
                     }
-                    else buf = 0;
                     String num_item = String.valueOf(buf);
-                    if(buf == 0) num_item = num_item + " Element";
-                    else num_item = num_item + " Elemente";
-
-                    //String formated = lastModDate.toString();
+                    if(buf == 0){
+                        num_item = num_item + " Element";
+                    } else {
+                        num_item = num_item + " Elemente";
+                    }
                     dir.add(new Item(ff.getName(),num_item,date_modify,ff.getAbsolutePath(),"directory_icon"));
-                }
-                else
-                {
+                } else {
                     fls.add(new Item(ff.getName(),ff.length() + " Byte", date_modify, ff.getAbsolutePath(),"file_icon"));
                 }
             }
-        }catch(Exception e)
-        {
-
+        } catch(Exception e) {
         }
         Collections.sort(dir);
         Collections.sort(fls);
         dir.addAll(fls);
-        if(!f.getName().equalsIgnoreCase("sdcard"))
+        if(!f.getName().equalsIgnoreCase("sdcard")){
             dir.add(0,new Item("..","Verzeichnis zurück","",f.getParent(),"directory_up"));
+        }
         adapter = new FileArrayAdapter(FileExplorerActivity.this,R.layout.file_view,dir);
         this.setListAdapter(adapter);
     }
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         if (!currentDir.getName().equalsIgnoreCase("sdcard")){
             currentDir = currentDir.getParentFile();
             fill(currentDir);
@@ -88,15 +83,12 @@ public class FileExplorerActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
         Item o = adapter.getItem(position);
         if(o.getImage().equalsIgnoreCase("directory_icon")||o.getImage().equalsIgnoreCase("directory_up")){
             currentDir = new File(o.getPath());
             fill(currentDir);
-        }
-        else
-        {
+        } else {
             onFileClick(o);
         }
     }
