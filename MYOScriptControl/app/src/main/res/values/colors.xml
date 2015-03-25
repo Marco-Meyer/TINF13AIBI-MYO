@@ -12,7 +12,6 @@
     <color name="list_row_hover_end_color">#ffbfe9ff</color>
     <color name="list_row_bg_color">#ffdff5ff</color>
     <color name="activity_background">#ffdff5ff</color>
-    <color name="list_row_bg_color">#ffffff</color>
     <color name="wallet_bright_foreground_holo_dark">#fff3f3f3</color>
     <color name="wallet_dim_foreground_holo_dark">#bebebe</color>
     <color name="wallet_dim_foreground_disabled_holo_dark">#80bebebe</color>
