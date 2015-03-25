@@ -16,7 +16,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-
+/**
+ * Created by Daniel on 19.03.2015.
+ */
 public class ScriptListActivity extends ActionBarActivity {
     private static final int ADD_SCRIPT_REQUEST = 1;
     private static final int EDIT_SCRIPT_REQUEST = 2;

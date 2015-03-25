@@ -16,6 +16,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Daniel on 16.03.2015.
+ */
 
 public class GestureListActivity extends ActionBarActivity {
     private static final int ADD_GESTURE_REQUEST = 1;

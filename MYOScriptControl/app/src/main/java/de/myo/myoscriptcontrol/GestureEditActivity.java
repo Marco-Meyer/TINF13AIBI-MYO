@@ -1,5 +1,9 @@
 package de.myo.myoscriptcontrol;
 
+/**
+ * Created by Daniel on 18.03.2015.
+ */
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -30,7 +34,6 @@ import java.util.UUID;
 
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
-
 
 public class GestureEditActivity extends ActionBarActivity {
     private static final int EDIT_PATTERN_REQUEST = 1;

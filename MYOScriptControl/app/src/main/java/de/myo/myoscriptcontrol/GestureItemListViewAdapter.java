@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by Tommy on 12.03.2015.
+ * Created by Daniel on 12.03.2015.
  */
 public class GestureItemListViewAdapter extends BaseAdapter {
     private Activity mActivity;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Tommy on 19.03.2015.
+ * Created by Daniel on 19.03.2015.
  */
 public class ScriptItemListViewAdapter extends BaseAdapter {
     private Activity mActivity;

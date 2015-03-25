@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by Tommy on 18.03.2015.
+ * Created by Daniel on 18.03.2015.
  */
 public class GestureScriptManager {
     private ArrayList<GestureItem> mGestureList;

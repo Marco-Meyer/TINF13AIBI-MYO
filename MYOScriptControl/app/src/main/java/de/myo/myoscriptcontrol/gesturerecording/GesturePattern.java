@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 
 /**
- * Created by Tommy on 14.03.2015.
+ * Created by Daniel on 14.03.2015.
  */
 
 public class GesturePattern extends ArrayList<GridPosition> {

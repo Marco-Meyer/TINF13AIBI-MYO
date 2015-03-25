@@ -20,9 +20,7 @@ import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
 public class GestureRecordDeviceListener extends AbstractDeviceListener {
-    private boolean mSynced, mConnected, mUnlocked, mAttached;
     private Quaternion mOrientation;
-    private Pose mPose;
     private Point mArmPosition, mLastSetPoint;
 
     private double PI = Math.PI;    // 180°
@@ -35,7 +33,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     private double YAW_DEADZONE = EIGHTHPI;
     private double PITCH_DEADZONE = EIGHTHPI;
 
-    private GesturePattern mTempPattern;
     private Myo mMyo;
     private ArrayList<ListenerTarget> mTargets;
 
@@ -62,7 +59,7 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public GestureRecordDeviceListener(){
         mArmPosition = new Point(2, 2);
         mLastSetPoint = new Point(2, 2);
-        mTargets = new ArrayList<ListenerTarget>();
+        mTargets = new ArrayList<>();
     }
 
 
@@ -88,8 +85,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
         super.onArmSync(myo, timestamp, arm, xDirection);
-        mConnected = true;
-        mSynced = true;
         mMyo = myo;
         notifyUpdateStatus("LOCKED");
     }
@@ -97,8 +92,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onArmUnsync(Myo myo, long timestamp) {
         super.onArmUnsync(myo, timestamp);
-        mConnected = true;
-        mSynced = false;
         mMyo = myo;
         notifyUpdateStatus("UNSYNCED");
     }
@@ -106,7 +99,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onConnect(Myo myo, long timestamp) {
         super.onConnect(myo, timestamp);
-        mConnected = true;
         mMyo = myo;
         notifyUpdateStatus("UNSYNCED");
     }
@@ -114,7 +106,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onDisconnect(Myo myo, long timestamp) {
         super.onDisconnect(myo, timestamp);
-        mConnected = false;
         mMyo = myo;
         notifyUpdateStatus("DISCONNECTED");
     }
@@ -122,7 +113,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onUnlock(Myo myo, long timestamp) {
         super.onUnlock(myo, timestamp);
-        mUnlocked = true;
         myo.unlock(Myo.UnlockType.HOLD);
         centre();
         mMyo = myo;
@@ -132,8 +122,6 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onLock(Myo myo, long timestamp) {
         super.onLock(myo, timestamp);
-        mUnlocked = false;
-        mConnected = true;
         mMyo = myo;
         notifyUpdateStatus("LOCKED");
     }
@@ -141,16 +129,12 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     @Override
     public void onDetach(Myo myo, long timestamp) {
         super.onDetach(myo, timestamp);
-        mAttached = false;
-        mConnected = true;
         mMyo = myo;
     }
 
     @Override
     public void onAttach(Myo myo, long timestamp) {
         super.onAttach(myo, timestamp);
-        mAttached = true;
-        mConnected = true;
         mMyo = myo;
         notifyUpdateStatus("UNSYNCED");
     }
@@ -171,11 +155,33 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
         super.onOrientationData(myo, timestamp, rotation);
         mOrientation = rotation;
-        onPeriodic(rotation);
+        calculateArmPosition(rotation);
         notifyGridPos(pointToGridPosition(mArmPosition));
     }
 
-    private void onPeriodic(Quaternion orientation){
+    private int getArmPositionX(double deltaYaw){
+        if (deltaYaw < -YAW_DEADZONE){
+            return 1;
+        } else if (deltaYaw > YAW_DEADZONE){
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    private int getArmPositionY(double deltaPitch){
+        XDirection direction = mMyo.getXDirection();
+        int y = (direction == XDirection.TOWARD_WRIST) ? 1 : -1;
+        if (deltaPitch < -PITCH_DEADZONE){
+            return y;
+        } else if (deltaPitch > PITCH_DEADZONE){
+            return -y;
+        } else {
+            return 0;
+        }
+    }
+
+    private void calculateArmPosition(Quaternion orientation){
         if (centreYaw == 0) {
             return;
         }
@@ -184,38 +190,8 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         double deltaYaw = calculateDeltaRadians(currentYaw, centreYaw);
         double deltaPitch = calculateDeltaRadians(currentPitch, centrePitch);
 
-        int x,y;
-        if (deltaYaw < -YAW_DEADZONE){
-            x = 1;
-        } else if (deltaYaw > YAW_DEADZONE){
-            x=-1;
-        } else {
-            x=0;
-        }
-
-        XDirection direction = mMyo.getXDirection();
-        switch (direction){
-            case TOWARD_WRIST:{
-                if (deltaPitch < -PITCH_DEADZONE){
-                    y=1;
-                } else if (deltaPitch > PITCH_DEADZONE){
-                    y=-1;
-                } else {
-                    y=0;
-                }
-                break;
-            }
-            default: {
-                if (deltaPitch < -PITCH_DEADZONE) {
-                    y = -1;
-                } else if (deltaPitch > PITCH_DEADZONE) {
-                    y = 1;
-                } else {
-                    y = 0;
-                }
-                break;
-            }
-        }
+        int x = getArmPositionX(deltaYaw);
+        int y = getArmPositionY(deltaPitch);
         mArmPosition.set(x, y);
     }
 
@@ -267,40 +243,8 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         if (mOrientation!=null) {
             centreYaw = Quaternion.yaw(mOrientation);
             centrePitch = Quaternion.pitch(mOrientation);
-            mTempPattern = new GesturePattern();
         }
     }
 
-    private void escape(){
-        mMyo.lock();
-        centreYaw = 0.0;
-        centrePitch = 0.0;
-        mArmPosition.set(2, 2);
-        mLastSetPoint.set(2, 2);
-    }
-
-    public Point getArmPosition() {
-        return mArmPosition;
-    }
-
-    public void setArmPosition(Point mArmPosition) {
-        this.mArmPosition = mArmPosition;
-    }
-
-    public Point getLastSetPoint() {
-        return mLastSetPoint;
-    }
-
-    public void setLastSetPoint(Point mLastSetPoint) {
-        this.mLastSetPoint = mLastSetPoint;
-    }
-
-    public GesturePattern getTempPattern() {
-        return mTempPattern;
-    }
-
-    public void setTempPattern(GesturePattern mTempPattern) {
-        this.mTempPattern = mTempPattern;
-    }
 }
 

@@ -1,5 +1,9 @@
 package de.myo.myoscriptcontrol;
 
+/**
+ * Created by Daniel on 20.03.2015.
+ */
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Created by Tommy on 18.03.2015.
+ * Created by Daniel on 18.03.2015.
  */
 public class ScriptItem {
     private UUID mId;

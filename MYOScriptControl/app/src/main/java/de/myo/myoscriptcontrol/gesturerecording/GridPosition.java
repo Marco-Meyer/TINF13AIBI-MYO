@@ -1,7 +1,7 @@
 package de.myo.myoscriptcontrol.gesturerecording;
 
 /**
- * Created by felix on 24.03.2015.
+ * Created by Daniel on 24.03.2015.
  */
 
 public enum GridPosition {

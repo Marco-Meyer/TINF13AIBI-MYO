@@ -1,5 +1,9 @@
 package de.myo.myoscriptcontrol;
 
+/**
+ * Created by Daniel on 19.03.2015.
+ */
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;

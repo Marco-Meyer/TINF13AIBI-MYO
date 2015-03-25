@@ -186,16 +186,16 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     private void initializeGridImageMap(){
         mPositionImageMap = new HashMap<>();
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_NORTH_WEST, (ImageView)findViewById(R.id.imageViewNW));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_NORTH, (ImageView)findViewById(R.id.imageViewN));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_NORTH_EAST, (ImageView)findViewById(R.id.imageViewNE));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_WEST, (ImageView)findViewById(R.id.imageViewW));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_CENTER, (ImageView)findViewById(R.id.imageViewC));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_EAST, (ImageView)findViewById(R.id.imageViewE));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_SOUTH_WEST, (ImageView)findViewById(R.id.imageViewSW));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_SOUTH, (ImageView)findViewById(R.id.imageViewS));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_SOUTH_EAST, (ImageView)findViewById(R.id.imageViewSE));
-        mPositionImageMap.put(de.myo.myoscriptcontrol.gesturerecording.GridPosition.POS_UNKNOWN, null);
+        mPositionImageMap.put(GridPosition.POS_NORTH_WEST, (ImageView)findViewById(R.id.imageViewNW));
+        mPositionImageMap.put(GridPosition.POS_NORTH, (ImageView)findViewById(R.id.imageViewN));
+        mPositionImageMap.put(GridPosition.POS_NORTH_EAST, (ImageView)findViewById(R.id.imageViewNE));
+        mPositionImageMap.put(GridPosition.POS_WEST, (ImageView)findViewById(R.id.imageViewW));
+        mPositionImageMap.put(GridPosition.POS_CENTER, (ImageView)findViewById(R.id.imageViewC));
+        mPositionImageMap.put(GridPosition.POS_EAST, (ImageView)findViewById(R.id.imageViewE));
+        mPositionImageMap.put(GridPosition.POS_SOUTH_WEST, (ImageView)findViewById(R.id.imageViewSW));
+        mPositionImageMap.put(GridPosition.POS_SOUTH, (ImageView)findViewById(R.id.imageViewS));
+        mPositionImageMap.put(GridPosition.POS_SOUTH_EAST, (ImageView)findViewById(R.id.imageViewSE));
+        mPositionImageMap.put(GridPosition.POS_UNKNOWN, null);
     }
 
     @Override
