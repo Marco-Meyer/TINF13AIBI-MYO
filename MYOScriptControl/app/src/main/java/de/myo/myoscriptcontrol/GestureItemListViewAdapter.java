@@ -49,7 +49,6 @@ public class GestureItemListViewAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.listview_gesture_item, null);
         }
 
-        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumbnail);
         TextView gestureName = (TextView) convertView.findViewById(R.id.gestureName);
         TextView script = (TextView) convertView.findViewById(R.id.textViewListScript);
         TextView date = (TextView) convertView.findViewById(R.id.textViewListItemDate);
@@ -66,8 +65,6 @@ public class GestureItemListViewAdapter extends BaseAdapter {
             scriptText = String.format("Skript: %s", item.getScript());
         }
         script.setText(scriptText);
-
-//        script.setText(item.getScript());
         date.setText(item.getDate());
 
         return convertView;

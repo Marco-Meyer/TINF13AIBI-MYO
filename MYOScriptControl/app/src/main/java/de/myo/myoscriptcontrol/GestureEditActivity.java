@@ -91,7 +91,6 @@ public class GestureEditActivity extends ActionBarActivity {
         mButtonScriptEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO: Show scripts", Toast.LENGTH_LONG).show();
                 final Dialog dialog = new Dialog(GestureEditActivity.this);
                 dialog.setContentView(R.layout.activity_script_list);
 
@@ -151,7 +150,6 @@ public class GestureEditActivity extends ActionBarActivity {
                 GesturePattern pattern = new GesturePattern(jsonPattern);
                 mGestureItem.setPattern(pattern);
                 loadPatternIntoGrid(pattern);
-                Toast.makeText(getApplicationContext(), pattern.asJsonArray().toString(), Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

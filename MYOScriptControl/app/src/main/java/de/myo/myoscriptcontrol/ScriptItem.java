@@ -16,21 +16,21 @@ public class ScriptItem {
     private UUID mId;
     private String mName;
     private String mDate;
-    private String mScriptFile;
+    private String mScriptFileType;
     private String mDescription;
 
     public void insertJsonData(JSONObject json){
         mId = UUID.fromString(json.optString("id"));
         mName = json.optString("name");
         mDate = json.optString("date");
-        mScriptFile = json.optString("scriptFile");
+        mScriptFileType = json.optString("scriptFile");
         mDescription = json.optString("description");
     }
 
     public ScriptItem(){
         mId = UUID.randomUUID();
         mName = "Unbenannt";
-        mScriptFile = "";
+        mScriptFileType = "";
         mDescription = "";
         mDate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM, Locale.getDefault()).format(new Date());
     }
@@ -44,7 +44,7 @@ public class ScriptItem {
         try {
             json.put("id", mId.toString());
             json.put("name", mName);
-            json.put("scriptFile", mScriptFile);
+            json.put("scriptFile", mScriptFileType);
             json.put("date", mDate);
             json.put("description", mDescription);
         } catch (JSONException e){
@@ -78,6 +78,14 @@ public class ScriptItem {
     }
 
     public String getScriptFile() {
-        return mId.toString() + ".sf";
+        return mId.toString() + "." + mScriptFileType;
+    }
+
+    public String getScriptFileType() {
+        return  mScriptFileType;
+    }
+
+    public void setScriptFileType(String fileType) {
+        mScriptFileType = fileType;
     }
 }

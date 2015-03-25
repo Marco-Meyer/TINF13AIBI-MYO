@@ -54,6 +54,16 @@ public class ScriptItemListViewAdapter extends BaseAdapter {
         TextView date = (TextView) convertView.findViewById(R.id.textViewListItemDate);
 
         ScriptItem item = mScriptItems.get(position);
+        switch (item.getScriptFileType()){
+            case "py":{
+                thumbNail.setImageDrawable(mActivity.getApplicationContext().getResources().getDrawable(R.drawable.python));
+                break;
+            }
+            default:{
+                thumbNail.setImageDrawable(mActivity.getApplicationContext().getResources().getDrawable(R.drawable.file_icon));
+                break;
+            }
+        }
         scriptName.setText(item.getName());
         description.setText(item.getDescription());
         date.setText(item.getDate());

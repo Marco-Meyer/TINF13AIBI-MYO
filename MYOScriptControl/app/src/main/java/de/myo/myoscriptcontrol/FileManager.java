@@ -42,4 +42,13 @@ public class FileManager {
         in.close();
         out.close();
     }
+
+    public static String getFileExtension(String fileName){
+        String filenameArray[] = fileName.split("\\.");
+        if (filenameArray.length>0) {
+            return filenameArray[filenameArray.length - 1];
+        } else {
+            return "";
+        }
+    }
 }

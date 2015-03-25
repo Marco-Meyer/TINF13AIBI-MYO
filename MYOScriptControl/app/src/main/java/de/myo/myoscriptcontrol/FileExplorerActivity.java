@@ -18,6 +18,7 @@ public class FileExplorerActivity extends ListActivity {
 
     private File currentDir;
     private FileArrayAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,6 @@ public class FileExplorerActivity extends ListActivity {
                 }
                 else
                 {
-
                     fls.add(new Item(ff.getName(),ff.length() + " Byte", date_modify, ff.getAbsolutePath(),"file_icon"));
                 }
             }
@@ -70,10 +70,22 @@ public class FileExplorerActivity extends ListActivity {
         Collections.sort(fls);
         dir.addAll(fls);
         if(!f.getName().equalsIgnoreCase("sdcard"))
-            dir.add(0,new Item("..","Parent Directory","",f.getParent(),"directory_up"));
+            dir.add(0,new Item("..","Verzeichnis zurück","",f.getParent(),"directory_up"));
         adapter = new FileArrayAdapter(FileExplorerActivity.this,R.layout.file_view,dir);
         this.setListAdapter(adapter);
     }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if (!currentDir.getName().equalsIgnoreCase("sdcard")){
+            currentDir = currentDir.getParentFile();
+            fill(currentDir);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         // TODO Auto-generated method stub

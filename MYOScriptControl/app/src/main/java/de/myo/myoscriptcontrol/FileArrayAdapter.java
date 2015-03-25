@@ -47,13 +47,26 @@ public class FileArrayAdapter extends ArrayAdapter<Item>{
                        TextView t3 = (TextView) v.findViewById(R.id.TextViewDate);
                        /* Take the ImageView from layout and set the city's image */
 	               		ImageView imageCity = (ImageView) v.findViewById(R.id.fd_Icon1);
-	               		String uri = "drawable/" + o.getImage();
-	               	    int imageResource = c.getResources().getIdentifier(uri, null, c.getPackageName());
-	               	    Drawable image = c.getResources().getDrawable(imageResource);
-	               	    imageCity.setImageDrawable(image);
-                       
+
+                        String name = o.getName();
+                        name = FileManager.getFileExtension(name);
+                        switch (name){
+                            case "py":{
+                                Drawable image = c.getResources().getDrawable(R.drawable.python);
+                                imageCity.setImageDrawable(image);
+                                break;
+                            }
+                            default:{
+                                String uri = "drawable/" + o.getImage();
+                                int imageResource = c.getResources().getIdentifier(uri, null, c.getPackageName());
+                                Drawable image = c.getResources().getDrawable(imageResource);
+                                imageCity.setImageDrawable(image);
+                                break;
+                            }
+                        }
+
                        if(t1!=null)
-                       	t1.setText(o.getName());
+                       	    t1.setText(o.getName());
                        if(t2!=null)
                           	t2.setText(o.getData());
                        if(t3!=null)

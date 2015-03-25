@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    android:background="@drawable/list_row_selector"
     android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
     <ImageView
         android:id="@+id/fd_Icon1"

@@ -46,7 +46,7 @@ public class ScriptEditActivity extends ActionBarActivity {
     public void initializeViews(){
         mButtonNameEdit = (ImageButton)findViewById(R.id.imageButtonScriptName);
         mButtonDescriptionEdit = (ImageButton)findViewById(R.id.imageButtonEditDescription);
-        mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonEditScript);
+        mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonStartScript);
         mButtonScriptSearch = (ImageButton)findViewById(R.id.imageButtonImportScript);
 
         mTextViewName = (TextView)findViewById(R.id.textViewScriptName);
@@ -71,13 +71,12 @@ public class ScriptEditActivity extends ActionBarActivity {
         mButtonScriptEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO: Edit script", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "TODO: Test script", Toast.LENGTH_LONG).show();
             }
         });
         mButtonScriptSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO: Search script (FileExplorerActivity)", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(ScriptEditActivity.this, FileExplorerActivity.class);
                 startActivityForResult(intent,IMPORT_SCRIPT_REQUEST);
             }
@@ -204,17 +203,19 @@ public class ScriptEditActivity extends ActionBarActivity {
 
     public void saveScriptItem(File scriptFile){
         try {
-            mScriptItemString = mScriptItem.asJsonObject().toString(2);
-            Intent intent = new Intent();
-            intent.putExtra("resultItem", mScriptItemString);
             if (scriptFile != null) {
                 try {
-                    File destFile = new File(MainActivity.ScriptDir, mScriptItem.getId().toString() + ".sf");
+                    String fileType = FileManager.getFileExtension(scriptFile.getName());
+                    mScriptItem.setScriptFileType(fileType);
+                    File destFile = new File(MainActivity.ScriptDir, mScriptItem.getScriptFile());
                     FileManager.copyFile(scriptFile, destFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            mScriptItemString = mScriptItem.asJsonObject().toString(2);
+            Intent intent = new Intent();
+            intent.putExtra("resultItem", mScriptItemString);
             setResult(RESULT_OK, intent);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -239,13 +240,11 @@ public class ScriptEditActivity extends ActionBarActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        // See which child activity is calling us back.
         if (requestCode == IMPORT_SCRIPT_REQUEST){
             if (resultCode == RESULT_OK) {
                 String curFileName = data.getStringExtra("GetFileName");
                 mImportedScriptFile = new File(data.getStringExtra("GetPath"), curFileName);
                 refreshViews(mScriptItem);
-                Toast.makeText(this, mImportedScriptFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -6,10 +6,11 @@
     <color name="gpsPosIW">#555555</color>
     <color name="fileNameIW">#111111</color>
     <color name="dateIW">#222222</color>
-    <color name="list_row_start_color">#eeeeee</color>
-    <color name="list_row_end_color">#dddddd</color>
+    <color name="list_row_start_color">#ffdff5ff</color>
+    <color name="list_row_end_color">#fdadc9de</color>
     <color name="list_row_hover_start_color">#ffeaf8ff</color>
     <color name="list_row_hover_end_color">#ffbfe9ff</color>
-    <color name="list_row_bg_color">#ffffff</color>
+    <color name="list_row_bg_color">#ffdff5ff</color>
+    <color name="activity_background">#ffdff5ff</color>
 
 </resources>
