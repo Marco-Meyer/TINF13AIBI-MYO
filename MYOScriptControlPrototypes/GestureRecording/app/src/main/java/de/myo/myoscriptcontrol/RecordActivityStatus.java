@@ -10,8 +10,6 @@ public enum RecordActivityStatus {
     UNSYNCED("unsynced"),
     LOCKED("locked"),
     UNCENTERED("locked"),
-    RECORDING("recording"),
-    PLAYING("playing"),
     SEARCHING_MYO("Searcing MYO"),
 //    ESCAPED("escaped"),
     IDLE("idle");

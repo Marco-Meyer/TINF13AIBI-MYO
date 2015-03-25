@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.gesturerecording;
 
 import org.json.JSONArray;
 

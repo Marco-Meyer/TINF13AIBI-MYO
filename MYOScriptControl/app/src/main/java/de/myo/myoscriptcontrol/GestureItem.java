@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
+
 /**
  * Created by DTH on 11.03.2015.
  */

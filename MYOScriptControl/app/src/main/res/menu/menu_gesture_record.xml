@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="de.myo.myoscriptcontrol.GestureRecordActivity">
+    <item android:id="@+id/action_cancel_pattern"
+        android:title="@string/action_cancel_pattern"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_abort"
+        android:visible="true"/>
+    <item android:id="@+id/action_save_pattern"
+        android:title="@string/action_save_pattern"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_check"
+        android:visible="true"/>
+</menu>

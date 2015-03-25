@@ -5,6 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.thalmic.myo.Hub;
+import com.thalmic.myo.scanner.ScanActivity;
 
 import java.io.File;
 
@@ -14,6 +18,7 @@ public class MainActivity extends ActionBarActivity {
     private String ConfigDir;
     private File ConfigFile;
     public static String ScriptDir;
+    public static Hub MYOHub;
 
     public static GestureScriptManager mManager;
 
@@ -29,8 +34,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         initializeFiles();
         mManager = new GestureScriptManager(ConfigFile);
+        initializeMYOHub();
     }
 
+    private void initializeMYOHub() {
+        try {
+            MYOHub = Hub.getInstance();
+            if (!MYOHub.init(this)) {
+                throw new Exception();
+            }
+        } catch(Exception e) {
+            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -55,6 +71,10 @@ public class MainActivity extends ActionBarActivity {
         } else if (id == R.id.action_script_manager) {
             Intent intent = new Intent(MainActivity.this, ScriptListActivity.class);
 
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_connect_myo) {
+            Intent intent = new Intent(MainActivity.this, ScanActivity.class);
             startActivity(intent);
             return true;
         }

@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
         mMyoListener = new AbstractDeviceListener() {
             @Override
             public void onConnect(Myo myo, long timestamp) {
-                doLogEntry("Myo Connected!");
+                super.onConnect(myo, timestamp);
             }
 
             @Override

@@ -1,5 +1,6 @@
 package de.myo.myoscriptcontrol;
 
+import android.content.Context;
 import android.graphics.Point;
 
 import com.thalmic.myo.AbstractDeviceListener;
@@ -10,12 +11,15 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.Vector3;
 import com.thalmic.myo.XDirection;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 /**
  * Created by Tommy on 15.03.2015.
  */
 
 public class GestureRecordDeviceListener extends AbstractDeviceListener {
-    private boolean mSynced, mAttached, mConnected, mUnlocked, mRecording;
+    private boolean mSynced, mConnected, mUnlocked, mAttached;
     private Quaternion mOrientation;
     private Pose mPose;
     private Point mArmPosition, mLastSetPoint;
@@ -32,44 +36,142 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
 
     private GesturePattern mTempPattern;
     private Myo mMyo;
+    private ArrayList<ListenerTarget> mTargets;
+
+
+    private void notifyPose(Pose pose) {
+        for(ListenerTarget target : mTargets) {
+            target.OnPose(pose);
+        }
+    }
+
+    private void notifyGridPos(GridPosition position) {
+        for(ListenerTarget target : mTargets) {
+            target.OnGridPositionUpdate(position);
+        }
+    }
+
+    private void notifyUpdateStatus(String status) {
+        for(ListenerTarget target : mTargets) {
+            target.OnUpdateStatus(status);
+        }
+    }
+
 
     public GestureRecordDeviceListener(){
         mArmPosition = new Point(2, 2);
         mLastSetPoint = new Point(2, 2);
+        mTargets = new ArrayList<ListenerTarget>();
     }
 
-    public RecordActivityStatus getStatus() {
-        if (mConnected) {
-            if (mAttached) {
-                if (mSynced) {
-                    if (mUnlocked) {
-                        if (mRecording) {
-                            return RecordActivityStatus.RECORDING;
-                        } else {
-                            return RecordActivityStatus.IDLE;
-                        }
-                    } else {
-                        return RecordActivityStatus.LOCKED;
-                    }
-                } else {
-                    return RecordActivityStatus.UNSYNCED;
-                }
-            } else {
-                return RecordActivityStatus.DETACHED;
-            }
-        } else {
-            return RecordActivityStatus.DISCONNECTED;
-        }
+
+    public void addTarget(ListenerTarget target) {
+        mTargets.add(target);
     }
 
-    private double calculateDeltaRadians(double current, double centre){
-        double delta = current - centre;
-        if (delta > PI) {
-            delta = delta - TWOPI;
-        } else if (delta < -PI) {
-            delta = delta + TWOPI;
+    public void removeTarget(ListenerTarget target) {
+        mTargets.remove(target);
+    }
+
+    @Override
+    public void onPose(Myo myo, long timestamp, Pose pose) {
+        super.onPose(myo, timestamp, pose);
+        if(pose == Pose.DOUBLE_TAP) {
+            centre();
         }
-        return delta;
+        mMyo = myo;
+        notifyPose(pose);
+    }
+
+
+    @Override
+    public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+        super.onArmSync(myo, timestamp, arm, xDirection);
+        mConnected = true;
+        mSynced = true;
+        mMyo = myo;
+        notifyUpdateStatus("LOCKED");
+    }
+
+    @Override
+    public void onArmUnsync(Myo myo, long timestamp) {
+        super.onArmUnsync(myo, timestamp);
+        mConnected = true;
+        mSynced = false;
+        mMyo = myo;
+        notifyUpdateStatus("UNSYNCED");
+    }
+
+    @Override
+    public void onConnect(Myo myo, long timestamp) {
+        super.onConnect(myo, timestamp);
+        mConnected = true;
+        mMyo = myo;
+        notifyUpdateStatus("UNSYNCED");
+    }
+
+    @Override
+    public void onDisconnect(Myo myo, long timestamp) {
+        super.onDisconnect(myo, timestamp);
+        mConnected = false;
+        mMyo = myo;
+        notifyUpdateStatus("DISCONNECTED");
+    }
+
+    @Override
+    public void onUnlock(Myo myo, long timestamp) {
+        super.onUnlock(myo, timestamp);
+        mUnlocked = true;
+        myo.unlock(Myo.UnlockType.HOLD);
+        centre();
+        mMyo = myo;
+        notifyUpdateStatus("IDLE");
+    }
+
+    @Override
+    public void onLock(Myo myo, long timestamp) {
+        super.onLock(myo, timestamp);
+        mUnlocked = false;
+        mConnected = true;
+        mMyo = myo;
+        notifyUpdateStatus("LOCKED");
+    }
+
+    @Override
+    public void onDetach(Myo myo, long timestamp) {
+        super.onDetach(myo, timestamp);
+        mAttached = false;
+        mConnected = true;
+        mMyo = myo;
+    }
+
+    @Override
+    public void onAttach(Myo myo, long timestamp) {
+        super.onAttach(myo, timestamp);
+        mAttached = true;
+        mConnected = true;
+        mMyo = myo;
+        notifyUpdateStatus("UNSYNCED");
+    }
+
+    @Override
+    public void onGyroscopeData(Myo myo, long timestamp, Vector3 gyro) {
+        super.onGyroscopeData(myo, timestamp, gyro);
+        mMyo = myo;
+    }
+
+    @Override
+    public void onAccelerometerData(Myo myo, long timestamp, Vector3 accel) {
+        super.onAccelerometerData(myo, timestamp, accel);
+        mMyo = myo;
+    }
+
+    @Override
+    public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
+        super.onOrientationData(myo, timestamp, rotation);
+        mOrientation = rotation;
+        onPeriodic(rotation);
+        notifyGridPos(pointToGridPosition(mArmPosition));
     }
 
     private void onPeriodic(Quaternion orientation){
@@ -116,6 +218,16 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         mArmPosition.set(x, y);
     }
 
+    private double calculateDeltaRadians(double current, double centre){
+        double delta = current - centre;
+        if (delta > PI) {
+            delta = delta - TWOPI;
+        } else if (delta < -PI) {
+            delta = delta + TWOPI;
+        }
+        return delta;
+    }
+
     public GridPosition pointToGridPosition(Point position){
         if (position.x==0 && position.y == 0){
             return GridPosition.POS_CENTER;
@@ -155,144 +267,15 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
             centreYaw = Quaternion.yaw(mOrientation);
             centrePitch = Quaternion.pitch(mOrientation);
             mTempPattern = new GesturePattern();
-//            doLogEntry("zentriert");
         }
     }
 
     private void escape(){
-//        doLogEntry("escaped");
         mMyo.lock();
         centreYaw = 0.0;
         centrePitch = 0.0;
         mArmPosition.set(2, 2);
         mLastSetPoint.set(2, 2);
-    }
-
-    private void onPoseMain(Pose pose){
-//        doLogEntry(pose.name());
-        if (pose == Pose.FIST) {
-            mLastSetPoint.set(mArmPosition.x, mArmPosition.y);
-            mTempPattern.add(pointToGridPosition(mLastSetPoint));
-//            doLogEntry(mTempPattern.asJsonArray().toString());
-        } else if (pose == Pose.FINGERS_SPREAD) {
-            escape();
-            //TODO save pattern
-//            doLogEntry(mTempPattern.asJsonArray().toString());
-        } else if (pose == Pose.WAVE_OUT) {
-            escape();
-            mTempPattern.clear();
-            //TODO delete pattern
-//            doLogEntry(mTempPattern.asJsonArray().toString());
-        }
-    }
-
-    @Override
-    public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
-        super.onArmSync(myo, timestamp, arm, xDirection);
-        mConnected = true;
-        mSynced = true;
-        mMyo = myo;
-    }
-
-    @Override
-    public void onArmUnsync(Myo myo, long timestamp) {
-        super.onArmUnsync(myo, timestamp);
-        mConnected = true;
-        mSynced = false;
-        mMyo = myo;
-    }
-
-    @Override
-    public void onConnect(Myo myo, long timestamp) {
-//        doLogEntry("Myo Connected!");
-        mConnected = true;
-        mMyo = myo;
-    }
-
-    @Override
-    public void onDisconnect(Myo myo, long timestamp) {
-//        doLogEntry("Myo Disconnected!");
-        mConnected = false;
-        mMyo = myo;
-    }
-
-    @Override
-    public void onPose(Myo myo, long timestamp, Pose pose) {
-        if (mRecording) {
-            mPose = pose;
-            onPoseMain(pose);
-        }
-        mConnected = true;
-        mSynced = true;
-        mMyo = myo;
-    }
-
-    @Override
-    public void onUnlock(Myo myo, long timestamp) {
-        super.onUnlock(myo, timestamp);
-        mUnlocked = true;
-        mSynced = true;
-        mConnected = true;
-//        doLogEntry("Unlock");
-        if (mRecording) {
-            myo.unlock(Myo.UnlockType.HOLD);
-            centre();
-        }
-        mMyo = myo;
-    }
-
-    @Override
-    public void onDetach(Myo myo, long timestamp) {
-        super.onDetach(myo, timestamp);
-        mAttached = false;
-        mConnected = true;
-//        doLogEntry("Detach");
-        mMyo = myo;
-    }
-
-    @Override
-    public void onAttach(Myo myo, long timestamp) {
-        super.onAttach(myo, timestamp);
-        mAttached = true;
-        mConnected = true;
-//        doLogEntry("Attach");
-        mMyo = myo;
-    }
-
-    @Override
-    public void onLock(Myo myo, long timestamp) {
-        super.onLock(myo, timestamp);
-        mUnlocked = false;
-        mConnected = true;
-//        doLogEntry("Lock");
-        mMyo = myo;
-    }
-
-    @Override
-    public void onGyroscopeData(Myo myo, long timestamp, Vector3 gyro) {
-        super.onGyroscopeData(myo, timestamp, gyro);
-        mMyo = myo;
-    }
-
-    @Override
-    public void onAccelerometerData(Myo myo, long timestamp, Vector3 accel) {
-        super.onAccelerometerData(myo, timestamp, accel);
-        mMyo = myo;
-    }
-
-    @Override
-    public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
-        super.onOrientationData(myo, timestamp, rotation);
-        mOrientation = rotation;
-        onPeriodic(rotation);
-    }
-
-    public boolean isRecording() {
-        return mRecording;
-    }
-
-    public void setRecording(boolean mRecording) {
-        this.mRecording = mRecording;
     }
 
     public Point getArmPosition() {
@@ -317,9 +300,5 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
 
     public void setTempPattern(GesturePattern mTempPattern) {
         this.mTempPattern = mTempPattern;
-    }
-
-    public Pose getPose() {
-        return mPose;
     }
 }

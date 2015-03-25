@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.myo.myoscriptcontrol.GestureItem;
-import de.myo.myoscriptcontrol.GesturePattern;
+import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.ScriptItem;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 

@@ -25,9 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
+import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
 
 public class GestureEditActivity extends ActionBarActivity {
@@ -127,10 +129,9 @@ public class GestureEditActivity extends ActionBarActivity {
     }
 
     private void startGestureRecordActivity(GesturePattern pattern){
-        Toast.makeText(getApplicationContext(), "TODO: GestureRecordActivity", Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(GestureEditActivity.this, GestureRecordActivity.class);
-//        intent.putExtra("pattern", pattern.asJsonArray().toString());
-//        startActivityForResult(intent, EDIT_PATTERN_REQUEST);
+        Intent intent = new Intent(GestureEditActivity.this, GestureRecordActivity.class);
+        intent.putExtra("pattern", pattern.asJsonArray().toString());
+        startActivityForResult(intent, EDIT_PATTERN_REQUEST);
     }
 
     private void startGestureShowActivity(ArrayList<GridPosition> pattern){
@@ -263,5 +264,9 @@ public class GestureEditActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public GestureItem getGestureItem() {
+        return mGestureItem;
     }
 }

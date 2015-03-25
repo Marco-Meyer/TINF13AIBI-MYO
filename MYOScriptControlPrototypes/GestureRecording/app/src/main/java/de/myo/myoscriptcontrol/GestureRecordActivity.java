@@ -2,8 +2,7 @@ package de.myo.myoscriptcontrol;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.os.Handler;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,134 +14,107 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thalmic.myo.Hub;
+import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
-import com.thalmic.myo.scanner.ScanActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GestureRecordActivity extends ActionBarActivity{
+public class GestureRecordActivity extends ActionBarActivity implements ListenerTarget {
 
     private GesturePattern mPattern;
     private String mPatternString;
     private Hub mMyoHub;
+    private Pose mPose;
     private GestureRecordDeviceListener mMyoListener;
-    private Handler mHandler;
     private TextView mTextLog;
     private HashMap<GridPosition, ImageView> mPositionImageMap;
-    private boolean mRecording = false;
-    private boolean mPlaying = false;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
-//    private int count = 0;
+    private GridPosition mCurrentPosition;
+    private GridPosition mLastPosition;
+    private boolean mRecording, mPlaying;
 
-    private void useHandler() {
-        mHandler = new Handler();
-        mHandler.postDelayed(mRunnable, 20);
+    @Override
+    public void OnPose(Pose pose) {
+        mPose = pose;
+        if(mRecording) {
+            if(mPose == Pose.FIST) {
+                mPattern.add(mCurrentPosition);
+                showPattern();
+                showSetGridPosition();
+                clearLastPosition();
+                mLastPosition = mCurrentPosition;
+            }
+            if(mPose == Pose.FINGERS_SPREAD) {
+                findViewById(R.id.imageButtonRecordPattern).callOnClick();
+                mStatus = RecordActivityStatus.IDLE;
+
+                Toast.makeText(getApplicationContext(), mPattern.toString(), Toast.LENGTH_LONG).show();
+                //TODO save pattern
+            }
+            if (mPose == Pose.WAVE_OUT) {
+                mPattern.clear();
+                showPattern();
+            }
+            if(mPose == Pose.REST) {
+                showLastPositionOnGrid();
+            }
+        }
+
     }
 
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            updateStatus();
-            updateRecordAndPlayButton();
-            if (mStatus!=RecordActivityStatus.UNKNOWN &&
-                mStatus != RecordActivityStatus.DISCONNECTED &&
-                mStatus != RecordActivityStatus.PLAYING) {
-                    mRecording = mMyoListener.isRecording();
-                    if (mRecording) {
-                        updateMyoPosition();
-                        showPattern();
-                    }
-            }
-            mHandler.postDelayed(mRunnable, 20);
+    @Override
+    public void OnUpdateStatus(String status) {
+
+        mStatus = RecordActivityStatus.valueOf(status);
+        updateStatusText();
+    }
+
+    @Override
+    public void OnGridPositionUpdate(GridPosition position) {
+        if(mRecording) {
+            mCurrentPosition = position;
+            showPositionOnGrid();
         }
-    };
+    }
 
     private void showPattern(){
-        GesturePattern pattern = mMyoListener.getTempPattern();
-        if (pattern!=null) {
-            mTextLog.setText(pattern.asJsonArray().toString());
-//            count++;
-//            if (count>100) {
-//                Toast.makeText(getApplicationContext(), pattern.asJsonArray().toString(), Toast.LENGTH_SHORT).show();
-//                count=0;
-//            }
+        if (mPattern!=null) {
+            mTextLog.setText(mPattern.asJsonArray().toString());
         }
     }
 
-    private void updateStatus(){
-        if (mPlaying){
-            mStatus = RecordActivityStatus.PLAYING;
-        } else {
-            mStatus = mMyoListener.getStatus();
-        }
-        TextView textView = (TextView)findViewById(R.id.textViewRecordStatus);
-        textView.setText(mStatus.toString());
+    private void updateStatusText(){
+        ((TextView)findViewById(R.id.textViewRecordStatus)).setText(mStatus.toString());
     }
 
-    private void updateRecordAndPlayButton(){
-        ImageButton buttonRecord = (ImageButton)findViewById(R.id.imageButtonRecordPattern);
-        ImageButton buttonPlay = (ImageButton)findViewById(R.id.imageButtonPlayRecordedPattern);
-        if (mRecording){
-            buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
-            buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_play));
-            buttonRecord.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
-            buttonPlay.setBackgroundColor(Color.LTGRAY);
-            buttonPlay.setEnabled(false);
-        } else if (mPlaying) {
-            buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
-            buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
-            buttonRecord.setBackgroundColor(Color.LTGRAY);
-            buttonPlay.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
-            buttonRecord.setEnabled(false);
-        } else {
-            buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
-            buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_play));
-            buttonRecord.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-            buttonPlay.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-            buttonRecord.setEnabled(true);
-            buttonPlay.setEnabled(true);
+    private void showLastPositionOnGrid(){
+        ImageView image = mPositionImageMap.get(mLastPosition);
+        if (image != null && mLastPosition != mCurrentPosition){
+            image.setBackgroundColor(Color.LTGRAY);
         }
     }
 
+    private void clearLastPosition() {
+        ImageView image = mPositionImageMap.get(mLastPosition);
+        if (image != null){
+            image.setBackgroundColor(getResources().getColor(R.color.background_floating_material_light));
+        }
+    }
 
-    private void updateMyoPosition(){
+    private void showSetGridPosition() {
+        ImageView image = mPositionImageMap.get(mCurrentPosition);
+        image.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
+    }
+
+    private void showPositionOnGrid(){
         clearGridPosition();
-        showLastPositionOnGrid();
-        showPositionOnGrid();
-    }
-
-    public GridPosition pointToGridPosition(Point position){
-        if (position.x==0 && position.y == 0){
-            return GridPosition.POS_CENTER;
-        }
-        if (position.x==-1 && position.y == 0){
-            return GridPosition.POS_WEST;
-        }
-        if (position.x==1 && position.y == 0){
-            return GridPosition.POS_EAST;
-        }
-        if (position.x==0 && position.y == 1){
-            return GridPosition.POS_NORTH;
-        }
-        if (position.x==-1 && position.y == 1){
-            return GridPosition.POS_NORTH_WEST;
-        }
-        if (position.x==1 && position.y == 1){
-            return GridPosition.POS_NORTH_EAST;
-        }
-        if (position.x==0 && position.y == -1){
-            return GridPosition.POS_SOUTH;
-        }
-        if (position.x==-1 && position.y == -1){
-            return GridPosition.POS_SOUTH_WEST;
-        }
-        if (position.x==1 && position.y == -1){
-            return GridPosition.POS_SOUTH_EAST;
-        } else {
-            return GridPosition.POS_UNKNOWN;
+        ImageView image = mPositionImageMap.get(mCurrentPosition);
+        if (image != null) {
+            image.setImageResource(R.drawable.abc_btn_radio_to_on_mtrl_015);
         }
     }
 
@@ -150,52 +122,51 @@ public class GestureRecordActivity extends ActionBarActivity{
         for (ImageView image : mPositionImageMap.values()){
             if (image != null) {
                 image.setImageResource(R.drawable.abc_btn_radio_to_on_mtrl_000);
-                image.setBackgroundColor(Color.WHITE);
             }
         }
     }
 
-    private void showLastPositionOnGrid(){
-        GridPosition posLast = pointToGridPosition(mMyoListener.getLastSetPoint());
-        ImageView image = mPositionImageMap.get(posLast);
-        if (image != null){
-            image.setBackgroundColor(Color.LTGRAY);
-        }
-    }
-
-    private void showPositionOnGrid(){
-        GridPosition position = pointToGridPosition(mMyoListener.getArmPosition());
-        ImageView image = mPositionImageMap.get(position);
-        if (image != null) {
-            image.setImageResource(R.drawable.abc_btn_radio_to_on_mtrl_015);
-            if (mMyoListener.getPose()==Pose.FIST) {
-                image.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-            }
-        }
-    }
-
-    private void initializeListeners(){
-        ImageButton buttonRecord = (ImageButton)findViewById(R.id.imageButtonRecordPattern);
+    private void initializeButtonListeners(){
+        final ImageButton buttonRecord = (ImageButton)findViewById(R.id.imageButtonRecordPattern);
+        final ImageButton buttonPlay = (ImageButton)findViewById(R.id.imageButtonPlayRecordedPattern);
         buttonRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mRecording){
-                    mRecording = false;
-                    mPattern = mMyoListener.getTempPattern();
-                } else {
-                    if (mMyoListener.getStatus()==RecordActivityStatus.DISCONNECTED){
-                        Intent intent = new Intent(GestureRecordActivity.this, ScanActivity.class);
-                        startActivity(intent);
-                    }
-                    mRecording = true;
+                if(mRecording) {
+                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
+                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
+                    clearGridPosition();
+                    clearLastPosition();
+                    buttonPlay.setEnabled(true);
+                    buttonPlay.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
+
                 }
-                mMyoListener.setRecording(mRecording);
+                else {
+                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
+                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
+                    showPositionOnGrid();
+                    buttonPlay.setEnabled(false);
+                    buttonPlay.setBackgroundColor(getResources().getColor(R.color.common_signin_btn_light_text_disabled));
+                }
+                mRecording = !mRecording;
             }
         });
-        ImageButton buttonPlay = (ImageButton)findViewById(R.id.imageButtonPlayRecordedPattern);
+
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mPlaying) {
+                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_play));
+                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
+                    buttonRecord.setEnabled(true);
+                    buttonRecord.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
+                }
+                else {
+                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
+                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
+                    buttonRecord.setEnabled(false);
+                    buttonRecord.setBackgroundColor(getResources().getColor(R.color.common_signin_btn_light_text_disabled));
+                }
                 mPlaying = !mPlaying;
             }
         });
@@ -210,6 +181,7 @@ public class GestureRecordActivity extends ActionBarActivity{
         if (mMyoHub.getConnectedDevices().size()==0){
             mMyoHub.attachToAdjacentMyo();
         }
+        mMyoListener.addTarget(this);
     }
 
     @Override
@@ -218,10 +190,6 @@ public class GestureRecordActivity extends ActionBarActivity{
         mMyoHub.removeListener(mMyoListener);
         MainActivity.setGestureRecognitionListener();
     }
-
-//    private void doLogEntry(String message){
-//        mTextLog.setText(message + "\n" + mTextLog.getText());
-//    }
 
     private void initializeGridImageMap(){
         mPositionImageMap = new HashMap<>();
@@ -242,11 +210,15 @@ public class GestureRecordActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesture_record);
         mTextLog = (TextView)findViewById(R.id.textLogRecord);
+        mCurrentPosition = GridPosition.POS_CENTER;
+        mStatus = RecordActivityStatus.DISCONNECTED;
+        mPose = Pose.UNKNOWN;
+        updateStatusText();
         initializeIntentVars(getIntent());
         initializeGridImageMap();
-        initializeListeners();
+        initializeButtonListeners();
         initMyoHub();
-        useHandler();
+        showPositionOnGrid();
     }
 
     void initializeIntentVars(Intent intent){
