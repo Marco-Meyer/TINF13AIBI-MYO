@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageButtonEditGesturePattern"
             android:layout_weight="0.15"
-            android:src="@android:drawable/ic_menu_edit"/>
+            android:src="@drawable/ic_action_record"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"

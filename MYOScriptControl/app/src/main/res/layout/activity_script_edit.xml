@@ -98,15 +98,15 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButtonImportScript"
-            android:layout_weight="0.15"
-            android:src="@android:drawable/ic_menu_search"/>
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:id="@+id/imageButtonStartScript"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_media_play"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonImportScript"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_search"/>
     </LinearLayout>
     <TextView
         android:ellipsize="end"
