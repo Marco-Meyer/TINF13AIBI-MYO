@@ -11,6 +11,9 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.scanner.ScanActivity;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -19,6 +22,8 @@ public class MainActivity extends ActionBarActivity {
     private File ConfigFile;
     public static String ScriptDir;
     public static Hub MYOHub;
+
+    private ArrayList<GestureItem> mGestureList = new ArrayList<GestureItem>();
 
     public static GestureScriptManager mManager;
 
@@ -80,5 +85,19 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // TKi 26.03.2015
+    public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern){
+        mGestureList = mManager.getGestureList();
+        for(GestureItem gestureItem : mGestureList){
+            if(gestureItem.equalPattern(recordedPattern)){
+                String scriptName = gestureItem.getScript();
+                Toast.makeText(getApplicationContext(), "Available Script: "+ scriptName , Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "No available script for execution", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

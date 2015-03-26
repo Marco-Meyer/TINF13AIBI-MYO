@@ -21,13 +21,13 @@ public class GestureItem {
     private GesturePattern mPattern;
     private String mDate;
 
-    public boolean equalPattern(GestureItem item){
-        if (item.getPattern().size() != mPattern.size()){
+    public boolean equalPattern(GesturePattern pattern){
+        if (pattern.size() != mPattern.size()){
             return false;
         } else {
             int count = mPattern.size();
             for (int i=0; i<count; i++){
-                if (!item.getPattern().get(i).equals(mPattern.get(i))){
+                if (!pattern.get(i).equals(mPattern.get(i))){
                     return false;
                 }
             }
