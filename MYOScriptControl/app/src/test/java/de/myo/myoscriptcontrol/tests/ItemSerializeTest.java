@@ -29,7 +29,11 @@ public class ItemSerializeTest {
         ScriptItem sItem2 = new ScriptItem(jsonScItem1);
         JSONObject jsonScItem2 = sItem2.asJsonObject();
 
-        assertThat(jsonScItem1, is(jsonScItem2));
+        String jsonScString1 = jsonScItem1.toString();
+        String jsonScString2 = jsonScItem2.toString();
+        boolean equal = jsonScString1.equalsIgnoreCase(jsonScString2);
+
+        assertThat(equal, is(true));
 
         GestureItem gItem1 = new GestureItem();
         gItem1.setPattern(new GesturePattern());
@@ -40,7 +44,11 @@ public class ItemSerializeTest {
         GestureItem gItem2 = new GestureItem(jsonGeItem1);
         JSONObject jsonGeItem2 = gItem2.asJsonObject();
 
-        assertThat(jsonGeItem1, is(jsonGeItem2));
+        String jsonGeString1 = jsonGeItem1.toString();
+        String jsonGeString2 = jsonGeItem2.toString();
+        boolean equal2 = jsonGeString1.equalsIgnoreCase(jsonGeString2);
+
+        assertThat(equal2, is(true));
     }
 
 }

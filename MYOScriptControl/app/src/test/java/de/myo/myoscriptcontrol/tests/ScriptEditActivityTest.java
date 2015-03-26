@@ -56,7 +56,7 @@ public class ScriptEditActivityTest {
 
         activity.saveScriptItem(file);
         ScriptItem item = activity.getScriptItem();
-        File destFile = new File(MainActivity.ScriptDir, item.getId().toString() + ".sf");
+        File destFile = new File(MainActivity.ScriptDir, item.getScriptFile());
         String fileString = "";
         try {
             fileString = FileManager.getStringFromFile(destFile.getAbsolutePath());

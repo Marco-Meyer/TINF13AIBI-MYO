@@ -22,9 +22,6 @@ public class MainActivity extends ActionBarActivity {
     private File ConfigFile;
     public static String ScriptDir;
     public static Hub MYOHub;
-
-    private ArrayList<GestureItem> mGestureList = new ArrayList<GestureItem>();
-
     public static GestureScriptManager mManager;
 
     private void initializeFiles(){
@@ -89,8 +86,8 @@ public class MainActivity extends ActionBarActivity {
 
     // TKi 26.03.2015
     public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern){
-        mGestureList = mManager.getGestureList();
-        for(GestureItem gestureItem : mGestureList){
+        ArrayList<GestureItem> gestureList = mManager.getGestureList();
+        for(GestureItem gestureItem : gestureList){
             if(gestureItem.equalPattern(recordedPattern)){
                 String scriptName = gestureItem.getScript();
                 Toast.makeText(getApplicationContext(), "Available Script: "+ scriptName , Toast.LENGTH_LONG).show();
