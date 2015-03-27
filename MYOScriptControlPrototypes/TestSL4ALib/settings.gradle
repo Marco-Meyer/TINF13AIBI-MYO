@@ -1,0 +1,2 @@
+include ':app', ':sl4a-lib'
+project(':sl4a-lib').projectDir = new File('libs/sl4a-lib')
