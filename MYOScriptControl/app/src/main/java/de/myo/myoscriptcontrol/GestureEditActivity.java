@@ -42,27 +42,13 @@ public class GestureEditActivity extends ActionBarActivity {
     private GestureItem mGestureItem;
     private String mGestureItemString;
     private ImageButton mButtonNameEdit, mButtonScriptEdit, mButtonPatternPlay, mButtonPatternEdit;
-    private TextView mTextViewName, mTextViewScript;
+    private EditText mTextViewName, mTextViewScript;
+    private GesturePatternGridViewAdapter mGridAdapter;
 
     private void loadPatternIntoGrid(GesturePattern pattern){
-        int count = pattern.size();
-        String[] patternList = new String[count];
-        for (int i = 0; i < count; i++) {
-            patternList[i] = pattern.get(i).toString();
-        }
         GridView grid = (GridView)findViewById(R.id.gridViewGesturePattern);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_list_item_1, patternList){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text = (TextView) view.findViewById(android.R.id.text1);
-                text.setTextColor(Color.BLACK);
-                return view;
-            }
-        };
-        grid.setAdapter(arrayAdapter);
+        mGridAdapter = new GesturePatternGridViewAdapter(this, pattern);
+        grid.setAdapter(mGridAdapter);
     }
 
     @Override
@@ -79,10 +65,10 @@ public class GestureEditActivity extends ActionBarActivity {
         mButtonNameEdit = (ImageButton)findViewById(R.id.imageButtonGestureName);
         mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonEditGestureScript);
         mButtonPatternEdit = (ImageButton)findViewById(R.id.imageButtonEditGesturePattern);
-        mButtonPatternPlay = (ImageButton)findViewById(R.id.imageButtonPlayGesturePattern);
+//        mButtonPatternPlay = (ImageButton)findViewById(R.id.imageButtonPlayGesturePattern);
 
-        mTextViewName = (TextView)findViewById(R.id.textViewGestureName);
-        mTextViewScript = (TextView)findViewById(R.id.textViewGestureScript);
+        mTextViewName = (EditText)findViewById(R.id.textViewGestureName);
+        mTextViewScript = (EditText)findViewById(R.id.textViewGestureScript);
         initializeListeners();
     }
 
@@ -123,12 +109,12 @@ public class GestureEditActivity extends ActionBarActivity {
                 startGestureRecordActivity(mGestureItem.getPattern());
             }
         });
-        mButtonPatternPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGestureShowActivity(mGestureItem.getPattern());
-            }
-        });
+//        mButtonPatternPlay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startGestureShowActivity(mGestureItem.getPattern());
+//            }
+//        });
     }
 
     private void startGestureRecordActivity(GesturePattern pattern){
@@ -137,13 +123,13 @@ public class GestureEditActivity extends ActionBarActivity {
         startActivityForResult(intent, EDIT_PATTERN_REQUEST);
     }
 
-    private void startGestureShowActivity(ArrayList<GridPosition> pattern){
-        Toast.makeText(getApplicationContext(), "TODO: Show pattern Activity", Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), mGestureItem.getPattern().asJsonArray().toString(), Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(GestureEditActivity.this, GestureRecordActivity.class);
-//        intent.putExtra("addOrEdit", "add");
-//        startActivityForResult(intent, SHOW_PATTERN_REQUEST);
-    }
+//    private void startGestureShowActivity(ArrayList<GridPosition> pattern){
+//        Toast.makeText(getApplicationContext(), "TODO: Show pattern Activity", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), mGestureItem.getPattern().asJsonArray().toString(), Toast.LENGTH_LONG).show();
+////        Intent intent = new Intent(GestureEditActivity.this, GestureRecordActivity.class);
+////        intent.putExtra("addOrEdit", "add");
+////        startActivityForResult(intent, SHOW_PATTERN_REQUEST);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -222,10 +208,6 @@ public class GestureEditActivity extends ActionBarActivity {
     }
 
     private void refreshViews(GestureItem gestureItem){
-//        TextView name = (TextView)findViewById(R.id.textViewGestureName);
-//        TextView script = (TextView)findViewById(R.id.textViewGestureScript);
-//        name.setText(gestureItem.getName());
-//        script.setText(gestureItem.getScript());
         mTextViewName.setText(gestureItem.getName());
         try {
             UUID uuid = UUID.fromString(gestureItem.getScript());

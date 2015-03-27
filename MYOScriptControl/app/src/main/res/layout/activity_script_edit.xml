@@ -2,7 +2,9 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:padding="20dp"
     android:background="@color/activity_background"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -10,113 +12,119 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:weightSum="1">
 
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="fill_parent"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Name:"
             android:id="@+id/labelName"
-            android:layout_weight="0.25"/>
-
-        <TextView
-            android:ellipsize="end"
-            android:gravity="top|start"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:lines="1"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Medium Text"
-            android:id="@+id/textViewScriptName"
-            android:layout_weight="0.60"/>
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButtonScriptName"
-            android:layout_weight="0.15"
-            android:src="@android:drawable/ic_menu_edit"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:weightSum="1">
-
-        <TextView
-            android:ellipsize="end"
-            android:gravity="top|start"
-            android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Beschreibung:"
-            android:id="@+id/labelDescription"
             android:layout_weight="0.85"/>
         <ImageButton
+            android:id="@+id/imageButtonScriptName"
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButtonEditDescription"
+            android:layout_height="fill_parent"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
-    <TextView
+    <EditText
+        android:scrollbars="vertical"
+        android:textColor="@color/fileNameIW"
+        android:editable="false"
+        android:textSize="@dimen/scriptName"
         android:ellipsize="end"
         android:gravity="top|start"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:padding="10dp"
-        android:lines="3"
-        android:maxLines="5"
-        android:hint="Beschreibung..."
+        android:maxLines="2"
+        android:hint="Name eingeben"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text=""
-        android:id="@+id/textViewDescription"/>
+        android:id="@+id/textViewScriptName"/>
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:weightSum="1">
 
         <TextView
+            android:layout_height="50dp"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
+
+            android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Beschreibung:"
+            android:textColor="@android:color/secondary_text_light"
+            android:id="@+id/labelDescription"
+            android:layout_weight="0.85"/>
+        <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:id="@+id/imageButtonEditDescription"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_edit"/>
+    </LinearLayout>
+    <EditText
+        android:textColor="@color/fileNameIW"
+        android:editable="false"
+        android:scrollbars="vertical"
+        android:textSize="@dimen/description"
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:maxLines="7"
+        android:hint="Beschreibung eingeben"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/textViewDescription"/>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
+            android:ellipsize="end"
+            android:gravity="top|start"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Skript:"
             android:id="@+id/labelScript"
             android:layout_weight="0.70"/>
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonStartScript"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_media_play"/>
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonImportScript"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_menu_search"/>
     </LinearLayout>
-    <TextView
-        android:ellipsize="end"
-        android:gravity="top|start"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:fontFamily="monospace"
-        android:padding="10dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:hint="Skript..."
-        android:text=""
-        android:id="@+id/textViewScript"/>
 </LinearLayout>

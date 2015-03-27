@@ -2,6 +2,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:padding="20dp"
     android:background="@color/activity_background"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -10,122 +11,136 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:weightSum="1">
 
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="fill_parent"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Name:"
             android:id="@+id/labelName"
-            android:layout_weight="0.25"/>
-
-        <TextView
-            android:ellipsize="end"
-            android:gravity="top|start"
-            android:layout_height="wrap_content"
-            android:lines="1"
-            android:maxLines="1"
-            android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Medium Text"
-            android:id="@+id/textViewGestureName"
-            android:layout_weight="0.60"/>
-
+            android:layout_weight="0.85"/>
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonGestureName"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
+    <EditText
+        android:scrollbars="vertical"
+        android:textColor="@color/fileNameIW"
+        android:editable="false"
+        android:textSize="@dimen/gestureName"
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:maxLines="2"
+        android:hint="Name eingeben"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/textViewGestureName"/>
+
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:weightSum="1">
 
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="fill_parent"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Skript:"
             android:id="@+id/labelScript"
-            android:layout_weight="0.25"/>
-
-        <TextView
-            android:ellipsize="end"
-            android:gravity="top|start"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:lines="2"
-            android:maxLines="2"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Medium Text"
-            android:id="@+id/textViewGestureScript"
-            android:layout_weight="0.60"/>
-
+            android:layout_weight="0.85"/>
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonEditGestureScript"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
+    <EditText
+        android:scrollbars="vertical"
+        android:textColor="@color/fileNameIW"
+        android:editable="false"
+        android:textSize="@dimen/gestureName"
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:maxLines="2"
+        android:hint="Skript auswählen"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/textViewGestureScript"/>
+
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:weightSum="1">
 
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="fill_parent"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Muster:"
             android:id="@+id/labelPattern"
-            android:layout_weight="0.70"/>
-        <ImageButton
+            android:layout_weight="0.85"/>
+            <!--android:layout_weight="0.70"/-->
+        <!--ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonPlayGesturePattern"
             android:layout_weight="0.15"
-            android:src="@android:drawable/ic_media_play"/>
+            android:src="@android:drawable/ic_media_play"/-->
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButtonEditGesturePattern"
             android:layout_weight="0.15"
-            android:src="@drawable/ic_action_record"/>
+            android:src="@android:drawable/ic_menu_edit"/>
+            <!--android:src="@drawable/ic_action_record"/-->
     </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <GridView
+        android:longClickable="false"
+        android:focusable="false"
+        android:drawSelectorOnTop="false"
+        android:clickable="false"
+        android:id="@+id/gridViewGesturePattern"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:weightSum="1">
-        <GridView
-            android:id="@+id/gridViewGesturePattern"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:numColumns="auto_fit"
-            android:columnWidth="50dp"
-            android:horizontalSpacing="5dp"
-            android:verticalSpacing="5dp"
-            android:gravity="center"
-            android:stretchMode="columnWidth"/>
-
-    </LinearLayout>
+        android:numColumns="auto_fit"
+        android:columnWidth="60dp"
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"/>
 </LinearLayout>

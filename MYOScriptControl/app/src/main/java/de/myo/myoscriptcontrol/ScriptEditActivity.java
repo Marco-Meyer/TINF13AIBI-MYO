@@ -30,9 +30,9 @@ public class ScriptEditActivity extends ActionBarActivity {
 
     private ScriptItem mScriptItem;
     private String mScriptItemString;
-    private File mImportedScriptFile, mScriptFile;
+    private File mImportedScriptFile;
     private ImageButton mButtonNameEdit, mButtonDescriptionEdit, mButtonScriptEdit, mButtonScriptSearch;
-    private TextView mTextViewName, mTextViewDescription, mTextViewScript;
+    private EditText mTextViewName, mTextViewDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +53,9 @@ public class ScriptEditActivity extends ActionBarActivity {
         mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonStartScript);
         mButtonScriptSearch = (ImageButton)findViewById(R.id.imageButtonImportScript);
 
-        mTextViewName = (TextView)findViewById(R.id.textViewScriptName);
-        mTextViewDescription = (TextView)findViewById(R.id.textViewDescription);
-        mTextViewScript = (TextView)findViewById(R.id.textViewScript);
+        mTextViewName = (EditText)findViewById(R.id.textViewScriptName);
+        mTextViewDescription = (EditText)findViewById(R.id.textViewDescription);
+//        mTextViewScript = (TextView)findViewById(R.id.textViewScript);
         initializeListeners();
     }
 
@@ -181,20 +181,6 @@ public class ScriptEditActivity extends ActionBarActivity {
     private void refreshViews(ScriptItem scriptItem){
         mTextViewName.setText(scriptItem.getName());
         mTextViewDescription.setText(scriptItem.getDescription());
-        mScriptFile = new File(MainActivity.ScriptDir, mScriptItem.getScriptFile());
-            try {
-                String script;
-                if (mImportedScriptFile != null) {
-                    script = FileManager.getStringFromFile(mImportedScriptFile.getAbsolutePath());
-                } else if (mScriptFile.exists()) {
-                    script = FileManager.getStringFromFile(mScriptFile.getAbsolutePath());
-                } else {
-                    script = "<Kein Skript vorhanden>";
-                }
-                mTextViewScript.setText(script);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
     }
 
 
@@ -228,11 +214,7 @@ public class ScriptEditActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         if (id == R.id.action_cancel_script) {
             setResult(RESULT_CANCELED);
             finish();
@@ -247,8 +229,9 @@ public class ScriptEditActivity extends ActionBarActivity {
         if (requestCode == IMPORT_SCRIPT_REQUEST){
             if (resultCode == RESULT_OK) {
                 String curFileName = data.getStringExtra("GetFileName");
+                mScriptItem.setName(curFileName);
+                mTextViewName.setText(curFileName);
                 mImportedScriptFile = new File(data.getStringExtra("GetPath"), curFileName);
-                refreshViews(mScriptItem);
             }
         }
     }

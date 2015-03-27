@@ -20,7 +20,7 @@
         android:lines="1"
         android:maxLines="1"
         android:id="@+id/gestureName"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/fileName"
         android:paddingStart="15dp"
