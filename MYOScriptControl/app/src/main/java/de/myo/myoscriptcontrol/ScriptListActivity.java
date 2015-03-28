@@ -125,8 +125,6 @@ public class ScriptListActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_script) {
             addItem();
             return true;
@@ -138,7 +136,6 @@ public class ScriptListActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_SCRIPT_REQUEST && resultCode == RESULT_OK){
-            //Geste zur liste hinzufügen
             try {
                 String scriptItemResult = data.getStringExtra("resultItem");
                 ScriptItem item = new ScriptItem(new JSONObject(scriptItemResult));
@@ -149,7 +146,6 @@ public class ScriptListActivity extends ActionBarActivity {
             }
             mGestureScriptManager.saveToJsonFile();
         } else if (requestCode == EDIT_SCRIPT_REQUEST && resultCode == RESULT_OK){
-            //Geste in liste ändern/auswechseln
             try {
                 String scriptItemResult = data.getStringExtra("resultItem");
                 mSelectedItemToEdit.insertJsonData(new JSONObject(scriptItemResult));

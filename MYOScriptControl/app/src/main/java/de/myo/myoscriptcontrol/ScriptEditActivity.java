@@ -55,7 +55,6 @@ public class ScriptEditActivity extends ActionBarActivity {
 
         mTextViewName = (EditText)findViewById(R.id.textViewScriptName);
         mTextViewDescription = (EditText)findViewById(R.id.textViewDescription);
-//        mTextViewScript = (TextView)findViewById(R.id.textViewScript);
         initializeListeners();
     }
 
