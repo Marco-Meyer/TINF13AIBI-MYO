@@ -25,7 +25,7 @@ public class ScriptListActivity extends ActionBarActivity {
     private ArrayList<ScriptItem> mScriptList = new ArrayList<ScriptItem>();
     private ScriptItemListViewAdapter mListViewAdapter;
     private ListView mListView;
-    private ScriptItem mLongClickedItem;
+    private ScriptItem mSelectedItemToEdit;
     private GestureScriptManager mGestureScriptManager;
 
     @Override
@@ -47,14 +47,15 @@ public class ScriptListActivity extends ActionBarActivity {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mLongClickedItem = mListViewAdapter.getItem(position);
+                mSelectedItemToEdit = mListViewAdapter.getItem(position);
                 return false;
             }
         });
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                mSelectedItemToEdit = mListViewAdapter.getItem(position);
+                editItem(mSelectedItemToEdit);
             }
         });
 
@@ -76,10 +77,10 @@ public class ScriptListActivity extends ActionBarActivity {
         int menuItemIndex = item.getItemId();
         switch (menuItemIndex){
             case 0:
-                editItem(mLongClickedItem);
+                editItem(mSelectedItemToEdit);
                 break;
             case 1:
-                deleteItem(mLongClickedItem);
+                deleteItem(mSelectedItemToEdit);
                 break;
         }
         return true;
@@ -151,7 +152,7 @@ public class ScriptListActivity extends ActionBarActivity {
             //Geste in liste ändern/auswechseln
             try {
                 String scriptItemResult = data.getStringExtra("resultItem");
-                mLongClickedItem.insertJsonData(new JSONObject(scriptItemResult));
+                mSelectedItemToEdit.insertJsonData(new JSONObject(scriptItemResult));
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();

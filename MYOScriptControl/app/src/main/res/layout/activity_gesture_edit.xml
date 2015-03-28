@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:weightSum="1">
@@ -98,7 +98,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:weightSum="1">
-
         <TextView
             android:textColor="@android:color/secondary_text_light"
             android:textSize="@dimen/label"
@@ -110,15 +109,6 @@
             android:text="Muster:"
             android:id="@+id/labelPattern"
             android:layout_weight="0.85"/>
-            <!--android:layout_weight="0.70"/-->
-        <!--ImageButton
-            android:background="@color/myosdk__thalmic_blue"
-            android:layout_margin="1dp"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageButtonPlayGesturePattern"
-            android:layout_weight="0.15"
-            android:src="@android:drawable/ic_media_play"/-->
         <ImageButton
             android:background="@color/myosdk__thalmic_blue"
             android:layout_margin="1dp"
@@ -127,20 +117,13 @@
             android:id="@+id/imageButtonEditGesturePattern"
             android:layout_weight="0.15"
             android:src="@android:drawable/ic_menu_edit"/>
-            <!--android:src="@drawable/ic_action_record"/-->
     </LinearLayout>
     <GridView
-        android:longClickable="false"
-        android:focusable="false"
-        android:drawSelectorOnTop="false"
-        android:clickable="false"
         android:id="@+id/gridViewGesturePattern"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:numColumns="auto_fit"
         android:columnWidth="60dp"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
         android:gravity="center"
         android:stretchMode="columnWidth"/>
 </LinearLayout>
