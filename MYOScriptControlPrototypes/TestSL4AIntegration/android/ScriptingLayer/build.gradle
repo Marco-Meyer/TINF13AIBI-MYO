@@ -1,0 +1,18 @@
+apply plugin: 'java'
+sourceSets {
+    main.java.srcDirs = ['src']
+    main.resources.srcDirs = ['src']
+    test.java.srcDirs = ['tests/java']
+    test.resources.srcDirs = ['tests/resources']
+}
+
+dependencies {
+    compile files('libs/android.jar')
+    compile files('libs/guava-r06.jar')
+    compile project(':Common')
+    compile project(':Utils')
+    compile project(':TextToSpeechFacade')
+    compile project(':WebCamFacade')
+    compile project(':BluetoothFacade')
+    compile project(':SignalStrengthFacade')
+}
