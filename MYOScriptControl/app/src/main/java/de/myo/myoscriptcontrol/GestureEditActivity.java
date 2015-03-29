@@ -72,7 +72,7 @@ public class GestureEditActivity extends ActionBarActivity {
         initializeListeners();
     }
 
-    private void initializeListeners(){
+    private void initializeListeners() {
         mButtonNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,12 +109,6 @@ public class GestureEditActivity extends ActionBarActivity {
                 startGestureRecordActivity(mGestureItem.getPattern());
             }
         });
-//        mButtonPatternPlay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startGestureShowActivity(mGestureItem.getPattern());
-//            }
-//        });
     }
 
     private void startGestureRecordActivity(GesturePattern pattern){
@@ -122,14 +116,6 @@ public class GestureEditActivity extends ActionBarActivity {
         intent.putExtra("pattern", pattern.asJsonArray().toString());
         startActivityForResult(intent, EDIT_PATTERN_REQUEST);
     }
-
-//    private void startGestureShowActivity(ArrayList<GridPosition> pattern){
-//        Toast.makeText(getApplicationContext(), "TODO: Show pattern Activity", Toast.LENGTH_LONG).show();
-//        Toast.makeText(getApplicationContext(), mGestureItem.getPattern().asJsonArray().toString(), Toast.LENGTH_LONG).show();
-////        Intent intent = new Intent(GestureEditActivity.this, GestureRecordActivity.class);
-////        intent.putExtra("addOrEdit", "add");
-////        startActivityForResult(intent, SHOW_PATTERN_REQUEST);
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

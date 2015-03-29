@@ -10,9 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
@@ -56,50 +53,44 @@ public class GesturePatternGridViewAdapter extends BaseAdapter {
         TextView number = (TextView) convertView.findViewById(R.id.textViewPatternNumber);
         number.setText(position+1 + ".");
         GridPosition item = mGesturePattern.get(position);
-        switch (item){
-            case POS_CENTER:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_c));
-                break;
-            }
-            case POS_EAST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_e));
-                break;
-            }
-            case POS_NORTH:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_n));
-                break;
-            }
-            case POS_NORTH_EAST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_ne));
-                break;
-            }
-            case POS_NORTH_WEST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_nw));
-                break;
-            }
-            case POS_WEST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_w));
-                break;
-            }
-            case POS_SOUTH_EAST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_se));
-                break;
-            }
-            case POS_SOUTH:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_s));
-                break;
-            }
-            case POS_SOUTH_WEST:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_sw));
-                break;
-            }
-            default:{
-                image.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.pos_null));
-                break;
-            }
-        }
+        image.setImageDrawable(getDrawableForPosition(item));
 
         return convertView;
+    }
+
+    private Drawable getDrawableForPosition(GridPosition position) {
+        switch (position) {
+            case POS_CENTER:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_c);
+            }
+            case POS_EAST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_e);
+            }
+            case POS_NORTH:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_n);
+            }
+            case POS_NORTH_EAST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_ne);
+            }
+            case POS_NORTH_WEST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_nw);
+            }
+            case POS_WEST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_w);
+            }
+            case POS_SOUTH_EAST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_se);
+            }
+            case POS_SOUTH:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_s);
+            }
+            case POS_SOUTH_WEST:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_sw);
+            }
+            default:{
+                return mActivity.getResources().getDrawable(R.drawable.pos_null);
+            }
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,12 +30,11 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     private Hub mMyoHub;
     private Pose mPose;
     private static GestureRecordDeviceListener mMyoListener = new GestureRecordDeviceListener();
-    private TextView mTextLog;
     private HashMap<GridPosition, ImageView> mPositionImageMap;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
     private GridPosition mCurrentPosition;
     private GridPosition mLastPosition;
-    private boolean mRecording, mPlaying;
+    private boolean mRecording;
 
     @Override
     public void OnPose(Pose pose) {
@@ -58,7 +58,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                 showLastPositionOnGrid();
             }
         }
-
     }
 
     @Override
@@ -77,7 +76,9 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     private void showPattern(){
         if (mPattern!=null) {
-            mTextLog.setText(mPattern.asJsonArray().toString());
+            GridView grid = (GridView)findViewById(R.id.gridViewRecordedPattern);
+            GesturePatternGridViewAdapter gridAdapter = new GesturePatternGridViewAdapter(this, mPattern);
+            grid.setAdapter(gridAdapter);
         }
     }
 
@@ -122,9 +123,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     private void initializeButtonListeners(){
         mRecording = false;
-        mPlaying = false;
         final ImageButton buttonRecord = (ImageButton)findViewById(R.id.imageButtonRecordPattern);
-        final ImageButton buttonPlay = (ImageButton)findViewById(R.id.imageButtonPlayRecordedPattern);
         buttonRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,37 +132,13 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                     v.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
                     clearGridPosition();
                     clearLastPosition();
-                    buttonPlay.setEnabled(true);
-                    buttonPlay.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-
                 }
                 else {
                     ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
                     v.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
                     showPositionOnGrid();
-                    buttonPlay.setEnabled(false);
-                    buttonPlay.setBackgroundColor(getResources().getColor(R.color.bright_foreground_disabled_material_light));
                 }
                 mRecording = !mRecording;
-            }
-        });
-
-        buttonPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mPlaying) {
-                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_play));
-                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-                    buttonRecord.setEnabled(true);
-                    buttonRecord.setBackgroundColor(getResources().getColor(R.color.myosdk__thalmic_blue));
-                }
-                else {
-                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_av_stop));
-                    v.setBackgroundColor(getResources().getColor(R.color.myosdk__indicator_green));
-                    buttonRecord.setEnabled(false);
-                    buttonRecord.setBackgroundColor(getResources().getColor(R.color.bright_foreground_disabled_material_light));
-                }
-                mPlaying = !mPlaying;
             }
         });
     }
@@ -209,7 +184,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     @Override
     protected void onResume() {
         super.onResume();
-        mTextLog = (TextView)findViewById(R.id.textLogRecord);
         mCurrentPosition = GridPosition.POS_CENTER;
         mPose = Pose.UNKNOWN;
         initializeIntentVars(getIntent());
@@ -224,7 +198,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
         super.onPause();
         mMyoHub.removeListener(mMyoListener);
         mMyoListener.removeTarget(this);
-        mPlaying = false;
         mRecording = false;
         clearGridPosition();
     }

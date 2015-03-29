@@ -6,10 +6,5 @@
     <item android:id="@+id/action_script_manager" android:title="@string/action_script_manager"
         android:orderInCategory="100" app:showAsAction="ifRoom" android:icon="@drawable/ic_action_scriptlist"/>
     <item android:id="@+id/action_connect_myo" android:title="@string/action_connect_myo"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/action_help" android:title="@string/action_help"
-        android:orderInCategory="100" app:showAsAction="never"/>
-    <!--item android:id="@+id/action_add_gesture" android:title="@string/action_add"
-        android:orderInCategory="100" app:showAsAction="always" android:icon="@android:drawable/ic_menu_add" /-->
-
+        android:orderInCategory="100" app:showAsAction="ifRoom" android:icon="@drawable/myo_icon"/>
 </menu>

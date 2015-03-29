@@ -26,21 +26,22 @@ public class GestureListActivity extends ActionBarActivity {
     private ArrayList<GestureItem> mGestureList = new ArrayList<GestureItem>();
     private GestureItemListViewAdapter mListViewAdapter;
     private ListView mListView;
-    private GestureItem mLongClickedItem;
+    private GestureItem mSelectedItemToEdit;
     private GestureScriptManager mGestureScriptManager;
 
     private void initializeListeners(){
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mLongClickedItem = mListViewAdapter.getItem(position);
+                mSelectedItemToEdit = mListViewAdapter.getItem(position);
                 return false;
             }
         });
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                mSelectedItemToEdit = mListViewAdapter.getItem(position);
+                editItem(mSelectedItemToEdit);
             }
         });
 
@@ -76,10 +77,10 @@ public class GestureListActivity extends ActionBarActivity {
         int menuItemIndex = item.getItemId();
         switch (menuItemIndex){
             case 0:
-                editItem(mLongClickedItem);
+                editItem(mSelectedItemToEdit);
                 break;
             case 1:
-                deleteItem(mLongClickedItem);
+                deleteItem(mSelectedItemToEdit);
                 break;
         }
         return true;
@@ -119,7 +120,7 @@ public class GestureListActivity extends ActionBarActivity {
         } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
             try {
                 String gestureItemResult = data.getStringExtra("resultItem");
-                mLongClickedItem.insertJsonData(new JSONObject(gestureItemResult));
+                mSelectedItemToEdit.insertJsonData(new JSONObject(gestureItemResult));
                 mListViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                     e.printStackTrace();

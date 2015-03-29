@@ -3,83 +3,69 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/activity_background"
+    android:padding="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.11"
-        android:layout_gravity="center"
-        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:weightSum="1">
-
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="fill_parent"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Status:"
             android:id="@+id/labelRecordStatus"
             android:layout_weight="0.25"/>
-
         <TextView
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="@dimen/label"
             android:ellipsize="end"
             android:gravity="top|start"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="a status"
             android:id="@+id/textViewRecordStatus"
-            android:layout_weight="0.45"/>
+            android:layout_weight="0.6"/>
         <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageButtonRecordPattern"
             android:layout_weight="0.15"
-            android:src="@drawable/ic_action_record"
-            android:background="@color/wallet_holo_blue_light"
-            android:longClickable="true"
-            android:layout_marginEnd="5dp"/>
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageButtonPlayRecordedPattern"
-            android:layout_weight="0.15"
-            android:src="@drawable/ic_action_av_play"
-            android:background="@color/wallet_holo_blue_light"
-            android:longClickable="true" />
+            android:src="@drawable/ic_action_record"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5625"
-        android:padding="10dp"
         android:orientation="vertical" >
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.33"
             android:orientation="horizontal">
-
             <ImageView
                 android:id="@+id/imageViewNW"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000"/>
-
             <ImageView
                 android:id="@+id/imageViewN"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
-
             <ImageView
                 android:id="@+id/imageViewNE"
                 android:layout_width="wrap_content"
@@ -92,21 +78,18 @@
             android:layout_height="0dp"
             android:layout_weight="0.33"
             android:orientation="horizontal" >
-
             <ImageView
                 android:id="@+id/imageViewW"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
-
             <ImageView
                 android:id="@+id/imageViewC"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
-
             <ImageView
                 android:id="@+id/imageViewE"
                 android:layout_width="wrap_content"
@@ -119,21 +102,18 @@
             android:layout_height="0dp"
             android:layout_weight="0.33"
             android:orientation="horizontal" >
-
             <ImageView
                 android:id="@+id/imageViewSW"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
-
             <ImageView
                 android:id="@+id/imageViewS"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
-
             <ImageView
                 android:id="@+id/imageViewSE"
                 android:layout_width="wrap_content"
@@ -142,20 +122,13 @@
                 android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <GridView
+        android:layout_weight="0.25"
+        android:id="@+id/gridViewRecordedPattern"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.13"
-        android:padding="10dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textLogRecord"
-            android:lines="10"
-            android:ellipsize="end"
-            android:gravity="top|start"
-            android:layout_height="fill_parent"
-            android:layout_width="fill_parent"
-            android:scrollbars="vertical" />
-    </LinearLayout>
+        android:numColumns="auto_fit"
+        android:columnWidth="60dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"/>
 </LinearLayout>
