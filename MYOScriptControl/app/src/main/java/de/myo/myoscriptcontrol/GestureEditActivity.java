@@ -37,11 +37,10 @@ import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
 public class GestureEditActivity extends ActionBarActivity {
     private static final int EDIT_PATTERN_REQUEST = 1;
-    private static final int SHOW_PATTERN_REQUEST = 2;
 
     private GestureItem mGestureItem;
     private String mGestureItemString;
-    private ImageButton mButtonNameEdit, mButtonScriptEdit, mButtonPatternPlay, mButtonPatternEdit;
+    private ImageButton mButtonNameEdit, mButtonScriptEdit, mButtonPatternEdit;
     private EditText mTextViewName, mTextViewScript;
     private GesturePatternGridViewAdapter mGridAdapter;
 

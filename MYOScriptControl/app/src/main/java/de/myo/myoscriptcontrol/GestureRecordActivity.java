@@ -96,7 +96,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     private void clearLastPosition() {
         ImageView image = mPositionImageMap.get(mLastPosition);
         if (image != null){
-            image.setBackgroundColor(getResources().getColor(R.color.background_floating_material_light));
+            image.setBackgroundColor(getResources().getColor(R.color.activity_background));
         }
     }
 
