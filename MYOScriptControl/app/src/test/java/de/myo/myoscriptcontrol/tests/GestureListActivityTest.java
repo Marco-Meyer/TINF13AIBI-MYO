@@ -13,6 +13,7 @@ import org.robolectric.util.ActivityController;
 
 import de.myo.myoscriptcontrol.GestureItem;
 import de.myo.myoscriptcontrol.GestureListActivity;
+import de.myo.myoscriptcontrol.GestureScriptManager;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 import de.myo.myoscriptcontrol.MainActivity;
 
@@ -28,7 +29,7 @@ public class GestureListActivityTest {
         MainActivity mainActivity = mainController.create().start().resume().get();
         ActivityController<GestureListActivity> listController = Robolectric.buildActivity(GestureListActivity.class);
         GestureListActivity listActivity = listController.create().start().resume().get();
-        List<GestureItem> list = mainActivity.mManager.getGestureList();
+        List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
         GestureItem testItem = new GestureItem();
         assertThat(list.size(), is(0));
         list.add(testItem);

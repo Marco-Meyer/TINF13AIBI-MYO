@@ -58,7 +58,7 @@ public class GestureItemListViewAdapter extends BaseAdapter {
         String scriptText;
         try {
             UUID uuid = UUID.fromString(item.getScript());
-            ScriptItem scriptItem = MainActivity.mManager.getScriptByUUID(uuid);
+            ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
             scriptText = String.format("Skript: %s", scriptItem.getName());
         } catch (NullPointerException|IllegalArgumentException e){
             scriptText = String.format("Skript: %s", item.getScript());

@@ -9,6 +9,7 @@ import org.robolectric.shadows.ShadowToast;
 import java.util.List;
 
 import de.myo.myoscriptcontrol.GestureItem;
+import de.myo.myoscriptcontrol.GestureScriptManager;
 import de.myo.myoscriptcontrol.MainActivity;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
@@ -29,7 +30,7 @@ public class MainActivityTest {
 
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
-        List<GestureItem> list = mainActivity.mManager.getGestureList();
+        List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
 
         GestureItem testItem = new GestureItem();
         testItem.setScript("TestScript");

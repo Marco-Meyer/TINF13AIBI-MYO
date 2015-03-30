@@ -27,7 +27,6 @@ public class GestureListActivity extends ActionBarActivity {
     private GestureItemListViewAdapter mListViewAdapter;
     private ListView mListView;
     private GestureItem mSelectedItemToEdit;
-    private GestureScriptManager mGestureScriptManager;
 
     private void initializeListeners(){
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -51,8 +50,7 @@ public class GestureListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesture_list);
-        mGestureScriptManager = MainActivity.mManager;
-        mGestureList = mGestureScriptManager.getGestureList();
+        mGestureList = GestureScriptManager.getInstance().getGestureList();
         mListViewAdapter = new GestureItemListViewAdapter(this, mGestureList);
         mListView = (ListView)findViewById(R.id.listViewGestures);
         mListView.setAdapter(mListViewAdapter);
@@ -116,7 +114,7 @@ public class GestureListActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mGestureScriptManager.saveToJsonFile();
+            GestureScriptManager.getInstance().saveToJsonFile();
         } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
             try {
                 String gestureItemResult = data.getStringExtra("resultItem");
@@ -125,7 +123,7 @@ public class GestureListActivity extends ActionBarActivity {
             } catch (JSONException e) {
                     e.printStackTrace();
             }
-            mGestureScriptManager.saveToJsonFile();
+            GestureScriptManager.getInstance().saveToJsonFile();
         }
     }
 
@@ -133,7 +131,7 @@ public class GestureListActivity extends ActionBarActivity {
         String gestureName = item.getName();
         mGestureList.remove(item);
         mListViewAdapter.notifyDataSetChanged();
-        mGestureScriptManager.saveToJsonFile();
+        GestureScriptManager.getInstance().saveToJsonFile();
         Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 

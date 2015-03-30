@@ -26,14 +26,12 @@ public class ScriptListActivity extends ActionBarActivity {
     private ScriptItemListViewAdapter mListViewAdapter;
     private ListView mListView;
     private ScriptItem mSelectedItemToEdit;
-    private GestureScriptManager mGestureScriptManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_script_list);
-        mGestureScriptManager = MainActivity.mManager;
-        mScriptList = mGestureScriptManager.getScriptList();
+        mScriptList = GestureScriptManager.getInstance().getScriptList();
 
         mListViewAdapter = new ScriptItemListViewAdapter(this, mScriptList);
         mListView = (ListView)findViewById(R.id.listViewScripts);
@@ -90,7 +88,7 @@ public class ScriptListActivity extends ActionBarActivity {
         String scriptName = longClickedItem.getName();
         mScriptList.remove(longClickedItem);
         mListViewAdapter.notifyDataSetChanged();
-        mGestureScriptManager.saveToJsonFile();
+        GestureScriptManager.getInstance().saveToJsonFile();
         Toast.makeText(getApplicationContext(), scriptName + " wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 
@@ -144,7 +142,7 @@ public class ScriptListActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mGestureScriptManager.saveToJsonFile();
+            GestureScriptManager.getInstance().saveToJsonFile();
         } else if (requestCode == EDIT_SCRIPT_REQUEST && resultCode == RESULT_OK){
             try {
                 String scriptItemResult = data.getStringExtra("resultItem");
@@ -153,7 +151,7 @@ public class ScriptListActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mGestureScriptManager.saveToJsonFile();
+            GestureScriptManager.getInstance().saveToJsonFile();
         }
     }
 

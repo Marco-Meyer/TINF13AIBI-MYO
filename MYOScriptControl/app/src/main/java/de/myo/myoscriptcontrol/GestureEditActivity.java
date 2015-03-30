@@ -84,7 +84,7 @@ public class GestureEditActivity extends ActionBarActivity {
                 final Dialog dialog = new Dialog(GestureEditActivity.this);
                 dialog.setContentView(R.layout.activity_script_list);
 
-                ArrayList<ScriptItem> scriptList = MainActivity.mManager.getScriptList();
+                ArrayList<ScriptItem> scriptList = GestureScriptManager.getInstance().getScriptList();
                 ListView listView = (ListView) dialog.findViewById(R.id.listViewScripts);
                 final ScriptItemListViewAdapter adapter = new ScriptItemListViewAdapter(GestureEditActivity.this, scriptList);
                 listView.setAdapter(adapter);
@@ -196,7 +196,7 @@ public class GestureEditActivity extends ActionBarActivity {
         mTextViewName.setText(gestureItem.getName());
         try {
             UUID uuid = UUID.fromString(gestureItem.getScript());
-            ScriptItem scriptItem = MainActivity.mManager.getScriptByUUID(uuid);
+            ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
             mTextViewScript.setText(scriptItem.getName());
         } catch (NullPointerException|IllegalArgumentException e){
             mTextViewScript.setText(gestureItem.getScript());

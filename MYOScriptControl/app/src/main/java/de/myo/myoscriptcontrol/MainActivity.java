@@ -22,7 +22,6 @@ public class MainActivity extends ActionBarActivity {
     private File ConfigFile;
     public static String ScriptDir;
     public static Hub MYOHub;
-    public static GestureScriptManager mManager;
 
     private void initializeFiles(){
         ConfigDir = getMyoFileDir("config/");
@@ -46,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeFiles();
-        mManager = new GestureScriptManager(ConfigFile);
+        GestureScriptManager.getInstance().setConfigFile(ConfigFile);
         initializeMYOHub();
     }
 
@@ -97,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
 
     // TKi 26.03.2015
     public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern){
-        ArrayList<GestureItem> gestureList = mManager.getGestureList();
+        ArrayList<GestureItem> gestureList = GestureScriptManager.getInstance().getGestureList();
         for(GestureItem gestureItem : gestureList){
             if(gestureItem.equalPattern(recordedPattern)){
                 String scriptName = gestureItem.getScript();

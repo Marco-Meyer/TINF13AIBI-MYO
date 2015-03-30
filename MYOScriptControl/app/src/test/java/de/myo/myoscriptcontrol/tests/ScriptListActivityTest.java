@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.myo.myoscriptcontrol.GestureItem;
 import de.myo.myoscriptcontrol.GestureListActivity;
+import de.myo.myoscriptcontrol.GestureScriptManager;
 import de.myo.myoscriptcontrol.MainActivity;
 import de.myo.myoscriptcontrol.ScriptItem;
 import de.myo.myoscriptcontrol.ScriptListActivity;
@@ -28,7 +29,7 @@ public class ScriptListActivityTest {
         MainActivity mainActivity = mainController.create().start().resume().get();
         ActivityController<ScriptListActivity> listController = Robolectric.buildActivity(ScriptListActivity.class);
         ScriptListActivity listActivity = listController.create().start().resume().get();
-        List<ScriptItem> list = mainActivity.mManager.getScriptList();
+        List<ScriptItem> list = GestureScriptManager.getInstance().getScriptList();
         ScriptItem testItem = new ScriptItem();
         assertThat(list.size(), is(0));
         list.add(testItem);

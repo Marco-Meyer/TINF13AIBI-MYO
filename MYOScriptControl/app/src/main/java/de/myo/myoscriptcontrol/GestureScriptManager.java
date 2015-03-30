@@ -18,13 +18,21 @@ import java.util.UUID;
  * Created by Daniel on 18.03.2015.
  */
 public class GestureScriptManager {
+    static private GestureScriptManager instance;
     private ArrayList<GestureItem> mGestureList;
     private ArrayList<ScriptItem> mScriptList;
     private File mConfigFile;
 
-    public GestureScriptManager(){
+    private GestureScriptManager(){
         mGestureList = new ArrayList<>();
         mScriptList = new ArrayList<>();
+    }
+
+    static public GestureScriptManager getInstance() {
+        if (instance == null) {
+            instance = new GestureScriptManager();
+        }
+        return instance;
     }
 
     public ScriptItem getScriptByUUID(UUID uuid){
@@ -34,12 +42,6 @@ public class GestureScriptManager {
             }
         }
         return null;
-    }
-
-    public GestureScriptManager(File file){
-        this();
-        mConfigFile = file;
-        loadFromJsonFile(mConfigFile);
     }
 
     private void loadGestureListFromJson(JSONArray json){
@@ -126,7 +128,8 @@ public class GestureScriptManager {
         return mConfigFile;
     }
 
-    public void setConfigFile(File mConfigFile) {
-        this.mConfigFile = mConfigFile;
+    public void setConfigFile(File configFile) {
+        this.mConfigFile = configFile;
+        loadFromJsonFile(mConfigFile);
     }
 }
