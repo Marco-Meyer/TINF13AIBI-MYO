@@ -25,9 +25,20 @@ public class MainActivity extends ActionBarActivity {
     public static GestureScriptManager mManager;
 
     private void initializeFiles(){
-        ConfigDir = getExternalFilesDir("config/").getAbsolutePath();
+        ConfigDir = getMyoFileDir("config/");
         ConfigFile = new File(ConfigDir, "Config.json");
-        ScriptDir = getExternalFilesDir("scripts/").getAbsolutePath();
+        ScriptDir = getMyoFileDir("scripts/");
+    }
+
+    private String getMyoFileDir(String folder) {
+        String fileDirPath = getFilesDir().getAbsolutePath();
+        File file = new File(fileDirPath + "/" + folder);
+        file.mkdir();
+        if (!file.isDirectory()) {
+            throw new IllegalStateException("Folder couldn't be created");
+            //instead, use new error handling here.
+        }
+        return file.getAbsolutePath();
     }
 
     @Override
