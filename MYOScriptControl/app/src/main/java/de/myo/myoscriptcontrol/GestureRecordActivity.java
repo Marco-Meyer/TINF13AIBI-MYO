@@ -38,6 +38,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     @Override
     public void OnPose(Pose pose) {
+        OnUpdateStatus("IDLE");
         mPose = pose;
         if(mRecording) {
             if(mPose == Pose.FIST) {
@@ -124,6 +125,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     private void initializeButtonListeners(){
         mRecording = false;
         final ImageButton buttonRecord = (ImageButton)findViewById(R.id.imageButtonRecordPattern);
+        final ImageButton buttonDelete = (ImageButton)findViewById(R.id.imageButtonDeletePattern);
         buttonRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +141,13 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                     showPositionOnGrid();
                 }
                 mRecording = !mRecording;
+            }
+        });
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPattern.clear();
+                showPattern();
             }
         });
     }
@@ -178,7 +187,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesture_record);
         mStatus = RecordActivityStatus.DISCONNECTED;
-
     }
 
     @Override

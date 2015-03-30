@@ -33,7 +33,15 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="a status"
             android:id="@+id/textViewRecordStatus"
-            android:layout_weight="0.6"/>
+            android:layout_weight="0.45"/>
+        <ImageButton
+            android:background="@color/myosdk__thalmic_blue"
+            android:layout_margin="1dp"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageButtonDeletePattern"
+            android:layout_weight="0.15"
+            android:src="@android:drawable/ic_menu_delete"/>
         <ImageButton
             android:background="@color/myosdk__thalmic_blue"
             android:layout_margin="1dp"
