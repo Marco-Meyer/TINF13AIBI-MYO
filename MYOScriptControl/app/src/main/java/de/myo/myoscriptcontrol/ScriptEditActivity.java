@@ -5,10 +5,14 @@ package de.myo.myoscriptcontrol;
  */
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 public class ScriptEditActivity extends ActionBarActivity {
@@ -31,7 +36,7 @@ public class ScriptEditActivity extends ActionBarActivity {
     private ScriptItem mScriptItem;
     private String mScriptItemString;
     private File mImportedScriptFile;
-    private ImageButton mButtonNameEdit, mButtonDescriptionEdit, mButtonScriptEdit, mButtonScriptSearch;
+    private ImageButton mButtonNameEdit, mButtonDescriptionEdit, mButtonStartScript, mButtonScriptSearch;
     private EditText mTextViewName, mTextViewDescription;
 
     @Override
@@ -50,7 +55,7 @@ public class ScriptEditActivity extends ActionBarActivity {
     public void initializeViews(){
         mButtonNameEdit = (ImageButton)findViewById(R.id.imageButtonScriptName);
         mButtonDescriptionEdit = (ImageButton)findViewById(R.id.imageButtonEditDescription);
-        mButtonScriptEdit = (ImageButton)findViewById(R.id.imageButtonStartScript);
+        mButtonStartScript = (ImageButton)findViewById(R.id.imageButtonStartScript);
         mButtonScriptSearch = (ImageButton)findViewById(R.id.imageButtonImportScript);
 
         mTextViewName = (EditText)findViewById(R.id.textViewScriptName);
@@ -71,10 +76,11 @@ public class ScriptEditActivity extends ActionBarActivity {
                 showAlertTextInputDescription(mScriptItem.getDescription());
             }
         });
-        mButtonScriptEdit.setOnClickListener(new View.OnClickListener() {
+        mButtonStartScript.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO: Test script", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "TODO: Test script", Toast.LENGTH_LONG).show();
+                startScript();
             }
         });
         mButtonScriptSearch.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +90,42 @@ public class ScriptEditActivity extends ActionBarActivity {
                 startActivityForResult(intent,IMPORT_SCRIPT_REQUEST);
             }
         });
+    }
+
+    private void startScript(){
+        if (neededPackagesExist()){
+            //TODO if fileexists
+            File file = new File(MainActivity.ScriptDir ,mScriptItem.getScriptFile());
+            Intent intent = buildStartSL4A(file);
+            startActivity(intent);
+        } else {
+            //TODO
+        }
+    }
+
+    private Intent buildStartSL4A(File file){
+        final ComponentName componentName = SL4AConstants.SL4A_SERVICE_LAUNCHER_COMPONENT_NAME;
+        Intent intent = new Intent();
+        intent.setComponent(componentName);
+        intent.setAction(SL4AConstants.ACTION_LAUNCH_BACKGROUND_SCRIPT);
+        intent.putExtra(SL4AConstants.EXTRA_SCRIPT_PATH, file.getAbsolutePath());
+        return intent;
+    }
+
+    private boolean neededPackagesExist(){
+        final PackageManager pm = getPackageManager();
+        boolean androidScriptingExists = false;
+        boolean pythonForAndroidExists = false;
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        for (ApplicationInfo packageInfo : packages){
+            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.android_scripting")){
+                androidScriptingExists = true;
+            }
+            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.pythonforandroid")){
+                pythonForAndroidExists = true;
+            }
+        }
+        return androidScriptingExists & pythonForAndroidExists;
     }
 
     private void showAlertTextInputName(String text){

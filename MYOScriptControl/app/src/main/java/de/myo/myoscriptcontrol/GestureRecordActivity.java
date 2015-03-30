@@ -48,9 +48,9 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                 clearLastPosition();
                 mLastPosition = mCurrentPosition;
             }
-            if(mPose == Pose.FINGERS_SPREAD) {
-                findViewById(R.id.imageButtonRecordPattern).callOnClick();
-            }
+//            if(mPose == Pose.FINGERS_SPREAD) {
+//                findViewById(R.id.imageButtonRecordPattern).callOnClick();
+//            }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();
                 showPattern();
