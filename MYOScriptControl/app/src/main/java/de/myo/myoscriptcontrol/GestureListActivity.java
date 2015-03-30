@@ -127,7 +127,7 @@ public class GestureListActivity extends ActionBarActivity {
         }
     }
 
-    public void deleteItem(GestureItem item){
+    private void deleteItem(GestureItem item){
         String gestureName = item.getName();
         mGestureList.remove(item);
         mListViewAdapter.notifyDataSetChanged();
