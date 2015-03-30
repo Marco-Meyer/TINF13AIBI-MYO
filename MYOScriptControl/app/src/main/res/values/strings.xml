@@ -36,4 +36,6 @@
     <string name="title_activity_script_list">Scripte verwalten</string>
     <string name="title_activity_script_edit">ScriptEditActivity</string>
     <string name="title_activity_file_explorer">FileExplorerActivity</string>
+    <string name="title_activity_error">Fehler</string>
+    <string name="default_error_string">Beim Anzeigen des Fehlers ist ein Fehler aufgetreten.</string>
 </resources>

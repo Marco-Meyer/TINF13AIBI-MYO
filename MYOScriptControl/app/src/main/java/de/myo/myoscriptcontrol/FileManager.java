@@ -7,6 +7,7 @@ package de.myo.myoscriptcontrol;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class FileManager {
-    private static String convertStreamToString(InputStream is) throws Exception {
+    private static String convertStreamToString(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line = null;
@@ -25,7 +26,7 @@ public class FileManager {
         return sb.toString();
     }
 
-    public static String getStringFromFile (String filePath) throws Exception {
+    public static String getStringFromFile (String filePath) throws IOException {
         File fl = new File(filePath);
         FileInputStream fin = new FileInputStream(fl);
         String ret = convertStreamToString(fin);

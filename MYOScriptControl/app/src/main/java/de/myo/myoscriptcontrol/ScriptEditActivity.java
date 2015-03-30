@@ -216,6 +216,7 @@ public class ScriptEditActivity extends ActionBarActivity {
             refreshViews(mScriptItem);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -242,6 +243,7 @@ public class ScriptEditActivity extends ActionBarActivity {
                     FileManager.copyFile(scriptFile, destFile);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    ErrorActivity.handleError(this, e.getMessage());
                 }
             }
             mScriptItemString = mScriptItem.asJsonObject().toString(2);
@@ -250,6 +252,7 @@ public class ScriptEditActivity extends ActionBarActivity {
             setResult(RESULT_OK, intent);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 

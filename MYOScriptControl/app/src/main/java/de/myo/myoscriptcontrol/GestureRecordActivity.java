@@ -217,6 +217,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
             showPattern();
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -238,6 +239,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                 finish();
             } catch (JSONException e) {
                 e.printStackTrace();
+                ErrorActivity.handleError(this, e.getMessage());
             }
         } else if (id == R.id.action_cancel_pattern) {
             setResult(RESULT_CANCELED);

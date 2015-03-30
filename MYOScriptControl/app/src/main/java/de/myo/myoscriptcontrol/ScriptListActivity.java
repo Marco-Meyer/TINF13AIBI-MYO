@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -88,7 +89,12 @@ public class ScriptListActivity extends ActionBarActivity {
         String scriptName = longClickedItem.getName();
         mScriptList.remove(longClickedItem);
         mListViewAdapter.notifyDataSetChanged();
-        GestureScriptManager.getInstance().saveToJsonFile();
+        try {
+            GestureScriptManager.getInstance().saveToJsonFile();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
+        }
         Toast.makeText(getApplicationContext(), scriptName + " wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 
@@ -106,6 +112,7 @@ public class ScriptListActivity extends ActionBarActivity {
             startActivityForResult(intent, EDIT_SCRIPT_REQUEST);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -133,25 +140,22 @@ public class ScriptListActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_SCRIPT_REQUEST && resultCode == RESULT_OK){
-            try {
+        try {
+            if (requestCode == ADD_SCRIPT_REQUEST && resultCode == RESULT_OK) {
                 String scriptItemResult = data.getStringExtra("resultItem");
                 ScriptItem item = new ScriptItem(new JSONObject(scriptItemResult));
                 mScriptList.add(item);
                 mListViewAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            GestureScriptManager.getInstance().saveToJsonFile();
-        } else if (requestCode == EDIT_SCRIPT_REQUEST && resultCode == RESULT_OK){
-            try {
+                GestureScriptManager.getInstance().saveToJsonFile();
+            } else if (requestCode == EDIT_SCRIPT_REQUEST && resultCode == RESULT_OK) {
                 String scriptItemResult = data.getStringExtra("resultItem");
                 mSelectedItemToEdit.insertJsonData(new JSONObject(scriptItemResult));
                 mListViewAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                GestureScriptManager.getInstance().saveToJsonFile();
             }
-            GestureScriptManager.getInstance().saveToJsonFile();
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 

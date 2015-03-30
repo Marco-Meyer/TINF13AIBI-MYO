@@ -58,22 +58,18 @@ public class GestureScriptManager {
         }
     }
 
-    public void loadFromJsonFile(File file){
+    public void loadFromJsonFile(File file) throws JSONException, IOException {
         if (file.exists()){
-            try {
-                String jsonFileString = FileManager.getStringFromFile(file.getAbsolutePath());
-                JSONObject jsonObject = new JSONObject(jsonFileString);
-                JSONArray jsonGestureArray = jsonObject.optJSONArray("gestures");
-                JSONArray jsonScriptArray = jsonObject.optJSONArray("scripts");
-                loadGestureListFromJson(jsonGestureArray);
-                loadScriptListFromJson(jsonScriptArray);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String jsonFileString = FileManager.getStringFromFile(file.getAbsolutePath());
+            JSONObject jsonObject = new JSONObject(jsonFileString);
+            JSONArray jsonGestureArray = jsonObject.optJSONArray("gestures");
+            JSONArray jsonScriptArray = jsonObject.optJSONArray("scripts");
+            loadGestureListFromJson(jsonGestureArray);
+            loadScriptListFromJson(jsonScriptArray);
         }
     }
 
-    private JSONObject asJsonObject(){
+    private JSONObject asJsonObject() throws JSONException{
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonGestures = new JSONArray();
         JSONArray jsonScripts = new JSONArray();
@@ -83,28 +79,20 @@ public class GestureScriptManager {
         for (ScriptItem item : mScriptList){
             jsonScripts.put(item.asJsonObject());
         }
-        try {
-            jsonObject.put("gestures", jsonGestures);
-            jsonObject.put("scripts", jsonScripts);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        jsonObject.put("gestures", jsonGestures);
+        jsonObject.put("scripts", jsonScripts);
+
         return jsonObject;
     }
 
-    public void saveToJsonFile(File file){
+    public void saveToJsonFile(File file) throws JSONException, IOException{
         JSONObject jsonObject = asJsonObject();
-        try {
-            String test = jsonObject.toString(2);
-            FileOutputStream fOut = new FileOutputStream(file);
-            fOut.write(test.getBytes());
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-
+        String test = jsonObject.toString(2);
+        FileOutputStream fOut = new FileOutputStream(file);
+        fOut.write(test.getBytes());
     }
 
-    public void saveToJsonFile(){
+    public void saveToJsonFile() throws IOException, JSONException {
         saveToJsonFile(mConfigFile);
     }
 
@@ -128,7 +116,7 @@ public class GestureScriptManager {
         return mConfigFile;
     }
 
-    public void setConfigFile(File configFile) {
+    public void setConfigFile(File configFile) throws IOException, JSONException {
         this.mConfigFile = configFile;
         loadFromJsonFile(mConfigFile);
     }

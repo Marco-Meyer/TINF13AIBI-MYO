@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -105,25 +106,22 @@ public class GestureListActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_GESTURE_REQUEST && resultCode == RESULT_OK){
-            try {
-                String gestureItemResult = data.getStringExtra("resultItem");
-                GestureItem item = new GestureItem(new JSONObject(gestureItemResult));
-                mGestureList.add(item);
-                mListViewAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            if (requestCode == ADD_GESTURE_REQUEST && resultCode == RESULT_OK) {
+                    String gestureItemResult = data.getStringExtra("resultItem");
+                    GestureItem item = new GestureItem(new JSONObject(gestureItemResult));
+                    mGestureList.add(item);
+                    mListViewAdapter.notifyDataSetChanged();
+                    GestureScriptManager.getInstance().saveToJsonFile();
+            } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK) {
+                    String gestureItemResult = data.getStringExtra("resultItem");
+                    mSelectedItemToEdit.insertJsonData(new JSONObject(gestureItemResult));
+                    mListViewAdapter.notifyDataSetChanged();
+                    GestureScriptManager.getInstance().saveToJsonFile();
             }
-            GestureScriptManager.getInstance().saveToJsonFile();
-        } else if (requestCode == EDIT_GESTURE_REQUEST && resultCode == RESULT_OK){
-            try {
-                String gestureItemResult = data.getStringExtra("resultItem");
-                mSelectedItemToEdit.insertJsonData(new JSONObject(gestureItemResult));
-                mListViewAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                    e.printStackTrace();
-            }
-            GestureScriptManager.getInstance().saveToJsonFile();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -131,7 +129,12 @@ public class GestureListActivity extends ActionBarActivity {
         String gestureName = item.getName();
         mGestureList.remove(item);
         mListViewAdapter.notifyDataSetChanged();
-        GestureScriptManager.getInstance().saveToJsonFile();
+        try {
+            GestureScriptManager.getInstance().saveToJsonFile();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
+        }
         Toast.makeText(getApplicationContext(), gestureName+" wurde gelöscht", Toast.LENGTH_LONG).show();
     }
 
@@ -149,6 +152,7 @@ public class GestureListActivity extends ActionBarActivity {
             startActivityForResult(intent, EDIT_GESTURE_REQUEST);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 }
