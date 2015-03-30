@@ -6,6 +6,7 @@ package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -76,11 +77,12 @@ public class ScriptEditActivity extends ActionBarActivity {
                 showAlertTextInputDescription(mScriptItem.getDescription());
             }
         });
+        final Context appContext = getApplicationContext();
+        final Context activityContext = this;
         mButtonStartScript.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), "TODO: Test script", Toast.LENGTH_LONG).show();
-                startScript();
+                SL4AManager.startScript(appContext, activityContext, mScriptItem);
             }
         });
         mButtonScriptSearch.setOnClickListener(new View.OnClickListener() {
@@ -90,42 +92,6 @@ public class ScriptEditActivity extends ActionBarActivity {
                 startActivityForResult(intent,IMPORT_SCRIPT_REQUEST);
             }
         });
-    }
-
-    private void startScript(){
-        if (neededPackagesExist()){
-            //TODO if fileexists
-            File file = new File(MainActivity.ScriptDir ,mScriptItem.getScriptFile());
-            Intent intent = buildStartSL4A(file);
-            startActivity(intent);
-        } else {
-            //TODO
-        }
-    }
-
-    private Intent buildStartSL4A(File file){
-        final ComponentName componentName = SL4AConstants.SL4A_SERVICE_LAUNCHER_COMPONENT_NAME;
-        Intent intent = new Intent();
-        intent.setComponent(componentName);
-        intent.setAction(SL4AConstants.ACTION_LAUNCH_BACKGROUND_SCRIPT);
-        intent.putExtra(SL4AConstants.EXTRA_SCRIPT_PATH, file.getAbsolutePath());
-        return intent;
-    }
-
-    private boolean neededPackagesExist(){
-        final PackageManager pm = getPackageManager();
-        boolean androidScriptingExists = false;
-        boolean pythonForAndroidExists = false;
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        for (ApplicationInfo packageInfo : packages){
-            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.android_scripting")){
-                androidScriptingExists = true;
-            }
-            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.pythonforandroid")){
-                pythonForAndroidExists = true;
-            }
-        }
-        return androidScriptingExists & pythonForAndroidExists;
     }
 
     private void showAlertTextInputName(String text){
