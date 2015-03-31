@@ -77,12 +77,10 @@ public class ScriptEditActivity extends ActionBarActivity {
                 showAlertTextInputDescription(mScriptItem.getDescription());
             }
         });
-        final Context appContext = getApplicationContext();
-        final Context activityContext = this;
         mButtonStartScript.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SL4AManager.startScript(appContext, activityContext, mScriptItem);
+                startScript();
             }
         });
         mButtonScriptSearch.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +90,15 @@ public class ScriptEditActivity extends ActionBarActivity {
                 startActivityForResult(intent,IMPORT_SCRIPT_REQUEST);
             }
         });
+    }
+
+    private void startScript(){
+        try {
+            SL4AManager.startScript(getApplicationContext(), this, mScriptItem);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
+        }
     }
 
     private void showAlertTextInputName(String text){

@@ -125,6 +125,6 @@
             android:layout_height="fill_parent"
             android:id="@+id/imageButtonImportScript"
             android:layout_weight="0.15"
-            android:src="@android:drawable/ic_menu_search"/>
+            android:src="@drawable/ic_menu_archive"/>
     </LinearLayout>
 </LinearLayout>
