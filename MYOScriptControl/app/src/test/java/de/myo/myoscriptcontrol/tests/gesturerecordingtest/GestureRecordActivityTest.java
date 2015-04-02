@@ -32,23 +32,11 @@ public class GestureRecordActivityTest {
         assertThat(target.getPattern().asJsonArray().toString(), equalTo(pattern.asJsonArray().toString()));
     }
 
-    @Test
-    public void poseTestFist() {
-        GestureRecordActivity target = setupActivity(null);
-        GesturePattern expected = new GesturePattern();
-        expected.add(GridPosition.POS_CENTER);
-
-        target.setRecording(true);
-        target.OnPose(Pose.FIST);
-
-        assertThat(target.getPattern().asJsonArray().toString(), equalTo(expected.asJsonArray().toString()));
-    }
-
     public static GestureRecordActivity setupActivity(GesturePattern pattern) {
         if(pattern == null) {
             pattern = new GesturePattern();
         }
         Intent intent = new Intent().putExtra("pattern", pattern.asJsonArray().toString());
-        return Robolectric.buildActivity(GestureRecordActivity.class).withIntent(intent).create().resume().visible().get();
+        return Robolectric.buildActivity(GestureRecordActivity.class).withIntent(intent).create().resume().get();
     }
 }
