@@ -1,5 +1,7 @@
 package de.myo.vuzixcontrol;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,12 +12,15 @@ import android.widget.ImageView;
 
 public class MainActivity extends ActionBarActivity {
 
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothSocket mBluetoothSocket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageView wombat = (ImageView)findViewById(R.id.wombat);
-        wombat.setBackgroundResource(R.drawable.wombat_vuzix);
+        findViewById(R.id.wombat).setBackgroundResource(R.drawable.wombat_vuzix);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
 
@@ -39,5 +44,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public BluetoothAdapter getBluetoothAdapter() {
+        return mBluetoothAdapter;
+    }
+
+    public void setBluetoothAdapter(BluetoothAdapter mBluetoothAdapter) {
+        this.mBluetoothAdapter = mBluetoothAdapter;
+    }
+
+    public BluetoothSocket getBluetoothSocket() {
+        return mBluetoothSocket;
+    }
+
+    public void setBluetoothSocket(BluetoothSocket mBluetoothSocket) {
+        this.mBluetoothSocket = mBluetoothSocket;
     }
 }
