@@ -1,13 +1,13 @@
 package de.myo.myoscriptcontrol;
 
-public class Item implements Comparable<Item>{
+public class FileItem implements Comparable<FileItem>{
 	private String name;
 	private String data;
 	private String date;
 	private String path;
 	private String image;
 	
-	public Item(String n, String d, String dt, String p, String img)
+	public FileItem(String n, String d, String dt, String p, String img)
 	{
 		name = n;
 		data = d;
@@ -36,7 +36,7 @@ public class Item implements Comparable<Item>{
 		return image;
 	}
 	
-	public int compareTo(Item o) {
+	public int compareTo(FileItem o) {
 		if(this.name != null)
 			return this.name.toLowerCase().compareTo(o.getName().toLowerCase()); 
 		else 

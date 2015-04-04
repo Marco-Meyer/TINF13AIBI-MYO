@@ -12,22 +12,22 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class FileArrayAdapter extends ArrayAdapter<Item>{
+public class FileItemListViewAdapter extends ArrayAdapter<FileItem>{
 
 	private Context c;
 	private int id;
-	private List<Item>items;
+	private List<FileItem> fileItems;
 	
-	public FileArrayAdapter(Context context, int textViewResourceId, List<Item> objects) {
+	public FileItemListViewAdapter(Context context, int textViewResourceId, List<FileItem> objects) {
 		super(context, textViewResourceId, objects);
 		c = context;
 		id = textViewResourceId;
-		items = objects;
+		fileItems = objects;
 	}
 
-	public Item getItem(int i)
+	public FileItem getItem(int i)
     {
-        return items.get(i);
+        return fileItems.get(i);
     }
 
 	@Override
@@ -37,7 +37,7 @@ public class FileArrayAdapter extends ArrayAdapter<Item>{
             LayoutInflater vi = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(id, null);
         }
-        final Item o = items.get(position);
+        final FileItem o = fileItems.get(position);
         if (o != null) {
             TextView t1 = (TextView) v.findViewById(R.id.TextView01);
             TextView t2 = (TextView) v.findViewById(R.id.TextView02);

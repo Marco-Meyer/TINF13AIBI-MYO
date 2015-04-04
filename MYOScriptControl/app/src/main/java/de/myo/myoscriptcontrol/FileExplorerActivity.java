@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 public class FileExplorerActivity extends ActionBarActivity {
     private File currentDir;
-    private FileArrayAdapter adapter;
+    private FileItemListViewAdapter adapter;
     private ListView listView;
 
     @Override
@@ -35,8 +35,8 @@ public class FileExplorerActivity extends ActionBarActivity {
     {
         File[]dirs = f.listFiles();
         this.setTitle("Verzeichnis: "+f.getName());
-        List<Item>dir = new ArrayList<Item>();
-        List<Item>fls = new ArrayList<Item>();
+        List<FileItem>dir = new ArrayList<FileItem>();
+        List<FileItem>fls = new ArrayList<FileItem>();
         try{
             for(File ff: dirs){
                 Date lastModDate = new Date(ff.lastModified());
@@ -56,9 +56,9 @@ public class FileExplorerActivity extends ActionBarActivity {
                     } else {
                         num_item = num_item + " Elemente";
                     }
-                    dir.add(new Item(ff.getName(),num_item,date_modify,ff.getAbsolutePath(),"directory_icon"));
+                    dir.add(new FileItem(ff.getName(),num_item,date_modify,ff.getAbsolutePath(),"directory_icon"));
                 } else {
-                    fls.add(new Item(ff.getName(),ff.length() + " Byte", date_modify, ff.getAbsolutePath(),"file_icon"));
+                    fls.add(new FileItem(ff.getName(),ff.length() + " Byte", date_modify, ff.getAbsolutePath(),"file_icon"));
                 }
             }
         } catch(Exception e) {
@@ -67,9 +67,9 @@ public class FileExplorerActivity extends ActionBarActivity {
         Collections.sort(fls);
         dir.addAll(fls);
         if (!currentDir.getName().equalsIgnoreCase("storage")){
-            dir.add(0, new Item("..", "Verzeichnis zurück", "", f.getParent(), "directory_up"));
+            dir.add(0, new FileItem("..", "Verzeichnis zurück", "", f.getParent(), "directory_up"));
         }
-        adapter = new FileArrayAdapter(FileExplorerActivity.this,R.layout.file_view,dir);
+        adapter = new FileItemListViewAdapter(FileExplorerActivity.this,R.layout.file_view,dir);
         listView.setAdapter(adapter);
     }
 
@@ -87,7 +87,7 @@ public class FileExplorerActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Item o = adapter.getItem(position);
+                FileItem o = adapter.getItem(position);
                 if(o.getImage().equalsIgnoreCase("directory_icon")||o.getImage().equalsIgnoreCase("directory_up")){
                     currentDir = new File(o.getPath());
                     fill(currentDir);
@@ -98,7 +98,7 @@ public class FileExplorerActivity extends ActionBarActivity {
         });
     }
 
-    private void onFileClick(Item o)
+    private void onFileClick(FileItem o)
     {
         Intent intent = new Intent();
         intent.putExtra("GetPath",currentDir.toString());
