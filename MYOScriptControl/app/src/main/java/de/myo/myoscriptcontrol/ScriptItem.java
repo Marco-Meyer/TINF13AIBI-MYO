@@ -39,17 +39,13 @@ public class ScriptItem {
         insertJsonData(json);
     }
 
-    public JSONObject asJsonObject() {
+    public JSONObject asJsonObject() throws JSONException {
         JSONObject json = new JSONObject();
-        try {
-            json.put("id", mId.toString());
-            json.put("name", mName);
-            json.put("scriptFile", mScriptFileType);
-            json.put("date", mDate);
-            json.put("description", mDescription);
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        json.put("id", mId.toString());
+        json.put("name", mName);
+        json.put("scriptFile", mScriptFileType);
+        json.put("date", mDate);
+        json.put("description", mDescription);
         return json;
     }
 

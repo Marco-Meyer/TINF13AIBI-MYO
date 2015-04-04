@@ -6,6 +6,7 @@ package de.myo.myoscriptcontrol;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -79,7 +80,6 @@ public class ScriptEditActivity extends ActionBarActivity {
         mButtonStartScript.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), "TODO: Test script", Toast.LENGTH_LONG).show();
                 startScript();
             }
         });
@@ -93,39 +93,12 @@ public class ScriptEditActivity extends ActionBarActivity {
     }
 
     private void startScript(){
-        if (neededPackagesExist()){
-            //TODO if fileexists
-            File file = new File(MainActivity.ScriptDir ,mScriptItem.getScriptFile());
-            Intent intent = buildStartSL4A(file);
-            startActivity(intent);
-        } else {
-            //TODO
+        try {
+            SL4AManager.startScript(getApplicationContext(), this, mScriptItem);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
-    }
-
-    private Intent buildStartSL4A(File file){
-        final ComponentName componentName = SL4AConstants.SL4A_SERVICE_LAUNCHER_COMPONENT_NAME;
-        Intent intent = new Intent();
-        intent.setComponent(componentName);
-        intent.setAction(SL4AConstants.ACTION_LAUNCH_BACKGROUND_SCRIPT);
-        intent.putExtra(SL4AConstants.EXTRA_SCRIPT_PATH, file.getAbsolutePath());
-        return intent;
-    }
-
-    private boolean neededPackagesExist(){
-        final PackageManager pm = getPackageManager();
-        boolean androidScriptingExists = false;
-        boolean pythonForAndroidExists = false;
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        for (ApplicationInfo packageInfo : packages){
-            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.android_scripting")){
-                androidScriptingExists = true;
-            }
-            if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.pythonforandroid")){
-                pythonForAndroidExists = true;
-            }
-        }
-        return androidScriptingExists & pythonForAndroidExists;
     }
 
     private void showAlertTextInputName(String text){
@@ -216,6 +189,7 @@ public class ScriptEditActivity extends ActionBarActivity {
             refreshViews(mScriptItem);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -242,6 +216,7 @@ public class ScriptEditActivity extends ActionBarActivity {
                     FileManager.copyFile(scriptFile, destFile);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    ErrorActivity.handleError(this, e.getMessage());
                 }
             }
             mScriptItemString = mScriptItem.asJsonObject().toString(2);
@@ -250,6 +225,7 @@ public class ScriptEditActivity extends ActionBarActivity {
             setResult(RESULT_OK, intent);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 

@@ -127,6 +127,7 @@ public class GestureEditActivity extends ActionBarActivity {
                 loadPatternIntoGrid(pattern);
             } catch (JSONException e) {
                 e.printStackTrace();
+                ErrorActivity.handleError(this, "JSON-Fehler aufgetreten ");
             }
         }
     }
@@ -189,6 +190,7 @@ public class GestureEditActivity extends ActionBarActivity {
             refreshViews(mGestureItem);
         } catch (JSONException e) {
             e.printStackTrace();
+            ErrorActivity.handleError(this, "JSON-Fehler aufgetreten ");
         }
     }
 
@@ -230,6 +232,7 @@ public class GestureEditActivity extends ActionBarActivity {
                 finish();
             } catch (JSONException e) {
                 e.printStackTrace();
+                ErrorActivity.handleError(this, "JSON-Fehler aufgetreten ");
             }
         }
 

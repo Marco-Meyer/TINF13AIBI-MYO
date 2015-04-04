@@ -55,17 +55,13 @@ public class GestureItem {
         insertJsonData(json);
     }
 
-    public JSONObject asJsonObject() {
+    public JSONObject asJsonObject() throws JSONException{
         JSONObject json = new JSONObject();
-        try {
-            json.put("id", mId.toString());
-            json.put("name", mName);
-            json.put("script", mScript);
-            json.put("date", mDate);
-            json.put("pattern", mPattern.asJsonArray());
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        json.put("id", mId.toString());
+        json.put("name", mName);
+        json.put("script", mScript);
+        json.put("date", mDate);
+        json.put("pattern", mPattern.asJsonArray());
 
         return json;
     }

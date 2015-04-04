@@ -1,5 +1,6 @@
 package de.myo.myoscriptcontrol;
 
+import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,7 +14,10 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
 
+import org.json.JSONException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
@@ -56,20 +60,14 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
     }
 
     private void initializeMYOHub() {
-        MyoListener.addTarget(this);
-        try {
+            MyoListener.addTarget(this);
             MYOHub = Hub.getInstance();
-
             if (!MYOHub.init(this)) {
-                throw new Exception();
+                Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
             }
             if(mStatus != RecordActivityStatus.DISCONNECTED || mStatus != RecordActivityStatus.UNKNOWN){
                 initializeMYOListenerForHub(MYOHub);
             }
-        }catch(Exception e) {
-            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private void initializeMYOListenerForHub(Hub hub){
@@ -89,8 +87,13 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeFiles();
-        GestureScriptManager.getInstance().setConfigFile(ConfigFile);
-        mStatus = RecordActivityStatus.DISCONNECTED;
+        try {
+            GestureScriptManager.getInstance().setConfigFile(ConfigFile);
+            mStatus = RecordActivityStatus.DISCONNECTED;
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
+        }
         initializeMYOHub();
         updateStatus();
     }
@@ -153,7 +156,6 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
