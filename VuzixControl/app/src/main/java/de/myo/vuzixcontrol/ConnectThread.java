@@ -3,6 +3,7 @@ package de.myo.vuzixcontrol;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.Console;
@@ -17,15 +18,13 @@ public class ConnectThread extends Thread {
     private final BluetoothServerSocket mmServerSocket;
     private MainActivity mActivityContext;
 
-    public ConnectThread(MainActivity activityContext, String name, UUID uuid) {
-        // Use a temporary object that is later assigned to mmServerSocket,
-        // because mmServerSocket is final
+    public ConnectThread(MainActivity activityContext, String name, UUID uuid) throws IOException {
         BluetoothServerSocket tmp = null;
         mActivityContext = activityContext;
         try {
-            // MY_UUID is the app's UUID string, also used by the client code
             tmp = mActivityContext.getBluetoothAdapter().listenUsingRfcommWithServiceRecord(name, uuid);
         } catch (IOException e) {
+            throw e;
         }
         mmServerSocket = tmp;
     }
@@ -39,7 +38,7 @@ public class ConnectThread extends Thread {
                 break;
             }
             if (socket != null) {
-                mActivityContext.setBluetoothSocket(socket);
+                mActivityContext.OnBluetoothConnectionAvailable(socket);
                 cancel();
                 break;
             }

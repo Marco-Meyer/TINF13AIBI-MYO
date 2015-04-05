@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by felix on 02.04.2015.
@@ -14,10 +15,11 @@ public class DataReceiveThread extends Thread {
     private static final int MESSAGE_READ = 42;
     private BluetoothSocket mBluetoothSocket;
     private InputStream mInputStream;
-    private Handler mHandler;
+    private MainActivity mActivityContext;
 
-    public DataReceiveThread(BluetoothSocket socket) {
-        mBluetoothSocket = socket;
+    public DataReceiveThread(MainActivity activityContext) {
+        mActivityContext = activityContext;
+        mBluetoothSocket = mActivityContext.getBluetoothSocket();
         try {
             mInputStream = mBluetoothSocket.getInputStream();
         } catch (IOException e) {
@@ -32,7 +34,6 @@ public class DataReceiveThread extends Thread {
         while (true) {
             try {
                 bytes = mInputStream.read(buffer);
-                // Send the obtained bytes to the UI activity
                 evaluateInput(buffer);
 
             } catch (IOException e) {
@@ -42,7 +43,14 @@ public class DataReceiveThread extends Thread {
     }
 
     private void evaluateInput(byte[] buffer) {
-        mHandler.obtainMessage(MESSAGE_READ, 0, -1, buffer)
-                .sendToTarget();
+        if(buffer.length >= 22) {
+            String command = null;
+            try {
+                command = new String(buffer, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            mActivityContext.OnReceiveCommand(command);
+        }
     }
 }
