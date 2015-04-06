@@ -1,6 +1,5 @@
 package de.myo.myoscriptcontrol;
 
-import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,13 +18,14 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 import de.myo.myoscriptcontrol.gesturerecording.ListenerTarget;
 import de.myo.myoscriptcontrol.gesturerecording.*;
 
-public class MainActivity extends ActionBarActivity implements ListenerTarget{
+public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     private String ConfigDir;
     private File ConfigFile;
@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
     private GridPosition mCurrentPosition;
     private GridPosition mLastPosition;
 
-    private void initializeFiles(){
+    private void initializeFiles() {
         ConfigDir = getMyoFileDir("config/");
         ConfigFile = new File(ConfigDir, "Config.json");
         ScriptDir = getMyoFileDir("scripts/");
@@ -60,24 +60,24 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
     }
 
     private void initializeMYOHub() {
-            MyoListener.addTarget(this);
-            MYOHub = Hub.getInstance();
-            if (!MYOHub.init(this)) {
-                Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
-            }
-            if(mStatus != RecordActivityStatus.DISCONNECTED || mStatus != RecordActivityStatus.UNKNOWN){
-                initializeMYOListenerForHub(MYOHub);
-            }
+        MyoListener.addTarget(this);
+        MYOHub = Hub.getInstance();
+        if (!MYOHub.init(this)) {
+            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
+        }
+        if (mStatus != RecordActivityStatus.DISCONNECTED || mStatus != RecordActivityStatus.UNKNOWN) {
+            initializeMYOListenerForHub(MYOHub);
+        }
     }
 
-    private void initializeMYOListenerForHub(Hub hub){
-        try{
+    private void initializeMYOListenerForHub(Hub hub) {
+        try {
             hub.addListener(MyoListener);
             hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
-            if (hub.getConnectedDevices().size()==0){
+            if (hub.getConnectedDevices().size() == 0) {
                 hub.attachToAdjacentMyo();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Could not initialize MYO Listener", Toast.LENGTH_SHORT).show();
         }
     }
@@ -160,21 +160,30 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
     }
 
     // TKi 26.03.2015
-    public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern){
+    public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern) {
         ArrayList<GestureItem> gestureList = GestureScriptManager.getInstance().getGestureList();
         int counterNoEqualGestureItem = 0;
-        for(GestureItem gestureItem : gestureList){
-            if(gestureItem.equalPattern(recordedPattern)){
-                String scriptName = gestureItem.getScript();
-                // executeScript(scriptName);
-                Toast.makeText(getApplicationContext(), "Available Script: "+ scriptName , Toast.LENGTH_SHORT).show();
-            }
-            else{
+        for (GestureItem gestureItem : gestureList) {
+            if (gestureItem.equalPattern(recordedPattern)) {
+                UUID uuid = UUID.fromString(gestureItem.getScript());
+                ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
+                executeScript(scriptItem);
+//                Toast.makeText(getApplicationContext(), "Available Script: " + scriptName, Toast.LENGTH_SHORT).show();
+            } else {
                 counterNoEqualGestureItem++;
-                if(counterNoEqualGestureItem == gestureList.size()) {
+                if (counterNoEqualGestureItem == gestureList.size()) {
                     Toast.makeText(getApplicationContext(), "No available script for the executed gesture combination.", Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    private void executeScript(ScriptItem scriptItem){
+        try {
+            SL4AManager.startScript(getApplicationContext(), this, scriptItem);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ErrorActivity.handleError(this, e.getMessage());
         }
     }
 
@@ -197,7 +206,9 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget{
             }
             if(mPose == Pose.FINGERS_SPREAD) {
                 OnUpdateStatus("LOCKED");
-                checkRecordedPatternForAvailableScript(mPattern);
+                if (!mPattern.isEmpty()) {
+                    checkRecordedPatternForAvailableScript(mPattern);
+                }
             }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();
