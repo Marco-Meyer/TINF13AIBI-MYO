@@ -40,7 +40,6 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     private Pose mPose;
     private boolean mExecutionMode;
     private GridPosition mCurrentPosition;
-    private GridPosition mLastPosition;
 
     private void initializeFiles() {
         ConfigDir = getMyoFileDir("config/");
@@ -65,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         if (!MYOHub.init(this)) {
             Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
         }
-        if (mStatus != RecordActivityStatus.DISCONNECTED || mStatus != RecordActivityStatus.UNKNOWN) {
+        if (mStatus != RecordActivityStatus.DISCONNECTED /*|| mStatus != RecordActivityStatus.UNKNOWN*/) {
             initializeMYOListenerForHub(MYOHub);
         }
     }
@@ -178,6 +177,8 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         }
     }
 
+
+    // DTh 06.04.2015
     private void executeScript(ScriptItem scriptItem){
         try {
             SL4AManager.startScript(getApplicationContext(), this, scriptItem);
@@ -200,7 +201,6 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         if(mExecutionMode) {
             if(mPose == Pose.FIST) {
                 mPattern.add(mCurrentPosition);
-                mLastPosition = mCurrentPosition;
                 String pattern = mPattern.toString();
                 Toast.makeText(getApplicationContext(), pattern , Toast.LENGTH_SHORT).show();
             }
