@@ -21,6 +21,7 @@ import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
 public class GestureRecordDeviceListener extends AbstractDeviceListener {
+    static private GestureRecordDeviceListener instance;
     private Quaternion mOrientation;
     private Point mArmPosition, mLastSetPoint;
 
@@ -37,6 +38,11 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     private Myo mMyo;
     private ArrayList<ListenerTarget> mTargets;
 
+    private String mStatus = "DISCONNECTED";
+
+    public String getStatus(){
+        return mStatus;
+    }
 
     private void notifyPose(Pose pose) {
         for(ListenerTarget target : mTargets) {
@@ -51,17 +57,26 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     }
 
     private void notifyUpdateStatus(String status) {
+        mStatus = status;
         for(ListenerTarget target : mTargets) {
             target.OnUpdateStatus(status);
         }
     }
 
 
-    public GestureRecordDeviceListener(){
+    private GestureRecordDeviceListener(){
         mArmPosition = new Point(2, 2);
         mLastSetPoint = new Point(2, 2);
         mTargets = new ArrayList<>();
     }
+
+    static public GestureRecordDeviceListener getInstance() {
+        if (instance == null) {
+            instance = new GestureRecordDeviceListener();
+        }
+        return instance;
+    }
+
 
 
     public void addTarget(ListenerTarget target) {
@@ -77,6 +92,8 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         super.onPose(myo, timestamp, pose);
         if(pose == Pose.DOUBLE_TAP) {
             centre();
+        }else if ( pose == Pose.FINGERS_SPREAD){
+            myo.lock();
         }
         mMyo = myo;
         notifyPose(pose);

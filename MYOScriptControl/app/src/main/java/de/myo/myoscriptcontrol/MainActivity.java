@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +32,27 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     private String ConfigDir;
     private File ConfigFile;
     public static String ScriptDir;
-    public static Hub MYOHub;
+    private static Hub mMyoHub;
 
-    public static GestureScriptManager mManager;
-
-    private static GestureRecordDeviceListener MyoListener = new GestureRecordDeviceListener();
+    private static GestureRecordDeviceListener mMyoListener;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
-    private GesturePattern mPattern;
+    private GesturePattern mPattern = new GesturePattern();
     private Pose mPose;
-    private boolean mExecutionMode;
+    private boolean mExecutionMode = false;
     private GridPosition mCurrentPosition;
+    public static boolean mDebugMode = false;
+
+    private void initSwitchListener(){
+        Switch switchMode = (Switch)findViewById(R.id.switchDebugMode);
+        switchMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mDebugMode = isChecked;
+                //TODO FELIX: Gridview visible und unvisible schalten
+            }
+        });
+
+    }
 
     private void initializeFiles() {
         ConfigDir = getMyoFileDir("config/");
@@ -59,19 +72,18 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     }
 
     private void initializeMYOHub() {
-        MyoListener.addTarget(this);
-        MYOHub = Hub.getInstance();
-        if (!MYOHub.init(this)) {
-            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
+        mMyoListener = GestureRecordDeviceListener.getInstance();
+        mMyoListener.addTarget(this);
+        mMyoHub = Hub.getInstance();
+        if (!mMyoHub.init(this)) {
+            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
         }
-        if (mStatus != RecordActivityStatus.DISCONNECTED /*|| mStatus != RecordActivityStatus.UNKNOWN*/) {
-            initializeMYOListenerForHub(MYOHub);
-        }
+        initializeMYOListenerForHub(mMyoHub);
     }
 
     private void initializeMYOListenerForHub(Hub hub) {
         try {
-            hub.addListener(MyoListener);
+            hub.addListener(mMyoListener);
             hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
             if (hub.getConnectedDevices().size() == 0) {
                 hub.attachToAdjacentMyo();
@@ -86,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeFiles();
+        initSwitchListener();
         try {
             GestureScriptManager.getInstance().setConfigFile(ConfigFile);
             mStatus = RecordActivityStatus.DISCONNECTED;
@@ -94,35 +107,15 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             ErrorActivity.handleError(this, e.getMessage());
         }
         initializeMYOHub();
-        updateStatus();
+        OnUpdateStatus(mMyoListener.getStatus());
     }
 
     // TKi 30.08.2015
     @Override
     protected void onResume() {
         super.onResume();
-        mPose = Pose.UNKNOWN;
-        updateStatus();
-        initializeMYOHub();
-    }
-
-    // TKi 30.03.2015
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MYOHub.removeListener(MyoListener);
-        MyoListener.removeTarget(this);
-        mExecutionMode = false;
-    }
-
-    // TKi 30.03.2015
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        MYOHub.removeListener(MyoListener);
-        MyoListener.removeTarget(this);
-        MYOHub.shutdown();
-        mExecutionMode = false;
+        OnUpdateStatus(mMyoListener.getStatus());
+        mExecutionMode = true;
     }
 
     @Override
@@ -138,7 +131,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        mExecutionMode = false;
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_gesture_manager) {
             Intent intent = new Intent(MainActivity.this, GestureListActivity.class);
@@ -164,14 +157,19 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         int counterNoEqualGestureItem = 0;
         for (GestureItem gestureItem : gestureList) {
             if (gestureItem.equalPattern(recordedPattern)) {
-                UUID uuid = UUID.fromString(gestureItem.getScript());
-                ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
-                executeScript(scriptItem);
-//                Toast.makeText(getApplicationContext(), "Available Script: " + scriptName, Toast.LENGTH_SHORT).show();
+                try {
+                    UUID uuid = UUID.fromString(gestureItem.getScript());
+                    ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
+                    executeScript(scriptItem);
+                } catch(IllegalArgumentException e){
+                    String message = "Der Geste "+ gestureItem.getName() +" ist kein Skript zugeordnet.";
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    ErrorActivity.handleError(this, message);
+                }
             } else {
                 counterNoEqualGestureItem++;
                 if (counterNoEqualGestureItem == gestureList.size()) {
-                    Toast.makeText(getApplicationContext(), "No available script for the executed gesture combination.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -184,6 +182,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             SL4AManager.startScript(getApplicationContext(), this, scriptItem);
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             ErrorActivity.handleError(this, e.getMessage());
         }
     }
@@ -197,23 +196,28 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         }
         if(mPose == Pose.DOUBLE_TAP) {
             OnUpdateStatus("IDLE");
+            mPattern.clear();
         }
         if(mExecutionMode) {
             if(mPose == Pose.FIST) {
                 mPattern.add(mCurrentPosition);
                 String pattern = mPattern.toString();
-                Toast.makeText(getApplicationContext(), pattern , Toast.LENGTH_SHORT).show();
+                if (mDebugMode) {
+                    Toast.makeText(getApplicationContext(), pattern, Toast.LENGTH_SHORT).show();
+                }
             }
             if(mPose == Pose.FINGERS_SPREAD) {
-                OnUpdateStatus("LOCKED");
                 if (!mPattern.isEmpty()) {
                     checkRecordedPatternForAvailableScript(mPattern);
                 }
+                OnUpdateStatus("LOCKED");
             }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();
+                OnUpdateStatus("LOCKED");
             }
         }
+        //TODO FELIX: Gridview mit pattern füllen/aktualisieren: siehe "GestureRecordActivity.showPattern()"
     }
 
     // TKi 28.03.2015
@@ -236,20 +240,21 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         ((TextView)findViewById(R.id.textViewMainStatus)).setText("Verbindungsstatus: " + mStatus.toString());
         if(mStatus==RecordActivityStatus.DISCONNECTED){
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
+            mPattern.clear();
         }
         if(mStatus==RecordActivityStatus.UNSYNCED) {
-            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
+            mPattern.clear();
         }
         if(mStatus==RecordActivityStatus.LOCKED) {
-            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
-            mExecutionMode = false;
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_blue_light);
+            mPattern.clear();
         }
         if(mStatus==RecordActivityStatus.IDLE) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_green_light);
-            mExecutionMode = true;
         }
         if(mStatus==RecordActivityStatus.UNKNOWN){
-            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_blue_light);
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
         }
 
     }

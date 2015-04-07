@@ -6,6 +6,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:weightSum="1">
 
+    <Switch
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Debug Mode"
+        android:id="@+id/switchDebugMode" />
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -33,6 +39,5 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Verbindungsstatus"
         android:id="@+id/textViewMainStatus" />
-
 
 </LinearLayout>
