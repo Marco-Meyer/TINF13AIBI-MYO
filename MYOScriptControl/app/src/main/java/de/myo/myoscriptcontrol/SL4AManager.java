@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -14,22 +15,19 @@ import java.util.List;
  * Created by DTH on 30.03.2015.
  */
 public class SL4AManager {
-    public static void startScript(Context appContext, Context activityContext, ScriptItem scriptItem){
+    public static void startScript(Context appContext, Context activityContext, ScriptItem scriptItem)throws IOException{
         if (neededPackagesExist(appContext)){
-            //TODO if fileexists
             File file = new File(MainActivity.ScriptDir ,scriptItem.getScriptFile());
             File outputDir = appContext.getExternalCacheDir();
-            try {
                 File outputFile = File.createTempFile(scriptItem.getId().toString(), "."+scriptItem.getScriptFileType(), outputDir);
                 FileManager.copyFile(file, outputFile);
-//                Intent intent = buildStartSL4A(file);
+                if (!outputFile.exists()){
+                    throw new FileNotFoundException("Das auszuführende Skript konnte nicht gefunden werden. \n\n Importieren Sie es ggfs. erneut.");
+                }
                 Intent intent = buildStartSL4A(outputFile);
                 activityContext.startActivity(intent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
-            //TODO
+            throw new IOException("Die notwendigen Anwendungen \"SL4A\" bzw. \"Python for Android\" zum Ausrühren von Scripten konnten nicht gefunden werden.");
         }
     }
 

@@ -1,14 +1,20 @@
 package de.myo.myoscriptcontrol;
 
-import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thalmic.myo.Hub;
+import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
 
 import org.json.JSONException;
@@ -16,18 +22,48 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
+import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
+import de.myo.myoscriptcontrol.gesturerecording.ListenerTarget;
+import de.myo.myoscriptcontrol.gesturerecording.*;
 
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     private String ConfigDir;
     private File ConfigFile;
     public static String ScriptDir;
-    public static Hub MYOHub;
+    private static Hub mMyoHub;
 
-    private void initializeFiles(){
+    private static GestureRecordDeviceListener mMyoListener;
+    private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
+    private GesturePattern mPattern = new GesturePattern();
+    private Pose mPose;
+    private boolean mExecutionMode = false;
+    private GridPosition mCurrentPosition;
+    private GesturePatternGridViewAdapter mGesturePatternGridViewAdapter;
+    public static boolean mDebugMode = false;
+
+
+    private void initSwitchListener(){
+        Switch switchMode = (Switch)findViewById(R.id.switchDebugMode);
+        switchMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mDebugMode = isChecked;
+                if(isChecked) {
+                    findViewById(R.id.debugGridView).setVisibility(View.VISIBLE);
+                }
+                else {
+                    findViewById(R.id.debugGridView).setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void initializeFiles() {
         ConfigDir = getMyoFileDir("config/");
         ConfigFile = new File(ConfigDir, "Config.json");
         ScriptDir = getMyoFileDir("scripts/");
@@ -44,25 +80,60 @@ public class MainActivity extends ActionBarActivity {
         return file.getAbsolutePath();
     }
 
+    private void initializeMYOHub() {
+        mMyoListener = GestureRecordDeviceListener.getInstance();
+        mMyoListener.addTarget(this);
+        mMyoHub = Hub.getInstance();
+        if (!mMyoHub.init(this)) {
+            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
+        }
+        initializeMYOListenerForHub(mMyoHub);
+    }
+
+    private void initializeMYOListenerForHub(Hub hub) {
+        try {
+            hub.addListener(mMyoListener);
+            hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
+            if (hub.getConnectedDevices().size() == 0) {
+                hub.attachToAdjacentMyo();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Could not initialize MYO Listener", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeFiles();
+        initSwitchListener();
         try {
             GestureScriptManager.getInstance().setConfigFile(ConfigFile);
+            mStatus = RecordActivityStatus.DISCONNECTED;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             ErrorActivity.handleError(this, e.getMessage());
         }
         initializeMYOHub();
+        OnUpdateStatus(mMyoListener.getStatus());
+        initGridAdapter();
     }
 
-    private void initializeMYOHub() {
-        MYOHub = Hub.getInstance();
-        if (!MYOHub.init(this)) {
-            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_LONG).show();
+    private void initGridAdapter() {
+        if (mPattern!=null) {
+            GridView grid = (GridView)findViewById(R.id.debugGridView);
+            mGesturePatternGridViewAdapter = new GesturePatternGridViewAdapter(this, mPattern);
+            grid.setAdapter(mGesturePatternGridViewAdapter);
         }
+    }
+
+    // TKi 30.08.2015
+    @Override
+    protected void onResume() {
+        super.onResume();
+        OnUpdateStatus(mMyoListener.getStatus());
+        mExecutionMode = true;
     }
 
     @Override
@@ -78,7 +149,7 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        mExecutionMode = false;
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_gesture_manager) {
             Intent intent = new Intent(MainActivity.this, GestureListActivity.class);
@@ -99,16 +170,143 @@ public class MainActivity extends ActionBarActivity {
     }
 
     // TKi 26.03.2015
-    public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern){
+    public void checkRecordedPatternForAvailableScript(GesturePattern recordedPattern) {
         ArrayList<GestureItem> gestureList = GestureScriptManager.getInstance().getGestureList();
-        for(GestureItem gestureItem : gestureList){
-            if(gestureItem.equalPattern(recordedPattern)){
-                String scriptName = gestureItem.getScript();
-                Toast.makeText(getApplicationContext(), "Available Script: "+ scriptName , Toast.LENGTH_LONG).show();
+        int counterNoEqualGestureItem = 0;
+        for (GestureItem gestureItem : gestureList) {
+            if (gestureItem.equalPattern(recordedPattern)) {
+                try {
+                    UUID uuid = UUID.fromString(gestureItem.getScript());
+                    ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
+                    executeScript(scriptItem);
+                } catch(IllegalArgumentException e){
+                    String message = "Der Geste "+ gestureItem.getName() +" ist kein Skript zugeordnet.";
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    ErrorActivity.handleError(this, message);
+                }
+            } else {
+                counterNoEqualGestureItem++;
             }
-            else{
-                Toast.makeText(getApplicationContext(), "No available script for execution", Toast.LENGTH_SHORT).show();
+        }
+        if (counterNoEqualGestureItem == gestureList.size()) {
+            Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    // DTh 06.04.2015
+    private void executeScript(ScriptItem scriptItem){
+        try {
+            SL4AManager.startScript(getApplicationContext(), this, scriptItem);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            ErrorActivity.handleError(this, e.getMessage());
+        }
+    }
+
+    // TKi 28.03.2015
+    @Override
+    public void OnPose(Pose pose) {
+        mPose = pose;
+        if(mPattern == null){
+            mPattern = new GesturePattern();
+        }
+        if(mPose == Pose.DOUBLE_TAP) {
+            OnUpdateStatus("IDLE");
+            mPattern.clear();
+            showPattern();
+        }
+        if(mExecutionMode) {
+            if (mPose == Pose.FIST) {
+                mPattern.add(mCurrentPosition);
+                if (mDebugMode) {
+                    String pattern = mPattern.toString();
+                    Toast.makeText(getApplicationContext(), pattern, Toast.LENGTH_LONG).show();
+                    showPattern();
+                }
+            }
+            if (mPose == Pose.FINGERS_SPREAD) {
+                if (!mPattern.isEmpty()) {
+                    checkRecordedPatternForAvailableScript(mPattern);
+                }
+                OnUpdateStatus("LOCKED");
+                showPattern();
+            }
+            if (mPose == Pose.WAVE_OUT) {
+                mPattern.clear();
+                showPattern();
             }
         }
     }
+
+    private void showPattern(){
+        if (mPattern!=null && mDebugMode) {
+            mGesturePatternGridViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    // TKi 28.03.2015
+    @Override
+    public void OnGridPositionUpdate(GridPosition position) {
+        if(mExecutionMode) {
+            mCurrentPosition = position;
+        }
+    }
+
+    // TKi 28.03.2015
+    @Override
+    public void OnUpdateStatus(String status) {
+        mStatus = RecordActivityStatus.valueOf(status);
+        updateStatus();
+    }
+
+    // TKi 28.03.2015
+    private void updateStatus(){
+        ((TextView)findViewById(R.id.textViewMainStatus)).setText("Verbindungsstatus: " + mStatus.toString());
+        if(mStatus==RecordActivityStatus.DISCONNECTED){
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
+            mPattern.clear();
+            showPattern();
+        }
+        if(mStatus==RecordActivityStatus.UNSYNCED) {
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
+            mPattern.clear();
+            showPattern();
+        }
+        if(mStatus==RecordActivityStatus.LOCKED) {
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_blue_light);
+            mPattern.clear();
+            showPattern();
+        }
+        if(mStatus==RecordActivityStatus.IDLE) {
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_green_light);
+        }
+        if(mStatus==RecordActivityStatus.UNKNOWN){
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
+        }
+
+    }
+    // TKi 04.04.2015
+    public GesturePattern getPattern() {
+        return mPattern;
+    }
+
+    // TKi 04.04.2015
+    public void setExecutionMode(boolean mExecutionMode) {
+        this.mExecutionMode = mExecutionMode;
+    }
+
+    // TKi 04.04.2015
+    public boolean getExecutionMode() {
+        return mExecutionMode;
+    }
+
+    // TKi 04.04.2015
+    public RecordActivityStatus getStatus() {
+        return mStatus;
+    }
+
+    // TKi 04.04.2015
+    public void setCurrentPosition(GridPosition gridPosition){ this.mCurrentPosition = gridPosition; }
 }

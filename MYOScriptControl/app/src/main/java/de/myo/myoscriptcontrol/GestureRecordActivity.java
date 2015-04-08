@@ -27,9 +27,8 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     private GesturePattern mPattern;
     private String mPatternString;
-    private Hub mMyoHub;
     private Pose mPose;
-    private static GestureRecordDeviceListener mMyoListener = new GestureRecordDeviceListener();
+    private static GestureRecordDeviceListener mMyoListener;
     private HashMap<GridPosition, ImageView> mPositionImageMap;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
     private GridPosition mCurrentPosition;
@@ -48,9 +47,9 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                 clearLastPosition();
                 mLastPosition = mCurrentPosition;
             }
-//            if(mPose == Pose.FINGERS_SPREAD) {
-//                findViewById(R.id.imageButtonRecordPattern).callOnClick();
-//            }
+            if(mPose == Pose.FINGERS_SPREAD) {
+                findViewById(R.id.imageButtonRecordPattern).callOnClick();
+            }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();
                 showPattern();
@@ -153,17 +152,9 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     }
 
     private void initMyoHub(){
+        mMyoListener = GestureRecordDeviceListener.getInstance();
         mMyoListener.addTarget(this);
-        try {
-            mMyoHub = MainActivity.MYOHub;
-            mMyoHub.addListener(mMyoListener);
-            mMyoHub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
-            if (mMyoHub.getConnectedDevices().size()==0){
-                mMyoHub.attachToAdjacentMyo();
-            }
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Could not initiate MYO Hub", Toast.LENGTH_LONG).show();
-        }
+        OnUpdateStatus(mMyoListener.getStatus());
     }
 
 
@@ -186,7 +177,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesture_record);
-        mStatus = RecordActivityStatus.DISCONNECTED;
     }
 
     @Override
@@ -197,14 +187,12 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
         initializeIntentVars(getIntent());
         initializeGridImageMap();
         initializeButtonListeners();
-        updateStatusText();
         initMyoHub();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mMyoHub.removeListener(mMyoListener);
         mMyoListener.removeTarget(this);
         mRecording = false;
         clearGridPosition();
