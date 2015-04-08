@@ -17,9 +17,9 @@
         android:layout_height="0dp"
         android:id="@+id/imageViewMypPicture"
         android:src="@drawable/myo"
-        android:layout_margin="40dp"
+        android:layout_margin="20dp"
         android:scaleType="fitCenter"
-        android:layout_weight="0.6"/>
+        android:layout_weight="0.4"/>
     <ImageView
         android:layout_width="fill_parent"
         android:paddingEnd="60dp"
@@ -39,5 +39,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Verbindungsstatus"
         android:id="@+id/textViewMainStatus" />
+
+    <GridView
+        android:layout_weight="0.25"
+        android:id="@+id/debugGridView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:numColumns="auto_fit"
+        android:columnWidth="60dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"/>
 
 </LinearLayout>

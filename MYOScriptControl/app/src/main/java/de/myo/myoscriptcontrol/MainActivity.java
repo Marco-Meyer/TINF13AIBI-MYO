@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -40,7 +42,9 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     private Pose mPose;
     private boolean mExecutionMode = false;
     private GridPosition mCurrentPosition;
+    private GesturePatternGridViewAdapter mGesturePatternGridViewAdapter;
     public static boolean mDebugMode = false;
+
 
     private void initSwitchListener(){
         Switch switchMode = (Switch)findViewById(R.id.switchDebugMode);
@@ -48,7 +52,12 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mDebugMode = isChecked;
-                //TODO FELIX: Gridview visible und unvisible schalten
+                if(isChecked) {
+                    findViewById(R.id.debugGridView).setVisibility(View.VISIBLE);
+                }
+                else {
+                    findViewById(R.id.debugGridView).setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -108,6 +117,15 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         }
         initializeMYOHub();
         OnUpdateStatus(mMyoListener.getStatus());
+        initGridAdapter();
+    }
+
+    private void initGridAdapter() {
+        if (mPattern!=null) {
+            GridView grid = (GridView)findViewById(R.id.debugGridView);
+            mGesturePatternGridViewAdapter = new GesturePatternGridViewAdapter(this, mPattern);
+            grid.setAdapter(mGesturePatternGridViewAdapter);
+        }
     }
 
     // TKi 30.08.2015
@@ -199,25 +217,32 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             mPattern.clear();
         }
         if(mExecutionMode) {
-            if(mPose == Pose.FIST) {
+            if (mPose == Pose.FIST) {
                 mPattern.add(mCurrentPosition);
-                String pattern = mPattern.toString();
                 if (mDebugMode) {
-                    Toast.makeText(getApplicationContext(), pattern, Toast.LENGTH_SHORT).show();
+                    String pattern = mPattern.toString();
+                    Toast.makeText(getApplicationContext(), pattern, Toast.LENGTH_LONG).show();
+                    showPattern();
                 }
             }
-            if(mPose == Pose.FINGERS_SPREAD) {
+            if (mPose == Pose.FINGERS_SPREAD) {
                 if (!mPattern.isEmpty()) {
                     checkRecordedPatternForAvailableScript(mPattern);
                 }
                 OnUpdateStatus("LOCKED");
+                showPattern();
             }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();
-                OnUpdateStatus("LOCKED");
+                showPattern();
             }
         }
-        //TODO FELIX: Gridview mit pattern füllen/aktualisieren: siehe "GestureRecordActivity.showPattern()"
+    }
+
+    private void showPattern(){
+        if (mPattern!=null && mDebugMode) {
+            mGesturePatternGridViewAdapter.notifyDataSetChanged();
+        }
     }
 
     // TKi 28.03.2015
