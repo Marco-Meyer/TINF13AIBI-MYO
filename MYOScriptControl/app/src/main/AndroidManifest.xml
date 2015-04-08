@@ -53,6 +53,10 @@
             android:name=".GestureRecordActivity"
             android:label="@string/title_activity_gesture_record" >
         </activity>
+        <activity
+            android:name=".ErrorActivity"
+            android:label="@string/title_activity_error" >
+        </activity>
     </application>
 
 </manifest>
