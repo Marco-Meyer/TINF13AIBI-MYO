@@ -21,7 +21,11 @@ build/
 local.properties
 /.idea/workspace.xml
 /.idea/gradle.xml
+/.idea/.name
+/.idea/vcs.xml
 *.iml
+/*/libraries
+
 
 # Log Files
 *.log
