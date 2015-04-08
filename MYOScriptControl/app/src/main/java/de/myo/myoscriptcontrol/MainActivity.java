@@ -186,10 +186,10 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
                 }
             } else {
                 counterNoEqualGestureItem++;
-                if (counterNoEqualGestureItem == gestureList.size()) {
-                    Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_LONG).show();
-                }
             }
+        }
+        if (counterNoEqualGestureItem == gestureList.size()) {
+            Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -215,6 +215,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         if(mPose == Pose.DOUBLE_TAP) {
             OnUpdateStatus("IDLE");
             mPattern.clear();
+            showPattern();
         }
         if(mExecutionMode) {
             if (mPose == Pose.FIST) {
@@ -266,14 +267,17 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         if(mStatus==RecordActivityStatus.DISCONNECTED){
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
             mPattern.clear();
+            showPattern();
         }
         if(mStatus==RecordActivityStatus.UNSYNCED) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
             mPattern.clear();
+            showPattern();
         }
         if(mStatus==RecordActivityStatus.LOCKED) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_blue_light);
             mPattern.clear();
+            showPattern();
         }
         if(mStatus==RecordActivityStatus.IDLE) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_green_light);
