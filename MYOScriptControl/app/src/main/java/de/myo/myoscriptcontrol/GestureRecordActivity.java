@@ -109,14 +109,14 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
         clearGridPosition();
         ImageView image = mPositionImageMap.get(mCurrentPosition);
         if (image != null) {
-            image.setImageResource(R.drawable.abc_btn_radio_to_on_mtrl_015);
+            image.setImageResource(R.drawable.ic_arm_pos_on);
         }
     }
 
     private void clearGridPosition(){
         for (ImageView image : mPositionImageMap.values()){
             if (image != null) {
-                image.setImageResource(R.drawable.abc_btn_radio_to_on_mtrl_000);
+                image.setImageResource(R.drawable.ic_arm_pos_off);
             }
         }
     }
