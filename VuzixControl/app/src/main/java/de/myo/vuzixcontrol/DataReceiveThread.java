@@ -17,9 +17,9 @@ public class DataReceiveThread extends Thread {
     private InputStream mInputStream;
     private MainActivity mActivityContext;
 
-    public DataReceiveThread(MainActivity activityContext) {
+    public DataReceiveThread(MainActivity activityContext, BluetoothSocket socket) {
         mActivityContext = activityContext;
-        mBluetoothSocket = mActivityContext.getBluetoothSocket();
+        mBluetoothSocket = socket;
         try {
             mInputStream = mBluetoothSocket.getInputStream();
         } catch (IOException e) {
@@ -43,14 +43,12 @@ public class DataReceiveThread extends Thread {
     }
 
     private void evaluateInput(byte[] buffer) {
-        if(buffer.length >= 22) {
-            String command = null;
-            try {
-                command = new String(buffer, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            mActivityContext.OnReceiveCommand(command);
+        String command = null;
+        try {
+            command = new String(buffer, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        mActivityContext.OnReceiveCommand(command);
     }
 }
