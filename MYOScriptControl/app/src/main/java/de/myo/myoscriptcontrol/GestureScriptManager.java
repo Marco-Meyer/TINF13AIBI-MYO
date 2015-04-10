@@ -45,6 +45,7 @@ public class GestureScriptManager {
     }
 
     private void loadGestureListFromJson(JSONArray json){
+        mGestureList.clear();
         int count = json.length();
         for (int i=0; i<count; i++){
             mGestureList.add(new GestureItem(json.optJSONObject(i)));
@@ -52,6 +53,7 @@ public class GestureScriptManager {
     }
 
     private void loadScriptListFromJson(JSONArray json){
+        mScriptList.clear();
         int count = json.length();
         for (int i=0; i<count; i++){
             mScriptList.add(new ScriptItem(json.optJSONObject(i)));

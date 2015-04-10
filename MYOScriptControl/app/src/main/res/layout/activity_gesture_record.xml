@@ -67,19 +67,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000"/>
+                android:src="@drawable/ic_arm_pos_off"/>
             <ImageView
                 android:id="@+id/imageViewN"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
             <ImageView
                 android:id="@+id/imageViewNE"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
@@ -91,19 +91,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
             <ImageView
                 android:id="@+id/imageViewC"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_015" />
+                android:src="@drawable/ic_arm_pos_off" />
             <ImageView
                 android:id="@+id/imageViewE"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
@@ -115,19 +115,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
             <ImageView
                 android:id="@+id/imageViewS"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
             <ImageView
                 android:id="@+id/imageViewSE"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.33"
-                android:src="@drawable/abc_btn_radio_to_on_mtrl_000" />
+                android:src="@drawable/ic_arm_pos_off" />
         </LinearLayout>
     </LinearLayout>
     <GridView
