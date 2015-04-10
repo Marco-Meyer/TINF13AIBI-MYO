@@ -1,7 +1,10 @@
 package de.myo.vuzixcontrol;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -46,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
         try {
             if(mConnectThread == null) {
                 if(mBluetoothAdapter.isEnabled()) {
-                    mConnectThread = new ConnectThread(this, "wayne", UUID.fromString(mUUIDString));
+                    mConnectThread = new ConnectThread(this, "vuzix", UUID.fromString(mUUIDString));
                     mConnectThread.start();
                     Toast.makeText(getApplicationContext(), "scanning for available connection", Toast.LENGTH_LONG).show();
                 }
@@ -55,13 +58,14 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "scan failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "scan failed: " + e.getMessage() + ", press enter to try again.", Toast.LENGTH_LONG).show();
         }
     }
 
     private void cancelConnectionScan() {
         if(mConnectThread != null) {
             mConnectThread.cancel();
+            mConnectThread = null;
             Toast.makeText(getApplicationContext(), "connection process stopped", Toast.LENGTH_LONG).show();
         }
     }
@@ -83,6 +87,13 @@ public class MainActivity extends ActionBarActivity {
                 return false;
             }
         });
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
         setContentView(R.layout.activity_main);
         findViewById(R.id.wombat).setBackgroundResource(R.drawable.wombat_vuzix);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -126,32 +137,14 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void OnBluetoothConnectionAvailable(BluetoothSocket socket) {
-        mBluetoothSocket = socket;
-        Message msg = new Message();
-        msg.what = 0;
-        mHandler.sendMessage(msg);
-        mConnectThread = null;
-        startReceiveThread();
-    }
-
     public void OnReceiveCommand(String command) {
         Message msg = new Message();
-        msg.what = 1;
+        msg.what = COMMAND_RECEIVED;
         msg.obj = command;
         mHandler.sendMessage(msg);
     }
 
-    private void startReceiveThread() {
-        DataReceiveThread receiveThread = new DataReceiveThread(this);
-        receiveThread.start();
-    }
-
     public BluetoothAdapter getBluetoothAdapter() {
         return mBluetoothAdapter;
-    }
-
-    public BluetoothSocket getBluetoothSocket() {
-        return mBluetoothSocket;
     }
 }

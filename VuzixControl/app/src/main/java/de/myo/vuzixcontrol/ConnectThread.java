@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.io.Console;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 /**
@@ -23,6 +24,7 @@ public class ConnectThread extends Thread {
         mActivityContext = activityContext;
         try {
             tmp = mActivityContext.getBluetoothAdapter().listenUsingRfcommWithServiceRecord(name, uuid);
+
         } catch (IOException e) {
             throw e;
         }
@@ -34,13 +36,12 @@ public class ConnectThread extends Thread {
         while (true) {
             try {
                 socket = mmServerSocket.accept();
-            } catch (IOException e) {
-                break;
+            } catch (Exception e) {
+                continue;
             }
             if (socket != null) {
-                mActivityContext.OnBluetoothConnectionAvailable(socket);
-                cancel();
-                break;
+                DataReceiveThread receiveThread = new DataReceiveThread(mActivityContext, socket);
+                receiveThread.start();
             }
         }
     }
