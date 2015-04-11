@@ -268,12 +268,12 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             showPattern();
         }
         if(mStatus==RecordActivityStatus.UNSYNCED) {
-            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_dark);
             mPattern.clear();
             showPattern();
         }
         if(mStatus==RecordActivityStatus.LOCKED) {
-            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_blue_light);
+            ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
             mPattern.clear();
             showPattern();
         }
