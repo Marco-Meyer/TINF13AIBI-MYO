@@ -213,7 +213,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             mPattern = new GesturePattern();
         }
         if(mPose == Pose.DOUBLE_TAP) {
-            OnUpdateStatus("IDLE");
+            OnUpdateStatus(RecordActivityStatus.IDLE);
             mPattern.clear();
             showPattern();
         }
@@ -230,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
                 if (!mPattern.isEmpty()) {
                     checkRecordedPatternForAvailableScript(mPattern);
                 }
-                OnUpdateStatus("LOCKED");
+                OnUpdateStatus(RecordActivityStatus.LOCKED);
                 showPattern();
             }
             if (mPose == Pose.WAVE_OUT) {
@@ -256,8 +256,8 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     // TKi 28.03.2015
     @Override
-    public void OnUpdateStatus(String status) {
-        mStatus = RecordActivityStatus.valueOf(status);
+    public void OnUpdateStatus(RecordActivityStatus status) {
+        mStatus = status;
         updateStatus();
     }
 

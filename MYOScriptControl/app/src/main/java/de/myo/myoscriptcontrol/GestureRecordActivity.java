@@ -37,7 +37,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
 
     @Override
     public void OnPose(Pose pose) {
-        OnUpdateStatus("IDLE");
+        OnUpdateStatus(RecordActivityStatus.IDLE);
         mPose = pose;
         if(mRecording) {
             if(mPose == Pose.FIST) {
@@ -61,8 +61,8 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     }
 
     @Override
-    public void OnUpdateStatus(String status) {
-        mStatus = RecordActivityStatus.valueOf(status);
+    public void OnUpdateStatus(RecordActivityStatus status) {
+        mStatus = status;
         updateStatusText();
     }
 

@@ -38,9 +38,9 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     private Myo mMyo;
     private ArrayList<ListenerTarget> mTargets;
 
-    private String mStatus = "DISCONNECTED";
+    private RecordActivityStatus mStatus = RecordActivityStatus.DISCONNECTED;
 
-    public String getStatus(){
+    public RecordActivityStatus getStatus(){
         return mStatus;
     }
 
@@ -56,7 +56,7 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         }
     }
 
-    private void notifyUpdateStatus(String status) {
+    private void notifyUpdateStatus(RecordActivityStatus status) {
         mStatus = status;
         for(ListenerTarget target : mTargets) {
             target.OnUpdateStatus(status);
@@ -104,28 +104,28 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
         super.onArmSync(myo, timestamp, arm, xDirection);
         mMyo = myo;
-        notifyUpdateStatus("LOCKED");
+        notifyUpdateStatus(RecordActivityStatus.LOCKED);
     }
 
     @Override
     public void onArmUnsync(Myo myo, long timestamp) {
         super.onArmUnsync(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus("UNSYNCED");
+        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
     }
 
     @Override
     public void onConnect(Myo myo, long timestamp) {
         super.onConnect(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus("UNSYNCED");
+        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
     }
 
     @Override
     public void onDisconnect(Myo myo, long timestamp) {
         super.onDisconnect(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus("DISCONNECTED");
+        notifyUpdateStatus(RecordActivityStatus.DISCONNECTED);
     }
 
     @Override
@@ -134,14 +134,14 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         myo.unlock(Myo.UnlockType.HOLD);
         centre();
         mMyo = myo;
-        notifyUpdateStatus("IDLE");
+        notifyUpdateStatus(RecordActivityStatus.IDLE);
     }
 
     @Override
     public void onLock(Myo myo, long timestamp) {
         super.onLock(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus("LOCKED");
+        notifyUpdateStatus(RecordActivityStatus.LOCKED);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public void onAttach(Myo myo, long timestamp) {
         super.onAttach(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus("UNSYNCED");
+        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
     }
 
     @Override
