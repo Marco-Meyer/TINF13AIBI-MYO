@@ -1,5 +1,6 @@
 package de.myo.myoscriptcontrol.tests;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +25,20 @@ public class ItemSerializeTest {
         ScriptItem sItem1 = new ScriptItem();
         sItem1.setDescription("blablablabla");
         sItem1.setName("testname");
-        JSONObject jsonScItem1 = sItem1.asJsonObject();
+        JSONObject jsonScItem1 = null;
+        try {
+            jsonScItem1 = sItem1.asJsonObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         ScriptItem sItem2 = new ScriptItem(jsonScItem1);
-        JSONObject jsonScItem2 = sItem2.asJsonObject();
+        JSONObject jsonScItem2 = null;
+        try {
+            jsonScItem2 = sItem2.asJsonObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         String jsonScString1 = jsonScItem1.toString();
         String jsonScString2 = jsonScItem2.toString();
@@ -39,10 +50,20 @@ public class ItemSerializeTest {
         gItem1.setPattern(new GesturePattern());
         gItem1.setName("testgesturename");
         gItem1.setScript(sItem2.getId().toString());
-        JSONObject jsonGeItem1 = gItem1.asJsonObject();
+        JSONObject jsonGeItem1 = null;
+        try {
+            jsonGeItem1 = gItem1.asJsonObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         GestureItem gItem2 = new GestureItem(jsonGeItem1);
-        JSONObject jsonGeItem2 = gItem2.asJsonObject();
+        JSONObject jsonGeItem2 = null;
+        try {
+            jsonGeItem2 = gItem2.asJsonObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         String jsonGeString1 = jsonGeItem1.toString();
         String jsonGeString2 = jsonGeItem2.toString();

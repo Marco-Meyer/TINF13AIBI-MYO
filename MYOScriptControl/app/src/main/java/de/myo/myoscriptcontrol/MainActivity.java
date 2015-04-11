@@ -36,7 +36,6 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     public static String ScriptDir;
     private static Hub mMyoHub;
 
-    private static GestureRecordDeviceListener mMyoListener;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
     private GesturePattern mPattern = new GesturePattern();
     private Pose mPose;
@@ -81,8 +80,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     }
 
     private void initializeMYOHub() {
-        mMyoListener = GestureRecordDeviceListener.getInstance();
-        mMyoListener.addTarget(this);
+        GestureRecordDeviceListener.getInstance().addTarget(this);
         mMyoHub = Hub.getInstance();
         if (!mMyoHub.init(this)) {
             Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
@@ -92,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     private void initializeMYOListenerForHub(Hub hub) {
         try {
-            hub.addListener(mMyoListener);
+            hub.addListener(GestureRecordDeviceListener.getInstance());
             hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
             if (hub.getConnectedDevices().size() == 0) {
                 hub.attachToAdjacentMyo();
@@ -116,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             ErrorActivity.handleError(this, e.getMessage());
         }
         initializeMYOHub();
-        OnUpdateStatus(mMyoListener.getStatus());
+        OnUpdateStatus(GestureRecordDeviceListener.getInstance().getStatus());
         initGridAdapter();
     }
 
@@ -132,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     @Override
     protected void onResume() {
         super.onResume();
-        OnUpdateStatus(mMyoListener.getStatus());
+        OnUpdateStatus(GestureRecordDeviceListener.getInstance().getStatus());
         mExecutionMode = true;
     }
 

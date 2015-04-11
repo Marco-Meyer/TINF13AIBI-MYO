@@ -28,7 +28,6 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     private GesturePattern mPattern;
     private String mPatternString;
     private Pose mPose;
-    private static GestureRecordDeviceListener mMyoListener;
     private HashMap<GridPosition, ImageView> mPositionImageMap;
     private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
     private GridPosition mCurrentPosition;
@@ -152,9 +151,8 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     }
 
     private void initMyoHub(){
-        mMyoListener = GestureRecordDeviceListener.getInstance();
-        mMyoListener.addTarget(this);
-        OnUpdateStatus(mMyoListener.getStatus());
+        GestureRecordDeviceListener.getInstance().addTarget(this);
+        OnUpdateStatus(GestureRecordDeviceListener.getInstance().getStatus());
     }
 
 
@@ -193,7 +191,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     @Override
     protected void onPause() {
         super.onPause();
-        mMyoListener.removeTarget(this);
+        GestureRecordDeviceListener.getInstance().removeTarget(this);
         mRecording = false;
         clearGridPosition();
     }

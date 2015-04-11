@@ -65,7 +65,7 @@ public class MainActivityTest {
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
 
-        mainActivity.OnUpdateStatus("LOCKED");
+        mainActivity.OnUpdateStatus(RecordActivityStatus.LOCKED);
         mainActivity.OnPose(Pose.DOUBLE_TAP);
         assertThat(mainActivity.getStatus(), equalTo(RecordActivityStatus.IDLE));
 
@@ -86,10 +86,10 @@ public class MainActivityTest {
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
 
-        mainActivity.OnUpdateStatus("IDLE");
+        mainActivity.OnUpdateStatus(RecordActivityStatus.IDLE);
         assertThat(mainActivity.getExecutionMode(), equalTo(true));
 
-        mainActivity.OnUpdateStatus("LOCKED");
+        mainActivity.OnUpdateStatus(RecordActivityStatus.LOCKED);
         assertThat(mainActivity.getExecutionMode(), equalTo(false));
 
         mainActivity.OnPose(Pose.DOUBLE_TAP);
@@ -106,7 +106,7 @@ public class MainActivityTest {
         GesturePattern expectedPattern = new GesturePattern();
         expectedPattern.add(GridPosition.POS_CENTER);
 
-        targetActivity.OnUpdateStatus("IDLE");
+        targetActivity.OnUpdateStatus(RecordActivityStatus.IDLE);
         targetActivity.setExecutionMode(true);
         targetActivity.setCurrentPosition(GridPosition.POS_CENTER);
         targetActivity.OnPose(Pose.FIST);
