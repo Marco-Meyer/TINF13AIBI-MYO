@@ -80,7 +80,9 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
 
 
     public void addTarget(ListenerTarget target) {
-        mTargets.add(target);
+        if (!mTargets.contains(target)){
+            mTargets.add(target);
+        }
     }
 
     public void removeTarget(ListenerTarget target) {

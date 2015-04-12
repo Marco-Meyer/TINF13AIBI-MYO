@@ -107,7 +107,7 @@
             android:layout_height="50dp"
             android:layout_width="0dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Skript:"
+            android:text=""
             android:id="@+id/labelScript"
             android:layout_weight="0.70"/>
         <ImageButton

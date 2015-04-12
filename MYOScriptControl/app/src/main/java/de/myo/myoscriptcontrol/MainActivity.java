@@ -47,12 +47,14 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     private void initSwitchListener(){
         Switch switchMode = (Switch)findViewById(R.id.switchDebugMode);
+        switchMode.setChecked(mDebugMode);
         switchMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mDebugMode = isChecked;
                 if(isChecked) {
                     findViewById(R.id.debugGridView).setVisibility(View.VISIBLE);
+                    showPattern();
                 }
                 else {
                     findViewById(R.id.debugGridView).setVisibility(View.INVISIBLE);
@@ -79,6 +81,12 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         return file.getAbsolutePath();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GestureRecordDeviceListener.getInstance().removeTarget(this);
+    }
+
     private void initializeMYOHub() {
         GestureRecordDeviceListener.getInstance().addTarget(this);
         mMyoHub = Hub.getInstance();
@@ -90,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     private void initializeMYOListenerForHub(Hub hub) {
         try {
+            hub.removeListener(GestureRecordDeviceListener.getInstance());
             hub.addListener(GestureRecordDeviceListener.getInstance());
             hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
             if (hub.getConnectedDevices().size() == 0) {
@@ -114,8 +123,8 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             ErrorActivity.handleError(this, e.getMessage());
         }
         initializeMYOHub();
-        OnUpdateStatus(GestureRecordDeviceListener.getInstance().getStatus());
         initGridAdapter();
+        OnUpdateStatus(GestureRecordDeviceListener.getInstance().getStatus());
     }
 
     private void initGridAdapter() {
@@ -179,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
                     executeScript(scriptItem);
                 } catch(IllegalArgumentException e){
                     String message = "Der Geste "+ gestureItem.getName() +" ist kein Skript zugeordnet.";
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     ErrorActivity.handleError(this, message);
                 }
             } else {
@@ -187,7 +196,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             }
         }
         if (counterNoEqualGestureItem == gestureList.size()) {
-            Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Die ausgeführe Geste existiert noch nicht.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,8 +228,6 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             if (mPose == Pose.FIST) {
                 mPattern.add(mCurrentPosition);
                 if (mDebugMode) {
-                    String pattern = mPattern.toString();
-                    Toast.makeText(getApplicationContext(), pattern, Toast.LENGTH_LONG).show();
                     showPattern();
                 }
             }
