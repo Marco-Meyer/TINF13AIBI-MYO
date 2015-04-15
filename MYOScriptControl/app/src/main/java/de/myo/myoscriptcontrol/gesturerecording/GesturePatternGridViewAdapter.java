@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.gesturerecording;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.myo.myoscriptcontrol.R;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 

@@ -2,14 +2,11 @@ package de.myo.myoscriptcontrol.tests.gesturerecordingtest;
 
 import android.content.Intent;
 
-import com.thalmic.myo.Pose;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 
-import de.myo.myoscriptcontrol.GestureRecordActivity;
-import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.activities.GestureRecordActivity;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;

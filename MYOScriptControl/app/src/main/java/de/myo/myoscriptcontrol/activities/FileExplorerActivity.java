@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 import java.io.File;
 import java.sql.Date;
@@ -16,6 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import de.myo.myoscriptcontrol.listmanagement.filemanagement.FileItem;
+import de.myo.myoscriptcontrol.listmanagement.filemanagement.FileItemListViewAdapter;
+import de.myo.myoscriptcontrol.R;
 
 public class FileExplorerActivity extends ActionBarActivity {
     private File currentDir;

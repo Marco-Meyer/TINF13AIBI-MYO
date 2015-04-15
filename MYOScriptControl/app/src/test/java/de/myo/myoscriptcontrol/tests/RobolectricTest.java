@@ -1,17 +1,14 @@
 package de.myo.myoscriptcontrol.tests;
 
 
-import android.app.Activity;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.util.ActivityController;
 
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
-import de.myo.myoscriptcontrol.MainActivity;
+import de.myo.myoscriptcontrol.activities.MainActivity;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

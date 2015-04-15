@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.myo.myoscriptcontrol.GestureEditActivity">
+    tools:context="de.myo.myoscriptcontrol.activities.GestureEditActivity">
     <item android:id="@+id/action_cancel_gesture"
         android:title="@string/action_cancel_gesture"
         android:orderInCategory="100"

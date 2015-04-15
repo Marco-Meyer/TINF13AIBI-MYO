@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.listmanagement.gesturemanagement;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import de.myo.myoscriptcontrol.GestureScriptManager;
+import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 
 /**
  * Created by Daniel on 12.03.2015.

@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.scriptexecution;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +10,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
+import de.myo.myoscriptcontrol.activities.MainActivity;
+import de.myo.myoscriptcontrol.FileManager;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 
 /**
  * Created by DTH on 30.03.2015.

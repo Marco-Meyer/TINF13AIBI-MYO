@@ -16,6 +16,8 @@ import com.thalmic.myo.XDirection;
 
 import java.util.ArrayList;
 
+import de.myo.myoscriptcontrol.activities.ListenerTarget;
+
 public class GestureRecordDeviceListener extends AbstractDeviceListener {
     static private GestureRecordDeviceListener instance;
     private Quaternion mOrientation;

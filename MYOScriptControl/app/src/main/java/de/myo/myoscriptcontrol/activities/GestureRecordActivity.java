@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 
+import de.myo.myoscriptcontrol.R;
 import de.myo.myoscriptcontrol.gesturerecording.*;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 
@@ -46,7 +47,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
                 mLastPosition = mCurrentPosition;
             }
             if(mPose == Pose.FINGERS_SPREAD) {
-                findViewById(R.id.imageButtonRecordPattern).callOnClick();
+                findViewById(de.myo.myoscriptcontrol.R.id.imageButtonRecordPattern).callOnClick();
             }
             if (mPose == Pose.WAVE_OUT) {
                 mPattern.clear();

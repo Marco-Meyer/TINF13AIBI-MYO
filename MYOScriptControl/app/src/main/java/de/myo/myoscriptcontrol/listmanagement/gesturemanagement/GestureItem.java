@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.listmanagement.gesturemanagement;
 
 import org.json.JSONException;
 import org.json.JSONObject;

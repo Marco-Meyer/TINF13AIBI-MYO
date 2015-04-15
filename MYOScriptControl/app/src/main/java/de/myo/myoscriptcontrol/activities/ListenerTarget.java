@@ -1,6 +1,9 @@
-package de.myo.myoscriptcontrol.gesturerecording;
+package de.myo.myoscriptcontrol.activities;
 
 import com.thalmic.myo.Pose;
+
+import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
+import de.myo.myoscriptcontrol.gesturerecording.MYOStatus;
 
 /**
  * Created by felix on 21.03.2015.

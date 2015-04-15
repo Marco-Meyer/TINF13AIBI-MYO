@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -24,9 +24,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
+import de.myo.myoscriptcontrol.GestureScriptManager;
+import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.scriptexecution.SL4AManager;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
-import de.myo.myoscriptcontrol.gesturerecording.ListenerTarget;
 import de.myo.myoscriptcontrol.gesturerecording.*;
 
 public class MainActivity extends ActionBarActivity implements ListenerTarget {

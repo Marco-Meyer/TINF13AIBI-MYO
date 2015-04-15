@@ -2,11 +2,9 @@ package de.myo.myoscriptcontrol.tests;
 
 import android.content.Intent;
 
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
 
 import java.io.File;
@@ -17,9 +15,9 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.is;
 
 import de.myo.myoscriptcontrol.FileManager;
-import de.myo.myoscriptcontrol.MainActivity;
-import de.myo.myoscriptcontrol.ScriptEditActivity;
-import de.myo.myoscriptcontrol.ScriptItem;
+import de.myo.myoscriptcontrol.activities.MainActivity;
+import de.myo.myoscriptcontrol.activities.ScriptEditActivity;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;

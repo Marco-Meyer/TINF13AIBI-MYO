@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.myo.myoscriptcontrol.ScriptEditActivity">
+    tools:context="de.myo.myoscriptcontrol.activities.ScriptEditActivity">
     <item android:id="@+id/action_cancel_script"
         android:title="@string/action_cancel_script"
         android:orderInCategory="100"

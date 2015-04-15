@@ -1,9 +1,8 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.listmanagement.scriptmanagement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;

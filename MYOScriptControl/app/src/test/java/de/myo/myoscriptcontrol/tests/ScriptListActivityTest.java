@@ -10,13 +10,11 @@ import org.robolectric.util.ActivityController;
 
 import java.util.List;
 
-import de.myo.myoscriptcontrol.GestureItem;
-import de.myo.myoscriptcontrol.GestureListActivity;
 import de.myo.myoscriptcontrol.GestureScriptManager;
-import de.myo.myoscriptcontrol.MainActivity;
+import de.myo.myoscriptcontrol.activities.MainActivity;
 import de.myo.myoscriptcontrol.R;
-import de.myo.myoscriptcontrol.ScriptItem;
-import de.myo.myoscriptcontrol.ScriptListActivity;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
+import de.myo.myoscriptcontrol.activities.ScriptListActivity;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 import de.myo.myoscriptcontrol.testutil.MenuItemMock;
 

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.scriptexecution;
 
 import android.content.ComponentName;
 

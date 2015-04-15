@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -23,37 +23,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GestureListActivity"
+            android:name=".activities.GestureListActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_gesture_list" >
         </activity>
         <activity
-            android:name=".GestureEditActivity"
+            android:name=".activities.GestureEditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_gesture_edit" >
         </activity>
         <activity
-            android:name=".ScriptListActivity"
+            android:name=".activities.ScriptListActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_script_list" >
         </activity>
         <activity
-            android:name=".ScriptEditActivity"
+            android:name=".activities.ScriptEditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_script_edit" >
         </activity>
         <activity
-            android:name=".FileExplorerActivity"
+            android:name=".activities.FileExplorerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_file_explorer" >
         </activity>
         <activity
-            android:name=".GestureRecordActivity"
+            android:name=".activities.GestureRecordActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_gesture_record" >
         </activity>
         <activity
-            android:name=".ErrorActivity"
+            android:name=".activities.ErrorActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_error" >
         </activity>

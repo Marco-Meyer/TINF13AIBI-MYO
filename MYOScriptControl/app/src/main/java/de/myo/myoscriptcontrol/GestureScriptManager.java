@@ -4,15 +4,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 
 /**
  * Created by Daniel on 18.03.2015.

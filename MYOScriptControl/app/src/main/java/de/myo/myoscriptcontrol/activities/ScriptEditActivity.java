@@ -1,19 +1,14 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 /**
  * Created by Daniel on 19.03.2015.
  */
 
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +16,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+
+import de.myo.myoscriptcontrol.FileManager;
+import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.scriptexecution.SL4AManager;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
 
 
 public class ScriptEditActivity extends ActionBarActivity {

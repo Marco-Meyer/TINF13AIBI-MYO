@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 /**
  * Created by Daniel on 18.03.2015.
@@ -8,22 +8,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,8 +28,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
+import de.myo.myoscriptcontrol.GestureScriptManager;
+import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItemListViewAdapter;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
-import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
+import de.myo.myoscriptcontrol.gesturerecording.GesturePatternGridViewAdapter;
 
 public class GestureEditActivity extends ActionBarActivity {
     private static final int EDIT_PATTERN_REQUEST = 1;

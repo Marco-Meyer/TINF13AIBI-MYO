@@ -14,12 +14,12 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.util.ActivityController;
 
-import de.myo.myoscriptcontrol.GestureItem;
-import de.myo.myoscriptcontrol.GestureListActivity;
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
+import de.myo.myoscriptcontrol.activities.GestureListActivity;
 import de.myo.myoscriptcontrol.GestureScriptManager;
 import de.myo.myoscriptcontrol.R;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
-import de.myo.myoscriptcontrol.MainActivity;
+import de.myo.myoscriptcontrol.activities.MainActivity;
 import de.myo.myoscriptcontrol.testutil.MenuItemMock;
 
 /**

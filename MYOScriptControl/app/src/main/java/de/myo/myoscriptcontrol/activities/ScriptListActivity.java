@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +16,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import de.myo.myoscriptcontrol.GestureScriptManager;
+import de.myo.myoscriptcontrol.R;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItem;
+import de.myo.myoscriptcontrol.listmanagement.scriptmanagement.ScriptItemListViewAdapter;
 
 /**
  * Created by Daniel on 19.03.2015.

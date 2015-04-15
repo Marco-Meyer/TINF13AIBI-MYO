@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.listmanagement.filemanagement;
 
 public class FileItem implements Comparable<FileItem>{
 	private String name;

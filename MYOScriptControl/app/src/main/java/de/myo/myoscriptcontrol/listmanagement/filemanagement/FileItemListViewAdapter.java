@@ -1,4 +1,4 @@
-package de.myo.myoscriptcontrol;
+package de.myo.myoscriptcontrol.listmanagement.filemanagement;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import de.myo.myoscriptcontrol.FileManager;
+import de.myo.myoscriptcontrol.R;
 
 
 public class FileItemListViewAdapter extends ArrayAdapter<FileItem>{

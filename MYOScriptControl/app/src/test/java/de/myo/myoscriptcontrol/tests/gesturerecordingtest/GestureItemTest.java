@@ -1,16 +1,13 @@
 package de.myo.myoscriptcontrol.tests.gesturerecordingtest;
 
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 
-import de.myo.myoscriptcontrol.GestureItem;
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

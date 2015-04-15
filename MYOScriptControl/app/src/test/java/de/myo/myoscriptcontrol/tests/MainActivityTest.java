@@ -12,10 +12,10 @@ import org.robolectric.shadows.ShadowToast;
 
 import java.util.List;
 
-import de.myo.myoscriptcontrol.GestureItem;
+import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
 
 import de.myo.myoscriptcontrol.GestureScriptManager;
-import de.myo.myoscriptcontrol.MainActivity;
+import de.myo.myoscriptcontrol.activities.MainActivity;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 import de.myo.myoscriptcontrol.gesturerecording.MYOStatus;
