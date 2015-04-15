@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     public static String ScriptDir;
     private static Hub mMyoHub;
 
-    private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
+    private MYOStatus mStatus = MYOStatus.UNKNOWN;
     private GesturePattern mPattern = new GesturePattern();
     private Pose mPose;
     private boolean mExecutionMode = false;
@@ -117,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         initSwitchListener();
         try {
             GestureScriptManager.getInstance().setConfigFile(ConfigFile);
-            mStatus = RecordActivityStatus.DISCONNECTED;
+            mStatus = MYOStatus.DISCONNECTED;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             ErrorActivity.handleError(this, e.getMessage());
@@ -220,7 +220,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
             mPattern = new GesturePattern();
         }
         if(mPose == Pose.DOUBLE_TAP) {
-            OnUpdateStatus(RecordActivityStatus.IDLE);
+            OnUpdateStatus(MYOStatus.IDLE);
             mPattern.clear();
             showPattern();
         }
@@ -235,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
                 if (!mPattern.isEmpty()) {
                     checkRecordedPatternForAvailableScript(mPattern);
                 }
-                OnUpdateStatus(RecordActivityStatus.LOCKED);
+                OnUpdateStatus(MYOStatus.LOCKED);
                 showPattern();
             }
             if (mPose == Pose.WAVE_OUT) {
@@ -261,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     // TKi 28.03.2015
     @Override
-    public void OnUpdateStatus(RecordActivityStatus status) {
+    public void OnUpdateStatus(MYOStatus status) {
         mStatus = status;
         updateStatus();
     }
@@ -269,25 +269,25 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     // TKi 28.03.2015
     private void updateStatus(){
         ((TextView)findViewById(R.id.textViewMainStatus)).setText("Verbindungsstatus: " + mStatus.toString());
-        if(mStatus==RecordActivityStatus.DISCONNECTED){
+        if(mStatus== MYOStatus.DISCONNECTED){
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
             mPattern.clear();
             showPattern();
         }
-        if(mStatus==RecordActivityStatus.UNSYNCED) {
+        if(mStatus== MYOStatus.UNSYNCED) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_dark);
             mPattern.clear();
             showPattern();
         }
-        if(mStatus==RecordActivityStatus.LOCKED) {
+        if(mStatus== MYOStatus.LOCKED) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_orange_light);
             mPattern.clear();
             showPattern();
         }
-        if(mStatus==RecordActivityStatus.IDLE) {
+        if(mStatus== MYOStatus.IDLE) {
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_green_light);
         }
-        if(mStatus==RecordActivityStatus.UNKNOWN){
+        if(mStatus== MYOStatus.UNKNOWN){
             ((ImageView) findViewById(R.id.imageViewMainStatus)).setImageResource(android.R.color.holo_red_light);
         }
 
@@ -308,7 +308,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     }
 
     // TKi 04.04.2015
-    public RecordActivityStatus getStatus() {
+    public MYOStatus getStatus() {
         return mStatus;
     }
 

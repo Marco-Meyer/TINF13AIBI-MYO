@@ -18,7 +18,7 @@ import de.myo.myoscriptcontrol.GestureScriptManager;
 import de.myo.myoscriptcontrol.MainActivity;
 import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
-import de.myo.myoscriptcontrol.gesturerecording.RecordActivityStatus;
+import de.myo.myoscriptcontrol.gesturerecording.MYOStatus;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,18 +65,18 @@ public class MainActivityTest {
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
 
-        mainActivity.OnUpdateStatus(RecordActivityStatus.LOCKED);
+        mainActivity.OnUpdateStatus(MYOStatus.LOCKED);
         mainActivity.OnPose(Pose.DOUBLE_TAP);
-        assertThat(mainActivity.getStatus(), equalTo(RecordActivityStatus.IDLE));
+        assertThat(mainActivity.getStatus(), equalTo(MYOStatus.IDLE));
 
         mainActivity.OnPose(Pose.FIST);
-        assertThat(mainActivity.getStatus(), equalTo(RecordActivityStatus.IDLE));
+        assertThat(mainActivity.getStatus(), equalTo(MYOStatus.IDLE));
 
         mainActivity.OnPose(Pose.WAVE_OUT);
-        assertThat(mainActivity.getStatus(), equalTo(RecordActivityStatus.IDLE));
+        assertThat(mainActivity.getStatus(), equalTo(MYOStatus.IDLE));
 
         mainActivity.OnPose(Pose.FINGERS_SPREAD);
-        assertThat(mainActivity.getStatus(), equalTo(RecordActivityStatus.LOCKED));
+        assertThat(mainActivity.getStatus(), equalTo(MYOStatus.LOCKED));
 
     }
 
@@ -86,10 +86,10 @@ public class MainActivityTest {
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
 
-        mainActivity.OnUpdateStatus(RecordActivityStatus.IDLE);
+        mainActivity.OnUpdateStatus(MYOStatus.IDLE);
         assertThat(mainActivity.getExecutionMode(), equalTo(true));
 
-        mainActivity.OnUpdateStatus(RecordActivityStatus.LOCKED);
+        mainActivity.OnUpdateStatus(MYOStatus.LOCKED);
         assertThat(mainActivity.getExecutionMode(), equalTo(false));
 
         mainActivity.OnPose(Pose.DOUBLE_TAP);
@@ -106,7 +106,7 @@ public class MainActivityTest {
         GesturePattern expectedPattern = new GesturePattern();
         expectedPattern.add(GridPosition.POS_CENTER);
 
-        targetActivity.OnUpdateStatus(RecordActivityStatus.IDLE);
+        targetActivity.OnUpdateStatus(MYOStatus.IDLE);
         targetActivity.setExecutionMode(true);
         targetActivity.setCurrentPosition(GridPosition.POS_CENTER);
         targetActivity.OnPose(Pose.FIST);

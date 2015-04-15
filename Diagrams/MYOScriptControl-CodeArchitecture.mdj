@@ -5723,7 +5723,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-notifyUpdateStatus(status: Sting)",
+											"text": "-notifyUpdateStatus(status: MYOStatus)",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -5986,7 +5986,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "RecordActivityStatus",
+											"text": "MYOStatus",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -19421,7 +19421,9 @@
 											"visibility": "public",
 											"isStatic": false,
 											"isLeaf": false,
-											"type": "Sting",
+											"type": {
+												"$ref": "AAAAAAFMhFXqeRrvXGo="
+											},
 											"isReadOnly": false,
 											"isOrdered": false,
 											"isUnique": false,
@@ -19554,7 +19556,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFMnXoHyuA04Yo="
 							},
-							"name": "RecordActivityStatus",
+							"name": "MYOStatus",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",

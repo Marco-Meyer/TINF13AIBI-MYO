@@ -4,7 +4,7 @@ package de.myo.myoscriptcontrol.gesturerecording;
  * Created by felix on 24.03.2015.
  */
 
-public enum RecordActivityStatus {
+public enum MYOStatus {
     UNKNOWN("unknown"),
     DISCONNECTED("disconnected"),
     DETACHED("detached"),
@@ -17,7 +17,7 @@ public enum RecordActivityStatus {
 
     private String mStringValue;
 
-    RecordActivityStatus(String value){
+    MYOStatus(String value){
         mStringValue = value;
     }
 
@@ -30,8 +30,8 @@ public enum RecordActivityStatus {
         return mStringValue;
     }
 
-    public static RecordActivityStatus parseString(String value) {
-        for(RecordActivityStatus v : values())
+    public static MYOStatus parseString(String value) {
+        for(MYOStatus v : values())
             if(v.getValue().equalsIgnoreCase(value)) return v;
         throw new IllegalArgumentException();
     }

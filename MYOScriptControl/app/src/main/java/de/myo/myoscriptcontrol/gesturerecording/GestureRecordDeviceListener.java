@@ -8,7 +8,6 @@ import android.graphics.Point;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
-import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.Quaternion;
@@ -16,9 +15,6 @@ import com.thalmic.myo.Vector3;
 import com.thalmic.myo.XDirection;
 
 import java.util.ArrayList;
-
-import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
-import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 
 public class GestureRecordDeviceListener extends AbstractDeviceListener {
     static private GestureRecordDeviceListener instance;
@@ -38,9 +34,9 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     private Myo mMyo;
     private ArrayList<ListenerTarget> mTargets;
 
-    private RecordActivityStatus mStatus = RecordActivityStatus.DISCONNECTED;
+    private MYOStatus mStatus = MYOStatus.DISCONNECTED;
 
-    public RecordActivityStatus getStatus(){
+    public MYOStatus getStatus(){
         return mStatus;
     }
 
@@ -56,7 +52,7 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         }
     }
 
-    private void notifyUpdateStatus(RecordActivityStatus status) {
+    private void notifyUpdateStatus(MYOStatus status) {
         mStatus = status;
         for(ListenerTarget target : mTargets) {
             target.OnUpdateStatus(status);
@@ -106,28 +102,28 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
         super.onArmSync(myo, timestamp, arm, xDirection);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.LOCKED);
+        notifyUpdateStatus(MYOStatus.LOCKED);
     }
 
     @Override
     public void onArmUnsync(Myo myo, long timestamp) {
         super.onArmUnsync(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
+        notifyUpdateStatus(MYOStatus.UNSYNCED);
     }
 
     @Override
     public void onConnect(Myo myo, long timestamp) {
         super.onConnect(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
+        notifyUpdateStatus(MYOStatus.UNSYNCED);
     }
 
     @Override
     public void onDisconnect(Myo myo, long timestamp) {
         super.onDisconnect(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.DISCONNECTED);
+        notifyUpdateStatus(MYOStatus.DISCONNECTED);
     }
 
     @Override
@@ -136,14 +132,14 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
         myo.unlock(Myo.UnlockType.HOLD);
         centre();
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.IDLE);
+        notifyUpdateStatus(MYOStatus.IDLE);
     }
 
     @Override
     public void onLock(Myo myo, long timestamp) {
         super.onLock(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.LOCKED);
+        notifyUpdateStatus(MYOStatus.LOCKED);
     }
 
     @Override
@@ -156,7 +152,7 @@ public class GestureRecordDeviceListener extends AbstractDeviceListener {
     public void onAttach(Myo myo, long timestamp) {
         super.onAttach(myo, timestamp);
         mMyo = myo;
-        notifyUpdateStatus(RecordActivityStatus.UNSYNCED);
+        notifyUpdateStatus(MYOStatus.UNSYNCED);
     }
 
     @Override

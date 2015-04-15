@@ -11,7 +11,6 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.thalmic.myo.*;
 
@@ -29,14 +28,14 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     private String mPatternString;
     private Pose mPose;
     private HashMap<GridPosition, ImageView> mPositionImageMap;
-    private RecordActivityStatus mStatus = RecordActivityStatus.UNKNOWN;
+    private MYOStatus mStatus = MYOStatus.UNKNOWN;
     private GridPosition mCurrentPosition;
     private GridPosition mLastPosition;
     private boolean mRecording;
 
     @Override
     public void OnPose(Pose pose) {
-        OnUpdateStatus(RecordActivityStatus.IDLE);
+        OnUpdateStatus(MYOStatus.IDLE);
         mPose = pose;
         if(mRecording) {
             if(mPose == Pose.FIST) {
@@ -60,7 +59,7 @@ public class GestureRecordActivity extends ActionBarActivity implements Listener
     }
 
     @Override
-    public void OnUpdateStatus(RecordActivityStatus status) {
+    public void OnUpdateStatus(MYOStatus status) {
         mStatus = status;
         updateStatusText();
     }

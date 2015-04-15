@@ -8,5 +8,5 @@ import com.thalmic.myo.Pose;
 public interface ListenerTarget {
     void OnPose(Pose pose);
     void OnGridPositionUpdate(GridPosition position);
-    void OnUpdateStatus(RecordActivityStatus status);
+    void OnUpdateStatus(MYOStatus status);
 }
