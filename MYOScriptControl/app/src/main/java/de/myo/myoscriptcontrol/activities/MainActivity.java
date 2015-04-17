@@ -79,8 +79,7 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         File file = new File(fileDirPath + "/" + folder);
         file.mkdir();
         if (!file.isDirectory()) {
-            throw new IllegalStateException("Folder couldn't be created");
-            //instead, use new error handling here.
+            ErrorActivity.handleError(this, "Die benötigten Ordner für die Anwendung konnten nicht angelegt werden.");
         }
         return file.getAbsolutePath();
     }
