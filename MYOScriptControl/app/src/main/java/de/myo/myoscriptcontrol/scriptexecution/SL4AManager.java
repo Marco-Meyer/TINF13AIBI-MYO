@@ -49,6 +49,9 @@ public class SL4AManager {
         boolean androidScriptingExists = false;
         boolean pythonForAndroidExists = false;
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        if (packages == null) {
+            return false;
+        }
         for (ApplicationInfo packageInfo : packages){
             if (packageInfo.packageName.equalsIgnoreCase("com.googlecode.android_scripting")){
                 androidScriptingExists = true;

@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ScriptEditActivityTest {
 
     @Test
-    public void activityTest() {
+    public void testSaveScriptItem() {
         ActivityController<MainActivity> controllerMain = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = controllerMain.create().start().resume().get();
 

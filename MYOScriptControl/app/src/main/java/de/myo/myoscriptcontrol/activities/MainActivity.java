@@ -93,8 +93,12 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
     private void initializeMYOHub() {
         GestureRecordDeviceListener.getInstance().addTarget(this);
         mMyoHub = Hub.getInstance();
-        if (!mMyoHub.init(this)) {
-            Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
+        try {
+            if (!mMyoHub.init(this)) {
+                Toast.makeText(getApplicationContext(), "Could not initialize MYO Hub", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         initializeMYOListenerForHub(mMyoHub);
     }
@@ -148,19 +152,14 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         mExecutionMode = false;
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_gesture_manager) {
             Intent intent = new Intent(MainActivity.this, GestureListActivity.class);
 

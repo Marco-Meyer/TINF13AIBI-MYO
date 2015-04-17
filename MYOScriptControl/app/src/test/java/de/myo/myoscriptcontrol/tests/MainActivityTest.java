@@ -7,10 +7,12 @@ import com.thalmic.myo.Pose;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
 import org.robolectric.shadows.ShadowToast;
 
 import java.util.List;
+import java.util.UUID;
 
 import de.myo.myoscriptcontrol.listmanagement.gesturemanagement.GestureItem;
 
@@ -20,6 +22,7 @@ import de.myo.myoscriptcontrol.gesturerecording.GesturePattern;
 import de.myo.myoscriptcontrol.gesturerecording.GridPosition;
 import de.myo.myoscriptcontrol.gesturerecording.MYOStatus;
 import de.myo.myoscriptcontrol.testutil.CustomRobolectricTestRunner;
+import de.myo.myoscriptcontrol.testutil.MenuItemMock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,14 +35,39 @@ public class MainActivityTest {
 
     //TKi 26.03.2015
     @Test
-    public void testCheckRecordedPatternForAvailableScript(){
+    public void testCheckRecordedPatternForAvailableScript_executeScript(){
 
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
         List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
 
         GestureItem testItem = new GestureItem();
-        testItem.setScript("TestScript");
+        testItem.setName("testGestureItem");
+        testItem.setScript(UUID.randomUUID().toString());
+        GesturePattern knownPattern = new GesturePattern();
+        knownPattern.add(GridPosition.POS_SOUTH_EAST);
+        testItem.setPattern(knownPattern);
+        list.add(testItem);
+
+        boolean errorThrown = false;
+        try {
+            mainActivity.checkRecordedPatternForAvailableScript(knownPattern);
+        } catch (Exception e) {
+            errorThrown = true;
+        }
+        assertThat(errorThrown, equalTo(false));
+    }
+
+    @Test
+    public void testCheckRecordedPatternForAvailableScript_ScriptNotFound(){
+
+        ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
+        MainActivity mainActivity = mainController.create().start().resume().get();
+        List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
+        ShadowActivity shadowActivity = Robolectric.shadowOf(mainActivity);
+
+        GestureItem testItem = new GestureItem();
+        testItem.setName("testGestureItem");
         GesturePattern knownPattern = new GesturePattern();
         knownPattern.add(GridPosition.POS_SOUTH_EAST);
         testItem.setPattern(knownPattern);
@@ -47,14 +75,23 @@ public class MainActivityTest {
 
         mainActivity.checkRecordedPatternForAvailableScript(knownPattern);
 
-        assertThat(ShadowToast.getTextOfLatestToast().toString(), equalTo("Available Script: TestScript"));
+        assertThat(shadowActivity.getNextStartedActivity().toString(), equalTo("Intent{" +
+                "componentName=ComponentInfo{de.myo.myoscriptcontrol/de.myo.myoscriptcontrol.activities.ErrorActivity}," +
+                " extras=Bundle[{errorMessage=Der Geste testGestureItem ist kein Skript zugeordnet.}]}"));
+    }
+
+    @Test
+    public void testCheckRecordedPatternForAvailableScript_GestureNotFound(){
+
+        ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
+        MainActivity mainActivity = mainController.create().start().resume().get();
 
         GesturePattern unknownGesturePattern = new GesturePattern();
         unknownGesturePattern.add(GridPosition.POS_SOUTH);
 
         mainActivity.checkRecordedPatternForAvailableScript(unknownGesturePattern);
 
-        assertThat(ShadowToast.getTextOfLatestToast().toString(), equalTo("No available script for execution"));
+        assertThat(ShadowToast.getTextOfLatestToast().toString(), equalTo("Die ausgeführe Geste existiert noch nicht."));
 
     }
 
@@ -82,21 +119,24 @@ public class MainActivityTest {
 
     // TKi 04.04.2015
     @Test
-    public void testExecutingMode(){
+    public void testExecutingMode_OnCreate(){
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
         MainActivity mainActivity = mainController.create().start().resume().get();
 
-        mainActivity.OnUpdateStatus(MYOStatus.IDLE);
         assertThat(mainActivity.getExecutionMode(), equalTo(true));
+    }
 
-        mainActivity.OnUpdateStatus(MYOStatus.LOCKED);
+    @Test
+    public void testExecutingMode_OnResume(){
+        ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
+        MainActivity mainActivity = mainController.create().start().resume().get();;
+        mainActivity.onOptionsItemSelected(new MenuItemMock(0));
+
         assertThat(mainActivity.getExecutionMode(), equalTo(false));
 
-        mainActivity.OnPose(Pose.DOUBLE_TAP);
-        assertThat(mainActivity.getExecutionMode(), equalTo(true));
+        mainController.resume();
 
-        mainActivity.OnPose(Pose.FINGERS_SPREAD);
-        assertThat(mainActivity.getExecutionMode(), equalTo(false));
+        assertThat(mainActivity.getExecutionMode(), equalTo(true));
     }
 
     // TKi 04.04.2015
