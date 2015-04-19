@@ -2,7 +2,7 @@
     <string name="app_name">MYO Script Control</string>
 
     <string name="action_gesture_manager">Gesten verwalten</string>
-    <string name="action_script_manager">Scripte verwalten</string>
+    <string name="action_script_manager">Skripte verwalten</string>
     <string name="action_connect_myo">MYO verbinden</string>
     <string name="action_help">Hilfe</string>
 
@@ -30,9 +30,9 @@
     <string name="title_activity_gesture_record">Geste aufnehmen</string>
     <string name="title_activity_text_input_alert">TextInputAlertActivity</string>
 
-    <string name="title_activity_script_list">Scripte verwalten</string>
-    <string name="title_activity_script_edit">Scripte editieren</string>
-    <string name="title_activity_file_explorer">Script importieren</string>
+    <string name="title_activity_script_list">Skripte verwalten</string>
+    <string name="title_activity_script_edit">Skripte editieren</string>
+    <string name="title_activity_file_explorer">Skript importieren</string>
     <string name="title_activity_error">Ein Fehler ist aufgetreten</string>
     <string name="default_error_string">Beim Anzeigen des Fehlers ist ein Fehler aufgetreten.</string>
 </resources>

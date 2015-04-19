@@ -31,7 +31,7 @@ public class SL4AManager {
                 Intent intent = buildStartSL4A(outputFile);
                 activityContext.startActivity(intent);
         } else {
-            throw new IOException("Die notwendigen Anwendungen \"SL4A\" bzw. \"Python for Android\" zum Ausrühren von Scripten konnten nicht gefunden werden.");
+            throw new IOException("Die notwendigen Anwendungen \"SL4A\" bzw. \"Python for Android\" zum Ausführen von Skripten konnten nicht gefunden werden.");
         }
     }
 
