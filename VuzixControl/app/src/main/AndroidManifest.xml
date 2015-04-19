@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.myo.vuzixcontrol" >
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
+        android:name=".VuzixControlApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +19,29 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <service
+            android:name=".CommandExecutionService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <activity
+            android:name=".ExampleActivity1"
+            android:label="Untermenü 1">
+        </activity>
+        <activity
+            android:name=".AbstractMenuActivity"
+            android:label="@string/title_activity_menu" >
+        </activity>
+        <activity
+            android:name=".ExampleActivity2"
+            android:label="Untermenü 2" >
+        </activity>
+        <activity
+            android:name=".ExampleActivity3"
+            android:label="Untermenü 3" >
         </activity>
     </application>
 

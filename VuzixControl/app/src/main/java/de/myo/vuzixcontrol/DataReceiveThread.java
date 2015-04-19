@@ -1,6 +1,7 @@
 package de.myo.vuzixcontrol;
 
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Handler;
 
 import java.io.IOException;
@@ -15,11 +16,13 @@ public class DataReceiveThread extends Thread {
     private static final int MESSAGE_READ = 42;
     private BluetoothSocket mBluetoothSocket;
     private InputStream mInputStream;
-    private MainActivity mActivityContext;
+    private Context mContext;
+    private byte[] buffer;
 
-    public DataReceiveThread(MainActivity activityContext, BluetoothSocket socket) {
-        mActivityContext = activityContext;
+    public DataReceiveThread(Context context, BluetoothSocket socket) {
+        mContext = context;
         mBluetoothSocket = socket;
+        buffer = new byte[10];
         try {
             mInputStream = mBluetoothSocket.getInputStream();
         } catch (IOException e) {
@@ -28,13 +31,10 @@ public class DataReceiveThread extends Thread {
     }
 
     public void run() {
-        byte[] buffer = new byte[1024];
-        int bytes;
-
         while (true) {
             try {
-                bytes = mInputStream.read(buffer);
-                evaluateInput(buffer);
+                mInputStream.read(buffer);
+                evaluateInput();
 
             } catch (IOException e) {
                 break;
@@ -42,13 +42,17 @@ public class DataReceiveThread extends Thread {
         }
     }
 
-    private void evaluateInput(byte[] buffer) {
+    private void evaluateInput() throws IOException {
         String command = null;
         try {
             command = new String(buffer, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        mActivityContext.OnReceiveCommand(command);
+        Integer keyCode = CommandManager.getCommandforString(command);
+        if(keyCode != null) {
+            mBluetoothSocket.close();
+            ((VuzixControlApplication)mContext).OnReceiveCommand(command, keyCode);
+        }
     }
 }

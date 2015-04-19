@@ -3,6 +3,7 @@ package de.myo.vuzixcontrol;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
@@ -17,13 +18,13 @@ import java.util.UUID;
 public class ConnectThread extends Thread {
 
     private final BluetoothServerSocket mmServerSocket;
-    private MainActivity mActivityContext;
+    private Context mContext;
 
-    public ConnectThread(MainActivity activityContext, String name, UUID uuid) throws IOException {
+    public ConnectThread(Context context, String name, UUID uuid) throws IOException {
         BluetoothServerSocket tmp = null;
-        mActivityContext = activityContext;
+        mContext = context;
         try {
-            tmp = mActivityContext.getBluetoothAdapter().listenUsingRfcommWithServiceRecord(name, uuid);
+            tmp = ((VuzixControlApplication)mContext).getBluetoothAdapter().listenUsingRfcommWithServiceRecord(name, uuid);
 
         } catch (IOException e) {
             throw e;
@@ -35,12 +36,14 @@ public class ConnectThread extends Thread {
         BluetoothSocket socket;
         while (true) {
             try {
+                Thread.sleep(50);
                 socket = mmServerSocket.accept();
             } catch (Exception e) {
+                ((VuzixControlApplication)mContext).OnReceiveCommand("error in ConnectThread: " + e.getMessage(), 0);
                 continue;
             }
             if (socket != null) {
-                DataReceiveThread receiveThread = new DataReceiveThread(mActivityContext, socket);
+                DataReceiveThread receiveThread = new DataReceiveThread(mContext, socket);
                 receiveThread.start();
             }
         }
