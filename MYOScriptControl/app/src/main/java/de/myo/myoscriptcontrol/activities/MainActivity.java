@@ -184,14 +184,17 @@ public class MainActivity extends ActionBarActivity implements ListenerTarget {
         int counterNoEqualGestureItem = 0;
         for (GestureItem gestureItem : gestureList) {
             if (gestureItem.equalPattern(recordedPattern)) {
-                try {
-                    UUID uuid = UUID.fromString(gestureItem.getScript());
-                    ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
-                    executeScript(scriptItem);
-                } catch(IllegalArgumentException e){
+                if (gestureItem.hasScript())
+                    try {
+                        UUID uuid = UUID.fromString(gestureItem.getScript());
+                        ScriptItem scriptItem = GestureScriptManager.getInstance().getScriptByUUID(uuid);
+                        executeScript(scriptItem);
+                    } catch(IllegalArgumentException e){
+                        e.printStackTrace();
+                        ErrorActivity.handleError(this, e.getMessage());
+                } else {
                     String message = "Der Geste "+ gestureItem.getName() +" ist kein Skript zugeordnet.";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    ErrorActivity.handleError(this, message);
                 }
             } else {
                 counterNoEqualGestureItem++;

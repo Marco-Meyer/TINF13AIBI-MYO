@@ -33,6 +33,26 @@ import static org.hamcrest.CoreMatchers.equalTo;
 @RunWith(CustomRobolectricTestRunner.class)
 public class MainActivityTest {
 
+    //MMy 17.04.2015
+    @Test
+    public void testCheckRecordedPatternForAvailableScript_ScriptNotFound(){
+
+        ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
+        MainActivity mainActivity = mainController.create().start().resume().get();
+        List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
+
+        GestureItem testItemWithoutScript = new GestureItem();
+        testItemWithoutScript.setName("testGestureItemWithoutScript");
+        GesturePattern pattern = new GesturePattern();
+        pattern.add(GridPosition.POS_SOUTH_EAST);
+        testItemWithoutScript.setPattern(pattern);
+        list.add(testItemWithoutScript);
+
+        mainActivity.checkRecordedPatternForAvailableScript(pattern);
+
+        assertThat(ShadowToast.getTextOfLatestToast().toString(), equalTo("Der Geste testGestureItemWithoutScript ist kein Skript zugeordnet."));
+    }
+
     //TKi 26.03.2015
     @Test
     public void testCheckRecordedPatternForAvailableScript_executeScript(){
@@ -59,28 +79,6 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testCheckRecordedPatternForAvailableScript_ScriptNotFound(){
-
-        ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
-        MainActivity mainActivity = mainController.create().start().resume().get();
-        List<GestureItem> list = GestureScriptManager.getInstance().getGestureList();
-        ShadowActivity shadowActivity = Robolectric.shadowOf(mainActivity);
-
-        GestureItem testItem = new GestureItem();
-        testItem.setName("testGestureItem");
-        GesturePattern knownPattern = new GesturePattern();
-        knownPattern.add(GridPosition.POS_SOUTH_EAST);
-        testItem.setPattern(knownPattern);
-        list.add(testItem);
-
-        mainActivity.checkRecordedPatternForAvailableScript(knownPattern);
-
-        assertThat(shadowActivity.getNextStartedActivity().toString(), equalTo("Intent{" +
-                "componentName=ComponentInfo{de.myo.myoscriptcontrol/de.myo.myoscriptcontrol.activities.ErrorActivity}," +
-                " extras=Bundle[{errorMessage=Der Geste testGestureItem ist kein Skript zugeordnet.}]}"));
-    }
-
-    @Test
     public void testCheckRecordedPatternForAvailableScript_GestureNotFound(){
 
         ActivityController<MainActivity> mainController = Robolectric.buildActivity(MainActivity.class);
@@ -92,7 +90,6 @@ public class MainActivityTest {
         mainActivity.checkRecordedPatternForAvailableScript(unknownGesturePattern);
 
         assertThat(ShadowToast.getTextOfLatestToast().toString(), equalTo("Die ausgeführe Geste existiert noch nicht."));
-
     }
 
     // TKi 04.04.2015

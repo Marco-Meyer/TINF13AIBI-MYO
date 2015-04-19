@@ -21,6 +21,8 @@ public class GestureItem {
     private GesturePattern mPattern;
     private String mDate;
 
+    private static final String noScriptString = "<No Script>";
+
     public boolean equalPattern(GesturePattern pattern){
         if (pattern.size() != mPattern.size()){
             return false;
@@ -46,7 +48,7 @@ public class GestureItem {
     public GestureItem(){
         mId = UUID.randomUUID();
         mName = "Unbenannt";
-        mScript = "<No Script>";
+        mScript = noScriptString;
         mPattern = new GesturePattern();
         mDate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM, Locale.getDefault()).format(new Date());
     }
@@ -66,6 +68,9 @@ public class GestureItem {
         return json;
     }
 
+    public boolean hasScript() {
+        return this.mScript != noScriptString;
+    }
     public String getScript() {
         return mScript;
     }
